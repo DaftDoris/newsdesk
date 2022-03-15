@@ -1,6 +1,6 @@
 <template>
   <div class="relative w-full h-full">
-    <AppBar :isScrolled="isScrolledY" />
+    <AppBar />
     <main class="mx-auto w-full h-full">
       <router-view />
     </main>

@@ -1,7 +1,6 @@
 <template>
   <header
     v-if="isAuthenticated"
-    :class="[props.isScrolled ? 'shadow-lg' : '']"
     v-bind="$attrs"
   >
     <div class="mx-auto w-full flex justify-between">
@@ -101,18 +100,17 @@
 </template>
 
 <script lang="ts">
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import { ChevronDownIcon } from "@heroicons/vue/solid";
+// import { ChevronDownIcon } from "@heroicons/vue/solid";
 
-export default {
-  components: {
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuItems,
-    ChevronDownIcon,
-  },
-};
+// export default {
+  //   components: {
+    //     Menu,
+//     MenuButton,
+//     MenuItem,
+//     MenuItems,
+//     // ChevronDownIcon,
+//   },
+// };
 </script>
 
 <script setup lang="ts">
@@ -121,17 +119,17 @@ import { useRoute, useRouter } from "vue-router";
 import { useDark, useToggle } from "@vueuse/core";
 import { useAuthStore } from "@/store/auth";
 import { useDialog } from "@/store/useDialog";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
+  ChevronDownIcon,
   MoonIcon as MoonIconRenderFn,
   SunIcon as SunIconRenderFn,
 } from "@heroicons/vue/outline";
 
+// @ts-ignore 
 const MoonIcon = MoonIconRenderFn();
+// @ts-ignore 
 const SunIcon = SunIconRenderFn();
-
-const props = defineProps<{
-  isScrolled: boolean;
-}>();
 
 const authStore = useAuthStore();
 const { showConfirm } = useDialog();
