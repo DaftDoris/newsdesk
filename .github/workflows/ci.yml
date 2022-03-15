@@ -22,8 +22,6 @@ jobs:
           node-version-file: '.nvmrc'
       - run: npm install
       - run: npm run build
-      - run: "npm run build"
-
       - run: tar -cf webui.tar dist
       - uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # renovate: tag=v2.3.1
         with:
