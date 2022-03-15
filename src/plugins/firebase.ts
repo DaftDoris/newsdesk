@@ -3,14 +3,15 @@ import { getAnalytics } from 'firebase/analytics'
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
 const firebaseConfig = {
-  apiKey: 'AIzaSyDjC2EbHueaBI2hpG9tcUzTP2o-fm4ag1o',
-  authDomain: 'vue3-todo-webapp.firebaseapp.com',
-  projectId: 'vue3-todo-webapp',
-  storageBucket: 'vue3-todo-webapp.appspot.com',
-  messagingSenderId: '799347812000',
-  appId: '1:799347812000:web:d5d17d22327bf2a6144bc5',
-  measurementId: '${config.measurementId}'
+  apiKey: "AIzaSyAXBQG6b0_AKCY63dbQlcecWNKmiLAKjiI",
+  authDomain: "daftdoris-cns.firebaseapp.com",
+  projectId: "daftdoris-cns",
+  storageBucket: "daftdoris-cns.appspot.com",
+  messagingSenderId: "785842200541",
+  appId: "1:785842200541:web:8b34412472e7aa2feaa034",
+  measurementId: "G-CCEL9G8W59"
 };
 
 // Initialize Firebase

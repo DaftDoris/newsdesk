@@ -55,7 +55,6 @@ import TodoCard from '@/components/molecules/Cards/TodoCard.vue'
 import InputCard from '@/components/molecules/Cards/InputCard.vue'
 import NoneCard from '@/components/molecules/Cards/NoneCard.vue'
 import { useRouter } from 'vue-router'
-import useScrollObserver from '@/hooks/useScrollObserver'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -95,12 +94,6 @@ watch(isAuthenticated, async authenticated => {
   immediate: true
 })
 
-// useScroll mount <=> unmount test example
-// useScrollObserver({
-//   callback (x, y) {
-//     console.log('hello route test page', { x, y })
-//   }
-// })
 
 const events = {
   onClickSave (text: string) {

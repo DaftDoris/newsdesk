@@ -19,7 +19,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '',
         component: Home,
-        meta: { title: 'Todo' }
+        meta: { title: 'Daft Doris' }
       },
       {
         path: 'route-test',

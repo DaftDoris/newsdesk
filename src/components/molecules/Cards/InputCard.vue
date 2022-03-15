@@ -1,6 +1,11 @@
 <template>
+  <div contenteditable="true" >
+    <p>thing 1</p>
+    <p>thing 2</p>
+    <p>thing 3</p>
+  </div>
   <div class="flex justify-end">
-    <label class="inline-flex items-center mr-2">
+    <label class="inline-flex items-center mr-2 invisible">
       <input
         v-model="checked"
         type="checkbox"
@@ -10,13 +15,13 @@
       <span class="ml-2">Show All</span>
     </label>
     <Button
-      class="bg-indigo-500 hover:bg-indigo-700"
+      class="bg-indigo-500 hover:bg-indigo-700 "
       @click="save"
     >
       Save
     </Button>
   </div>
-  <div class="mt-2 w-full">
+  <div class="mt-2 w-full invisible">
     <Input
       v-model="text"
       placeholder="Enter somethings..."
