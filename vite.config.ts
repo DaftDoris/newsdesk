@@ -8,8 +8,8 @@ const pwaOptions: Partial<VitePWAOptions> = {
   base: '/',
   includeAssets: ['icon.png'],
   manifest: {
-    name: 'Vue3 Todo',
-    short_name: 'TODO',
+    name: 'Daft Doris',
+    short_name: 'DAFTDORIS',
     theme_color: '#ffffff',
     icons: [],
   },
@@ -18,6 +18,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "./",
   plugins: [vue(), VitePWA(pwaOptions)],
   build: {
     minify: 'esbuild',
