@@ -9,7 +9,7 @@
   "dependencies": {
     "@headlessui/vue": "1.5.0",
     "@heroicons/vue": "1.0.6",
-    "@vueuse/core": "7.7.1",
+    "@vueuse/core": "8.0.1",
     "@vueuse/firebase": "7.7.1",
     "firebase": "9.6.8",
     "moment": "2.29.1",
