@@ -13,7 +13,7 @@
     "@vueuse/firebase": "8.1.2",
     "firebase": "9.6.9",
     "moment": "2.29.1",
-    "nanoid": "3.3.1",
+    "nanoid": "3.3.2",
     "pinia": "2.0.12",
     "vue": "3.2.31",
     "vue-create-ripple": "0.3.1",
