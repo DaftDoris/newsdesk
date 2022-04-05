@@ -21,7 +21,7 @@
       Save
     </Button>
   </div>
-  <div class="mt-2 w-full invisible">
+  <div class="mt-2 w-full">
     <Input
       v-model="text"
       placeholder="Enter somethings..."
