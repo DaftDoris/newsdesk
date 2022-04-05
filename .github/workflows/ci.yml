@@ -71,3 +71,4 @@ jobs:
           clean: true
           clean-exclude: pr-preview/
           folder: ./dist
+          branch: gh-pages
