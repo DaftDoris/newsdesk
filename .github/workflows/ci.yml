@@ -64,6 +64,7 @@ jobs:
           name: webui.tar
       - name: Untar files
         run: tar -xf webui.tar dist
+
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.0
         with:
