@@ -67,7 +67,7 @@ jobs:
         run: tar -xf webui.tar dist
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4.3.0
+        uses: JamesIves/github-pages-deploy-action@360c8e75d0ee81732d0a5675c71e51b569df2ee8 # tag=v4.3.0
         with:
           clean: true
           clean-exclude: pr-preview/
