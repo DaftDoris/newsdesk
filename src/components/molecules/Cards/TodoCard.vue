@@ -3,12 +3,12 @@
     class="card todo-card"
     :class="todo.done ? 'done' : ''"
   >
-    <p
+    <div
       class="text-xl"
       :class="todo.done ? 'line-through' : ''"
+      v-html="todo.text"
     >
-      {{ todo.text }}
-    </p>
+    </div>
     <p class="text-sm text-right text-gray-500 mt-2">
       {{ createdAt }}
     </p>

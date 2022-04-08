@@ -14,19 +14,22 @@
       />
       <span class="ml-2">Show All</span>
     </label>
-    <Button
+    <!-- <Button
       class="bg-indigo-500 hover:bg-indigo-700 "
       @click="save"
     >
       Save
+    </Button> -->
+
+    <Button
+      class="bg-indigo-500 hover:bg-indigo-700 "
+      @click="addEpisode"
+    >
+      Add Episode
     </Button>
   </div>
   <div class="mt-2 w-full">
-    <Input
-      v-model="text"
-      placeholder="Enter somethings..."
-      @keydown.enter.prevent="save"
-    />
+    <QuillEditor ref="editor" style="height: 200px" v-model:content="contents" theme="snow" />
   </div>
 </template>
 
@@ -36,18 +39,27 @@ import Button from '@/components/atoms/Button.vue'
 import { ref } from 'vue'
 import { useVModel } from '@vueuse/core'
 import { useDialog } from '@/store/useDialog'
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 const props = defineProps<{ showAll: boolean }>()
 const { showDialog } = useDialog()
+const editor = ref()
 
 const emits = defineEmits(['save', 'update:showAll'])
 const checked = useVModel(props, 'showAll', emits)
 
 const text = ref<string>('')
+const contents = ref<string>('')
 
 const save = () => {
   emits('save', text.value)
   text.value = ''
+}
+
+const addEpisode = () => {
+  emits('save', editor.value.getHTML())
+  editor.value.setHTML('');
 }
 
 const helloWorld = () => {
