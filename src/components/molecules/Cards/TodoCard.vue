@@ -1,7 +1,8 @@
+/* eslint-disable vue/no-mutating-props */
 <template>
   <contenteditable
     tag="p"
-    v-model="text"
+    v-model="todo.text"
     :noNL="true"
     :noHTML="true"
     @returned="update"
@@ -22,7 +23,7 @@
 
 <script lang="ts" setup>
 import contenteditable from "vue-contenteditable"
-import { computed, PropType, SetupContext, defineComponent } from "vue"
+import { PropType } from "vue"
 import { Todo } from "@/types/todo"
 import Button from "@/components/atoms/Button.vue"
 
@@ -37,7 +38,6 @@ const props = defineProps({
     default: null,
   },
 })
-const text = props.todo.text
 
 const emits = defineEmits(["delete", "update", "save", "toggle"])
 </script>
