@@ -20,7 +20,7 @@ export const useTodoStore = defineStore("todo", {
       const todo: Todo = { ...params, id, createdAt, done }
 
       this.todoList.push(todo)
-      await useAsync(() => saveData(this.todoList, userId))
+      await useAsync(() => saveData(this.todoList, userId || "unknown"))
     },
     async removeTodo(todo: Todo, userId?: string) {
       const index = this.todoList.findIndex((x) => x.id === todo.id)
@@ -30,7 +30,7 @@ export const useTodoStore = defineStore("todo", {
       }
 
       this.todoList.splice(index, 1)
-      await useAsync(() => saveData(this.todoList, userId))
+      await useAsync(() => saveData(this.todoList, userId || "unknown"))
     },
     async updateTodo(todo: Todo, userId?: string) {
       // const index = this.todoList.findIndex(x => x.id === todo.id)
@@ -40,7 +40,7 @@ export const useTodoStore = defineStore("todo", {
       // }
 
       // this.todoList.splice(index, 1)
-      await useAsync(() => saveData(this.todoList, userId))
+      await useAsync(() => saveData(this.todoList, userId || "unknown"))
     },
     async modifyTodo(todo: Todo, userId?: string) {
       const index = this.todoList.findIndex((x) => x.id === todo.id)
@@ -50,16 +50,14 @@ export const useTodoStore = defineStore("todo", {
       }
 
       this.todoList.splice(index, 1, todo)
-      await useAsync(() => saveData(this.todoList, userId))
+      await useAsync(() => saveData(this.todoList, userId || "unknown"))
     },
     async fetchTodo(userId?: string) {
-      this.todoList = await useAsync(() => fetchData(userId))
+      this.todoList = await useAsync(() => fetchData(userId || "unknown"))
     },
   },
   getters: {
     getList: (state: State) => state.todoList,
-    getDoneList: (state): Todo[] => state.todoList.filter((x) => x.done),
-    getNotDoneList: (state): Todo[] => state.todoList.filter((x) => !x.done),
     getAllList: (state): Todo[] => [
       ...state.todoList.filter((x) => !x.done),
       ...state.todoList.filter((x) => x.done),

@@ -12,7 +12,6 @@
 import Input from '@/components/atoms/Input.vue'
 import { ref } from 'vue'
 
-const props = defineProps<{ showAll: boolean }>()
 const emits = defineEmits(['save'])
 
 const text = ref<string>('')
