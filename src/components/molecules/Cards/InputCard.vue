@@ -1,26 +1,4 @@
 <template>
-  <div contenteditable="true" >
-    <p>thing 1</p>
-    <p>thing 2</p>
-    <p>thing 3</p>
-  </div>
-  <div class="flex justify-end">
-    <label class="inline-flex items-center mr-2 invisible">
-      <input
-        v-model="checked"
-        type="checkbox"
-        class=""
-        checked
-      />
-      <span class="ml-2">Show All</span>
-    </label>
-    <Button
-      class="bg-indigo-500 hover:bg-indigo-700 "
-      @click="save"
-    >
-      Save
-    </Button>
-  </div>
   <div class="mt-2 w-full">
     <Input
       v-model="text"
@@ -32,7 +10,7 @@
 
 <script lang="ts" setup>
 import Input from '@/components/atoms/Input.vue'
-import Button from '@/components/atoms/Button.vue'
+// import Button from '@/components/atoms/Button.vue'
 import { ref } from 'vue'
 import { useVModel } from '@vueuse/core'
 import { useDialog } from '@/store/useDialog'
@@ -40,8 +18,8 @@ import { useDialog } from '@/store/useDialog'
 const props = defineProps<{ showAll: boolean }>()
 const { showDialog } = useDialog()
 
-const emits = defineEmits(['save', 'update:showAll'])
-const checked = useVModel(props, 'showAll', emits)
+const emits = defineEmits(['save'])
+// const checked = useVModel(props, 'showAll', emits)
 
 const text = ref<string>('')
 

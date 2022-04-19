@@ -1,22 +1,9 @@
 <template>
-  <div
-    class="card todo-card"
-    :class="todo.done ? 'done' : ''"
-  >
-    <p
-      class="text-xl"
-      :class="todo.done ? 'line-through' : ''"
-    >
-      {{ todo.text }}
-    </p>
-    <p class="text-sm text-right text-gray-500 mt-2">
-      {{ createdAt }}
-    </p>
+  <contenteditable tag="p" 
+  v-model="text" :noNL="true" :noHTML="true" @returned="update" />
+
     <div class="flex justify-end mt-4">
-      <Button
-        class="btn-error mr-2"
-        @click="emits('delete', todo)"
-      >
+      <Button class="btn-error mr-2" @click="emits('delete', todo)">
         Delete
       </Button>
       <Button
@@ -25,15 +12,19 @@
       >
         {{ todo.done ? 'Revert' : 'Done' }}
       </Button>
-    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, PropType, SetupContext, defineComponent } from 'vue'
-import { Todo } from '@/types/todo'
-import { dateString } from '@/utils/stringFormat'
-import Button from '@/components/atoms/Button.vue'
+import contenteditable from 'vue-contenteditable'
+import { computed, PropType, SetupContext, defineComponent } from "vue";
+import { Todo } from "@/types/todo";
+import { dateString } from "@/utils/stringFormat";
+import Button from "@/components/atoms/Button.vue";
+import { ref } from 'vue'
+
+const text = ref<string>(props.todo.text)
+
 
 // // use defineComponent
 // export default defineComponent({
@@ -55,18 +46,29 @@ import Button from '@/components/atoms/Button.vue'
 //     }
 //   }
 // })
+// const text = ref<string>('')
+
+const update = (text: string) => {
+  props.todo.text = text
+  emits('update', props.todo)
+}
+
 const props = defineProps({
   todo: {
     type: Object as PropType<Todo>,
-    default: null
-  }
-})
+    default: null,
+  },
+});
 
-const emits = defineEmits(['delete', 'toggle'])
+const emits = defineEmits(["delete", "update", "save"]);
 
-const createdAt = computed(() => dateString(props.todo?.createdAt ?? ''))
+// const save = () => {
+//   emits("save", text.value);
+//   text.value = "";
+// };
+// const emits = defineEmits(['save'])
+
+const createdAt = computed(() => dateString(props.todo?.createdAt ?? ""));
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

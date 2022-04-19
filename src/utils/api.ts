@@ -1,9 +1,9 @@
 import { Todo } from '@/types/todo'
 import { collection, doc, getDoc, getFirestore, setDoc, Timestamp } from 'firebase/firestore'
-import useStorage from '@/hooks/useStorage'
-import delay from '@/utils/delay'
+// import useStorage from '@/hooks/useStorage'
+// import delay from '@/utils/delay'
 
-const localStorage = useStorage().localStorage
+// const localStorage = useStorage().localStorage
 
 async function fetchDataOnFirestore (userId: string): Promise<Todo[]> {
   const db = getFirestore()
@@ -23,36 +23,18 @@ async function saveDataOnFirestore (todoList: Todo[], userId: string): Promise<v
   await setDoc(docRef, { items: todoList })
 }
 
-async function fetchDataOnLocalStorage () {
-  await delay(250)
-  return localStorage.getItem<Todo[]>('todo') ?? []
+export function fetchData(userId: string): Promise<Todo[]> {
+  let fetchFunction: Promise<Todo[]>;
+
+  fetchFunction = fetchDataOnFirestore(userId);
+
+  return fetchFunction;
 }
 
-async function saveDataOnLocalStorage (todoList: Todo[]) {
-  await delay(250)
-  localStorage.setItem('todo', todoList)
-}
+export function saveData(todoList: Todo[], userId: string): Promise<void> {
+  let saveFunction: Promise<void>;
 
-export function fetchData (userId?: string): Promise<Todo[]> {
-  let fetchFunction: Promise<Todo[]>
+  saveFunction = saveDataOnFirestore(todoList, userId);
 
-  if (userId) {
-    fetchFunction = fetchDataOnFirestore(userId)
-  } else {
-    fetchFunction = fetchDataOnLocalStorage()
-  }
-
-  return fetchFunction
-}
-
-export function saveData (todoList: Todo[], userId?: string): Promise<void> {
-  let saveFunction: Promise<void>
-
-  if (userId) {
-    saveFunction = saveDataOnFirestore(todoList, userId)
-  } else {
-    saveFunction = saveDataOnLocalStorage(todoList)
-  }
-
-  return saveFunction
+  return saveFunction;
 }
