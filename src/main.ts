@@ -10,7 +10,7 @@ import "@/plugins/firebase"
 import "@/assets/styles/tailwind.scss"
 import "@/assets/styles/main.scss"
 
-const app = createApp(App)
+createApp(App)
   .directive(
     "ripple",
     createRippleDirective({

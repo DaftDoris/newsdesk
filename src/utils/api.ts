@@ -30,17 +30,9 @@ async function saveDataOnFirestore(
 }
 
 export function fetchData(userId: string): Promise<Todo[]> {
-  let fetchFunction: Promise<Todo[]>
-
-  fetchFunction = fetchDataOnFirestore(userId)
-
-  return fetchFunction
+  return fetchDataOnFirestore(userId)
 }
 
 export function saveData(todoList: Todo[], userId: string): Promise<void> {
-  let saveFunction: Promise<void>
-
-  saveFunction = saveDataOnFirestore(todoList, userId)
-
-  return saveFunction
+  return saveDataOnFirestore(todoList, userId)
 }

@@ -68,6 +68,7 @@ function useClassNameTransition(
     if (isStarted && trigger) {
       useStartDelay && (await delay(milliseconds))
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       for await (const x of trigger) {
         await delay(milliseconds)
       }

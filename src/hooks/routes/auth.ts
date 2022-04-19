@@ -14,10 +14,8 @@ export function useAuthentication() {
       const { getPersistenceFirebaseUser } = useAuthStore()
       const { isAuthenticated } = storeToRefs(authStore)
 
-      let success = false
-
       try {
-        success = await getPersistenceFirebaseUser(<Provider>"Google")
+        await getPersistenceFirebaseUser(<Provider>"Google")
       } catch {
         next("/auth/login")
       }

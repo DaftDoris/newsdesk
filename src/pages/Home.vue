@@ -50,7 +50,6 @@ import InputCard from "@/components/molecules/Cards/InputCard.vue";
 const authStore = useAuthStore();
 const todoStore = useTodoStore();
 
-const checked = ref(false);
 const initiated = ref(false);
 
 const { user, isAuthenticated } = storeToRefs(authStore);
