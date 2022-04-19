@@ -10,8 +10,7 @@ import {
   signInWithPopup,
   onAuthStateChanged
 } from 'firebase/auth'
-import useAsync from '@/hooks/useAsync'
-import delay from '@/utils/delay'
+import useAsync from "@/hooks/useAsync";
 
 export interface IUser {
   nickName?: string;

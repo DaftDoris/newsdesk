@@ -5,42 +5,36 @@ import defaultLayout from '@/layouts/default.vue'
 import authenticatedLayout from '@/layouts/authenticated.vue'
 
 //  Pages
-import Home from '@/pages/Home.vue'
-import RouteTest from '@/pages/RouteTest.vue'
+import Home from "@/pages/Home.vue";
 import Login from '@/pages/auth/Login.vue'
 import { useAuthentication } from '@/hooks/routes/auth'
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
-    name: 'Home',
+    path: "/",
+    name: "Home",
     component: authenticatedLayout,
     children: [
       {
-        path: '',
+        path: "",
         component: Home,
-        meta: { title: 'Daft Doris' }
+        meta: { title: "Daft Doris" },
       },
-      {
-        path: 'route-test',
-        component: RouteTest,
-        meta: { title: 'Test Home 2'}
-      }
     ],
-    ...useAuthentication()
+    ...useAuthentication(),
   },
   {
-    path: '/auth',
-    name: 'Auth',
+    path: "/auth",
+    name: "Auth",
     component: defaultLayout,
     children: [
       {
-        path: 'Login',
-        component: Login
-      }
-    ]
-  }
-]
+        path: "Login",
+        component: Login,
+      },
+    ],
+  },
+];
 
 export const router = createRouter({
   history: createWebHistory(),
