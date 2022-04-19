@@ -46,7 +46,7 @@ jobs:
         run: tar -xf webui.tar dist
 
       - name: Deploy preview
-        uses: rossjrw/pr-preview-action@98706dff8eaffcef39fbd5c5cadd2c6339bbd60b # tag=v1
+        uses: rossjrw/pr-preview-action@v1.1.1
         with:
           source-dir: ./dist
 
