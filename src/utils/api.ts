@@ -8,9 +8,12 @@ import {
   Timestamp,
 } from "firebase/firestore"
 
-async function fetchDataOnFirestore(userId: string): Promise<Todo[]> {
+async function fetchDataOnFirestore(
+  podcastname: string,
+  userId: string,
+): Promise<Todo[]> {
   const db = getFirestore()
-  const docRef = doc(collection(db, "todos"), userId)
+  const docRef = doc(collection(db, podcastname), userId)
   const snapshot = await getDoc(docRef)
   const data = snapshot.data()
 
@@ -22,17 +25,25 @@ async function fetchDataOnFirestore(userId: string): Promise<Todo[]> {
 
 async function saveDataOnFirestore(
   todoList: Todo[],
+  podcastname: string,
   userId: string,
 ): Promise<void> {
   const db = getFirestore()
-  const docRef = doc(collection(db, "todos"), userId)
+  const docRef = doc(collection(db, podcastname), userId)
   await setDoc(docRef, { items: todoList })
 }
 
-export function fetchData(userId: string): Promise<Todo[]> {
-  return fetchDataOnFirestore(userId)
+export function fetchData(
+  podcastname: string,
+  userId: string,
+): Promise<Todo[]> {
+  return fetchDataOnFirestore(podcastname, userId)
 }
 
-export function saveData(todoList: Todo[], userId: string): Promise<void> {
-  return saveDataOnFirestore(todoList, userId)
+export function saveData(
+  todoList: Todo[],
+  podcastname: string,
+  userId: string,
+): Promise<void> {
+  return saveDataOnFirestore(todoList, podcastname, userId)
 }

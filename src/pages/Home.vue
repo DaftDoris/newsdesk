@@ -52,11 +52,15 @@ const initiated = ref(false)
 
 const { user, isAuthenticated } = storeToRefs(authStore)
 
+// @TODO: work with todays date
+const docname = "todaysdate"
+const podcastname = "smartseven"
+
 watch(
   isAuthenticated,
   async (authenticated) => {
     if (authenticated) {
-      await todoStore.fetchTodo(user.value?.userId)
+      await todoStore.fetchTodo(podcastname, docname)
       initiated.value = true
     }
   },
@@ -67,16 +71,16 @@ watch(
 
 const events = {
   onClickSave(text: string) {
-    todoStore.addTodo({ text, level: 0 }, user.value?.userId)
+    todoStore.addTodo({ text, level: 0 }, podcastname, docname)
   },
   onClickDelete(todo: Todo) {
-    todoStore.removeTodo(todo, user.value?.userId)
+    todoStore.removeTodo(todo, podcastname, docname)
   },
   onClickUpdate(todo: Todo) {
-    todoStore.updateTodo(todo, user.value?.userId)
+    todoStore.updateTodo(todo, podcastname, docname)
   },
   onClickToggle(todo: Todo) {
-    todoStore.modifyTodo({ ...todo, done: !todo.done }, user.value?.userId)
+    todoStore.modifyTodo({ ...todo, done: !todo.done }, podcastname, docname)
   },
 }
 </script>
