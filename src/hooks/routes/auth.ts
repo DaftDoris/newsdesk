@@ -1,26 +1,21 @@
 import { useAuthStore } from '@/store/auth'
 import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { Provider } from '@/types/auth'
-import useStorage from '@/hooks/useStorage'
+import { Provider } from "@/types/auth";
 
 export function useAuthentication () {
   return {
     async beforeEnter (before: RouteLocationNormalized, after: RouteLocationNormalized, next: NavigationGuardNext) {
       const authStore = useAuthStore()
-      const { getPersistenceFirebaseUser } = useAuthStore()
-      const { localStorage } = useStorage()
-      const { isAuthenticated } = storeToRefs(authStore)
+      const { getPersistenceFirebaseUser } = useAuthStore();
+      const { isAuthenticated } = storeToRefs(authStore);
 
-      const providedBy = localStorage.getItem<Provider>('provider')
-      let success = false
+      let success = false;
 
       try {
-        if (providedBy === 'Google' || providedBy === 'Github') {
-          success = await getPersistenceFirebaseUser(providedBy)
-        }
+        success = await getPersistenceFirebaseUser(<Provider>"Google");
       } catch {
-        next('/auth/login')
+        next("/auth/login");
       }
 
 

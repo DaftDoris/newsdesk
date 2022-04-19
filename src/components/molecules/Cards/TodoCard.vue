@@ -10,7 +10,7 @@
         :class="todo.done ? 'btn-warning' : 'btn-success'"
         @click="emits('toggle', todo)"
       >
-        {{ todo.done ? 'Revert' : 'Done' }}
+        {{ todo.done ? 'UnShare' : 'Share' }}
       </Button>
   </div>
 </template>
@@ -19,34 +19,9 @@
 import contenteditable from 'vue-contenteditable'
 import { computed, PropType, SetupContext, defineComponent } from "vue";
 import { Todo } from "@/types/todo";
-import { dateString } from "@/utils/stringFormat";
 import Button from "@/components/atoms/Button.vue";
-import { ref } from 'vue'
 
-const text = ref<string>(props.todo.text)
-
-
-// // use defineComponent
-// export default defineComponent({
-//   components: {
-//     Button
-//   },
-//   props: {
-//     todo: {
-//       type: Object as PropType<Nullable<Todo>>,
-//       default: () => null
-//     }
-//   },
-//   emits: ['delete', 'toggle'],
-//   setup (props) {
-//     const createdAt = computed(() => dateString(props.todo?.createdAt ?? ''))
-//
-//     return {
-//       createdAt
-//     }
-//   }
-// })
-// const text = ref<string>('')
+const text = <string>props.todo.text
 
 const update = (text: string) => {
   props.todo.text = text
@@ -62,13 +37,6 @@ const props = defineProps({
 
 const emits = defineEmits(["delete", "update", "save"]);
 
-// const save = () => {
-//   emits("save", text.value);
-//   text.value = "";
-// };
-// const emits = defineEmits(['save'])
-
-const createdAt = computed(() => dateString(props.todo?.createdAt ?? ""));
 </script>
 
 <style scoped></style>

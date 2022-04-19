@@ -99,26 +99,12 @@
   </header>
 </template>
 
-<script lang="ts">
-// import { ChevronDownIcon } from "@heroicons/vue/solid";
-
-// export default {
-  //   components: {
-    //     Menu,
-//     MenuButton,
-//     MenuItem,
-//     MenuItems,
-//     // ChevronDownIcon,
-//   },
-// };
-</script>
 
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useDark, useToggle } from "@vueuse/core";
 import { useAuthStore } from "@/store/auth";
-import { useDialog } from "@/store/useDialog";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
   ChevronDownIcon,
@@ -132,7 +118,6 @@ const MoonIcon = MoonIconRenderFn();
 const SunIcon = SunIconRenderFn();
 
 const authStore = useAuthStore();
-const { showConfirm } = useDialog();
 const route = useRoute();
 const router = useRouter();
 
@@ -144,18 +129,9 @@ const isDarkMode = useDark();
 const toggleDarkMode = useToggle(isDarkMode);
 
 const events = {
-  onClickProfile() {
-    showConfirm(
-      "Do you want logout?",
-      async (confirmed) => {
-        if (!confirmed) {
-          return;
-        }
+  async onClickProfile()  {
         await authStore.logout();
         await router.push("/auth/login");
-      },
-      "Logout"
-    );
   },
   onClickToggleDarkMode() {
     toggleDarkMode();

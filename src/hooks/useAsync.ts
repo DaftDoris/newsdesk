@@ -1,38 +1,36 @@
-import { useDialog } from '@/store/useDialog'
-import { useLoading } from '@/store/useLoading'
+import { useLoading } from "@/store/useLoading";
 
 interface Options {
-  useAlert: boolean
+  useAlert: boolean;
 }
 
 const defaultOptions: Options = {
-  useAlert: true
-}
+  useAlert: true,
+};
 
-export default async function useAsync <T> (
+export default async function useAsync<T>(
   asyncFunction: () => Promise<T>,
   options: Partial<Options> = {}
 ): Promise<T> {
-  const { showDialog } = useDialog()
-  const { useAlert } = { ...defaultOptions, ...options }
-  const { setLoading } = useLoading()
+  const { useAlert } = { ...defaultOptions, ...options };
+  const { setLoading } = useLoading();
 
   try {
-    setLoading(true)
-    return await asyncFunction()
+    setLoading(true);
+    return await asyncFunction();
   } catch (e) {
-    let message: string = ''
-    if (typeof e === 'string') {
-      message = e
+    let message: string = "";
+    if (typeof e === "string") {
+      message = e;
     } else if (e instanceof Error) {
-      message = e.message
+      message = e.message;
     }
 
     if (useAlert) {
-      showDialog(message, 'Error')
+      alert(message);
     }
-    throw e
+    throw e;
   } finally {
-    setLoading(false)
+    setLoading(false);
   }
 }

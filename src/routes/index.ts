@@ -6,7 +6,7 @@ import authenticatedLayout from '@/layouts/authenticated.vue'
 
 //  Pages
 import Home from "@/pages/Home.vue";
-import Login from '@/pages/auth/Login.vue'
+import Login from "@/pages/Login.vue";
 import { useAuthentication } from '@/hooks/routes/auth'
 
 const routes: RouteRecordRaw[] = [
