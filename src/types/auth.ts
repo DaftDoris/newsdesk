@@ -1,1 +1,1 @@
-export type Provider = "Google";
+export type Provider = "Google"

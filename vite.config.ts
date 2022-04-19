@@ -1,35 +1,33 @@
-import { defineConfig } from 'vite'
-import { nodeResolve } from '@rollup/plugin-node-resolve'
-import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
-import vue from '@vitejs/plugin-vue'
-import path from 'path'
+import { defineConfig } from "vite"
+import { nodeResolve } from "@rollup/plugin-node-resolve"
+import { VitePWA, VitePWAOptions } from "vite-plugin-pwa"
+import vue from "@vitejs/plugin-vue"
+import path from "path"
 
 const pwaOptions: Partial<VitePWAOptions> = {
-  base: '/',
-  includeAssets: ['icon.png'],
+  base: "/",
+  includeAssets: ["icon.png"],
   manifest: {
-    name: 'Daft Doris',
-    short_name: 'DAFTDORIS',
-    theme_color: '#ffffff',
+    name: "Daft Doris",
+    short_name: "DAFTDORIS",
+    theme_color: "#ffffff",
     icons: [],
   },
 }
-
 
 // https://vitejs.dev/config/
 export default defineConfig({
   base: "./",
   plugins: [vue(), VitePWA(pwaOptions)],
   build: {
-    minify: 'esbuild',
+    minify: "esbuild",
     rollupOptions: {
-      plugins: [nodeResolve()]
-    }
+      plugins: [nodeResolve()],
+    },
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-    }
+      "@": path.resolve(__dirname, "./src"),
+    },
   },
-
 })

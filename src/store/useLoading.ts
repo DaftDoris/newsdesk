@@ -1,11 +1,11 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { defineStore } from "pinia"
+import { ref } from "vue"
 
-export const useLoading = defineStore('loading', () => {
+export const useLoading = defineStore("loading", () => {
   const value = ref(false)
   const transparent = ref(false)
 
-  function setLoading (v: boolean, useTransparent: boolean = true) {
+  function setLoading(v: boolean, useTransparent = true) {
     value.value = v
     transparent.value = useTransparent
   }
@@ -13,6 +13,6 @@ export const useLoading = defineStore('loading', () => {
   return {
     value,
     transparent,
-    setLoading
+    setLoading,
   }
 })

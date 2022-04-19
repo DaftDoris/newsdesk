@@ -1,6 +1,6 @@
-export type Nullable<T> = T | null | undefined;
+export type Nullable<T> = T | null | undefined
 
 export interface Content {
-  title?: string;
-  text?: string;
+  title?: string
+  text?: string
 }

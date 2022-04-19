@@ -1,13 +1,13 @@
-import { createWebHistory, createRouter, RouteRecordRaw } from 'vue-router'
+import { createWebHistory, createRouter, RouteRecordRaw } from "vue-router"
 
 //  Layouts
-import defaultLayout from '@/layouts/default.vue'
-import authenticatedLayout from '@/layouts/authenticated.vue'
+import defaultLayout from "@/layouts/default.vue"
+import authenticatedLayout from "@/layouts/authenticated.vue"
 
 //  Pages
-import Home from "@/pages/Home.vue";
-import Login from "@/pages/Login.vue";
-import { useAuthentication } from '@/hooks/routes/auth'
+import Home from "@/pages/Home.vue"
+import Login from "@/pages/Login.vue"
+import { useAuthentication } from "@/hooks/routes/auth"
 
 const routes: RouteRecordRaw[] = [
   {
@@ -34,7 +34,7 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
-];
+]
 
 export const router = createRouter({
   history: createWebHistory(),
