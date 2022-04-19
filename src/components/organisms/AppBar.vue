@@ -1,8 +1,5 @@
 <template>
-  <header
-    v-if="isAuthenticated"
-    v-bind="$attrs"
-  >
+  <header v-if="isAuthenticated" v-bind="$attrs">
     <div class="mx-auto w-full flex justify-between">
       <div
         class="text-2xl font-bold flex items-center dark:text-gray-50 transition-colors"
@@ -99,44 +96,43 @@
   </header>
 </template>
 
-
 <script setup lang="ts">
-import { computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { useDark, useToggle } from "@vueuse/core";
-import { useAuthStore } from "@/store/auth";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import { computed } from "vue"
+import { useRoute, useRouter } from "vue-router"
+import { useDark, useToggle } from "@vueuse/core"
+import { useAuthStore } from "@/store/auth"
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
 import {
   ChevronDownIcon,
   MoonIcon as MoonIconRenderFn,
   SunIcon as SunIconRenderFn,
-} from "@heroicons/vue/outline";
+} from "@heroicons/vue/outline"
 
-// @ts-ignore 
-const MoonIcon = MoonIconRenderFn();
-// @ts-ignore 
-const SunIcon = SunIconRenderFn();
+// @ts-expect-error (ts-tooling bug)
+const MoonIcon = MoonIconRenderFn()
+// @ts-expect-error (ts-tooling bug)
+const SunIcon = SunIconRenderFn()
 
-const authStore = useAuthStore();
-const route = useRoute();
-const router = useRouter();
+const authStore = useAuthStore()
+const route = useRoute()
+const router = useRouter()
 
-const title = computed(() => route.meta.title || "Home");
-const user = computed(() => authStore.user);
-const isAuthenticated = computed(() => authStore.isAuthenticated);
+const title = computed(() => route.meta.title || "Home")
+const user = computed(() => authStore.user)
+const isAuthenticated = computed(() => authStore.isAuthenticated)
 
-const isDarkMode = useDark();
-const toggleDarkMode = useToggle(isDarkMode);
+const isDarkMode = useDark()
+const toggleDarkMode = useToggle(isDarkMode)
 
 const events = {
-  async onClickProfile()  {
-        await authStore.logout();
-        await router.push("/auth/login");
+  async onClickProfile() {
+    await authStore.logout()
+    await router.push("/auth/login")
   },
   onClickToggleDarkMode() {
-    toggleDarkMode();
+    toggleDarkMode()
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
