@@ -3,9 +3,9 @@
   <contenteditable
     tag="p"
     v-model="item.text"
-    :noNL="true"
+    :noNL="false"
     :noHTML="true"
-    @returned="update"
+    @update:modelValue="update"
   />
 
   <div class="flex justify-end">
