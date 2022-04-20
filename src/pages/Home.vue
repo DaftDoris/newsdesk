@@ -1,13 +1,13 @@
 <template>
   <main
     v-show="initiated && isAuthenticated"
-    class="h-full grid grid-cols-3 gap-4 divide-x"
+    class="h-full grid grid-cols-5 gap-4 divide-x"
   >
     <div class="px-4">
       <h2 class="text-2xl dark:text-white">Longer List</h2>
       <p>coming soon...</p>
     </div>
-    <div class="px-4 mt-4">
+    <div class="px-4 mt-4 col-span-3">
       <section ref="t5">
         <InputCard @save="events.onClickSave" />
       </section>
