@@ -1,13 +1,5 @@
 /* eslint-disable vue/no-mutating-props */
 <template>
-  <!-- <contenteditable
-    tag="p"
-    v-model="item.text"
-    :noNL="false"
-    :noHTML="true"
-    @update:modelValue="update"
-  /> -->
-
   <p
     @blur="update"
     contenteditable="true"
@@ -28,7 +20,6 @@
 
 <script lang="ts" setup>
 import LinkifyIt from "linkify-it"
-import contenteditable from "vue-contenteditable"
 import { PropType, computed, ref } from "vue"
 import { Item } from "@/types/item"
 import Button from "@/components/atoms/Button.vue"
