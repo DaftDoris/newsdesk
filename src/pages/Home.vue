@@ -69,8 +69,8 @@ watch(
 )
 
 const events = {
-  onClickSave(text: string, slot: number) {
-    itemStore.addItem({ text, slot}, podcastname, docname)
+  onClickSave(text: string, slot: Item["slot"]) {
+    itemStore.addItem({ text, slot }, podcastname, docname)
   },
   onClickDelete(item: Item) {
     itemStore.removeItem(item, podcastname, docname)
