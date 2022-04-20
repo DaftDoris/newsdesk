@@ -10,7 +10,6 @@
     <div class="px-4 mt-4 col-span-3">
       <section v-for="slot in 7" :key="slot">
         <h2 class="text-5xl dark:text-white">{{slot}}</h2>
-        <InputCard @save="events.onClickSave" :slot="slot" />
         <List>
           <template v-for="item in itemStore.getSlotList(slot)" :key="item.id">
             <ListItem>
@@ -22,6 +21,7 @@
               />
             </ListItem>
           </template>
+          <InputCard @save="events.onClickSave" :slot="slot" />
         </List>
       </section>
     </div>
