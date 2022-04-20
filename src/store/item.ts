@@ -16,8 +16,8 @@ export const useItemStore = defineStore("item", {
     async addItem(params: Item, podcastname: string, userId: string) {
       const id = nanoid()
       const createdAt = new Date()
-      const done = false
-      const item: Item = { ...params, id, createdAt, done }
+      const shared = false
+      const item: Item = { ...params, id, createdAt, shared }
 
       this.itemList.push(item)
       await useAsync(() => saveData(this.itemList, podcastname, userId))
@@ -55,9 +55,9 @@ export const useItemStore = defineStore("item", {
   },
   getters: {
     getList: (state: State) => state.itemList,
-    getAllList: (state): Item[] => [
-      ...state.itemList.filter((x) => !x.done),
-      ...state.itemList.filter((x) => x.done),
-    ],
+    getSlotList: (state) => {
+      return (slot: number) =>
+        state.itemList.filter((item) => item.slot === slot)
+    },
   },
 })

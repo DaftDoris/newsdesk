@@ -8,16 +8,16 @@
     @returned="update"
   />
 
-  <div class="flex justify-end mt-4">
-    <Button class="btn-error mr-2" @click="emits('delete', item)">
-      Delete
-    </Button>
-    <Button
-      :class="item.done ? 'btn-warning' : 'btn-success'"
+  <div class="flex justify-end">
+    <ListActionButton title="Delete" @click="emits('delete', item)">
+      🗑
+    </ListActionButton>
+    <ListActionButton
       @click="emits('toggle', item)"
+      title="Share"
     >
-      {{ item.done ? "UnShare" : "Share" }}
-    </Button>
+      {{ item.shared ? "❌" : "⬆️" }}
+    </ListActionButton>
   </div>
 </template>
 
@@ -26,6 +26,7 @@ import contenteditable from "vue-contenteditable"
 import { PropType } from "vue"
 import { Item } from "@/types/item"
 import Button from "@/components/atoms/Button.vue"
+import ListActionButton from "@/components/atoms/ListActionButton.vue"
 
 const update = (text: string) => {
   props.item.text = text

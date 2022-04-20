@@ -8,12 +8,11 @@
       <p>coming soon...</p>
     </div>
     <div class="px-4 mt-4 col-span-3">
-      <section ref="t5">
-        <InputCard @save="events.onClickSave" />
-      </section>
-      <section ref="t6">
+      <section v-for="slot in 7" :key="slot">
+        <h2 class="text-5xl dark:text-white">{{slot}}</h2>
+        <InputCard @save="events.onClickSave" :slot="slot" />
         <List>
-          <template v-for="item in itemStore.getList" :key="item.id">
+          <template v-for="item in itemStore.getSlotList(slot)" :key="item.id">
             <ListItem>
               <ItemCard
                 :item="item"
@@ -34,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { watch, ref } from "vue"
+import { watch, ref, computed } from "vue"
 import { storeToRefs } from "pinia"
 import { useAuthStore } from "@/store/auth"
 import { useItemStore } from "@/store/item"
@@ -70,8 +69,8 @@ watch(
 )
 
 const events = {
-  onClickSave(text: string) {
-    itemStore.addItem({ text, slot:1 }, podcastname, docname)
+  onClickSave(text: string, slot: number) {
+    itemStore.addItem({ text, slot}, podcastname, docname)
   },
   onClickDelete(item: Item) {
     itemStore.removeItem(item, podcastname, docname)
@@ -80,9 +79,13 @@ const events = {
     itemStore.updateItem(item, podcastname, docname)
   },
   onClickToggle(item: Item) {
-    itemStore.modifyItem({ ...item, done: !item.done }, podcastname, docname)
+    itemStore.modifyItem({ ...item, shared: !item.shared }, podcastname, docname)
   },
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+ListItem {
+  display:none;
+}
+</style>

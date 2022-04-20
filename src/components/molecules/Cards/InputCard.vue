@@ -17,8 +17,15 @@ const emits = defineEmits(['save'])
 const text = ref<string>('')
 
 const save = () => {
-  emits('save', text.value)
+  emits('save', text.value, props.slot)
   text.value = ''
 }
+
+const props = defineProps({
+  slot: {
+    type: Number,
+    default: null,
+  },
+})
 
 </script>
