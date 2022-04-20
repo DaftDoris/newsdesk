@@ -2,7 +2,7 @@
   <div class="mt-2 w-full">
     <Input
       v-model="text"
-      placeholder="Enter somethings..."
+      :placeholder="`Enter things into ${slot}...`"
       @keydown.enter.prevent="save"
     />
   </div>
