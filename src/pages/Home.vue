@@ -59,7 +59,7 @@ watch(
   isAuthenticated,
   async (authenticated) => {
     if (authenticated) {
-      await itemStore.fetchItem(podcastname, docname)
+      await itemStore.connect(podcastname, docname)
       initiated.value = true
     }
   },
@@ -79,7 +79,8 @@ const events = {
     itemStore.updateItem(item, podcastname, docname)
   },
   onClickToggle(item: Item) {
-    itemStore.modifyItem({ ...item, shared: !item.shared }, podcastname, docname)
+    item.shared = !item.shared
+    itemStore.updateItem(item, podcastname, docname)
   },
 }
 </script>

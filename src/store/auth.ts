@@ -10,7 +10,6 @@ import {
   signInWithPopup,
   onAuthStateChanged,
 } from "firebase/auth"
-import useAsync from "@/hooks/useAsync"
 
 export interface IUser {
   nickName?: string
@@ -53,10 +52,8 @@ export const useAuthStore = defineStore("auth", () => {
     providedBy: Provider,
   ) {
     const auth = getAuth()
-    const userCredential = await useAsync(async () => {
-      await auth.setPersistence(browserSessionPersistence)
-      return await signInWithPopup(auth, provider)
-    })
+    await auth.setPersistence(browserSessionPersistence)
+    const userCredential = await signInWithPopup(auth, provider)
 
     saveUserToStore(userCredential.user, providedBy)
   }
@@ -68,17 +65,14 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   function getPersistenceFirebaseUser(providedBy: Provider): Promise<boolean> {
-    return useAsync(
-      () =>
-        new Promise((resolve) => {
-          const auth = getAuth()
+    return new Promise((resolve) => {
+      const auth = getAuth()
 
-          onAuthStateChanged(auth, (user) => {
-            if (user) saveUserToStore(user, providedBy)
-            resolve(user !== null)
-          })
-        }),
-    )
+      onAuthStateChanged(auth, (user) => {
+        if (user) saveUserToStore(user, providedBy)
+        resolve(user !== null)
+      })
+    })
   }
 
   return {

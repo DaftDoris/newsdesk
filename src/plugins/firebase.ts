@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app"
 import { getAnalytics } from "firebase/analytics"
-import { setLogLevel, getFirestore } from "firebase/firestore"
+import { getFirestore } from "firebase/firestore"
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAXBQG6b0_AKCY63dbQlcecWNKmiLAKjiI",
@@ -16,6 +16,3 @@ export const firebaseConfig = {
 export const app = initializeApp(firebaseConfig)
 export const db = getFirestore()
 export const analytics = getAnalytics(app)
-
-// TODO: remove this
-setLogLevel("debug")

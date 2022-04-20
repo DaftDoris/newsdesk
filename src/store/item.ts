@@ -1,8 +1,14 @@
 import { nanoid } from "nanoid"
 import { defineStore } from "pinia"
-import { fetchData, saveData } from "@/utils/api"
-import useAsync from "@/hooks/useAsync"
 import { Item } from "@/types/item"
+
+import {
+  collection,
+  doc,
+  getFirestore,
+  setDoc,
+  onSnapshot,
+} from "firebase/firestore"
 
 interface State {
   itemList: Item[]
@@ -15,12 +21,11 @@ export const useItemStore = defineStore("item", {
   actions: {
     async addItem(params: Item, podcastname: string, userId: string) {
       const id = nanoid()
-      const createdAt = new Date()
       const shared = false
-      const item: Item = { ...params, id, createdAt, shared }
+      const item: Item = { ...params, id, shared }
 
       this.itemList.push(item)
-      await useAsync(() => saveData(this.itemList, podcastname, userId))
+      return this.saveData(podcastname, userId)
     },
 
     async removeItem(item: Item, podcastname: string, userId: string) {
@@ -30,27 +35,26 @@ export const useItemStore = defineStore("item", {
 
       this.itemList.splice(index, 1)
       //TODO: remove only the individual item
-      await useAsync(() => saveData(this.itemList, podcastname, userId))
+      return this.saveData(podcastname, userId)
     },
 
     async updateItem(item: Item, podcastname: string, userId: string) {
       //TODO: update only the individual item
-      await useAsync(() => saveData(this.itemList, podcastname, userId))
+      return this.saveData(podcastname, userId)
     },
 
-    async modifyItem(item: Item, podcastname: string, userId: string) {
-      const index = this.itemList.findIndex((x) => x.id === item.id)
-
-      if (index < 0) {
-        throw new Error(`Can't find item [${item.id}]`)
-      }
-
-      this.itemList.splice(index, 1, item)
-      await useAsync(() => saveData(this.itemList, podcastname, userId))
+    async saveData(podcastname: string, userId: string) {
+      const db = getFirestore()
+      const docRef = doc(collection(db, podcastname), userId)
+      return setDoc(docRef, { items: this.itemList })
     },
 
-    async fetchItem(podcastname: string, userId: string) {
-      this.itemList = await useAsync(() => fetchData(podcastname, userId))
+    connect(podcastname: string, userId: string) {
+      const db = getFirestore()
+
+      onSnapshot(doc(db, podcastname, userId), (doc) => {
+        this.itemList = (doc.data()?.items ?? []) as Item[]
+      })
     },
   },
   getters: {
