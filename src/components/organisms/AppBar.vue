@@ -104,14 +104,9 @@ import { useAuthStore } from "@/store/auth"
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
 import {
   ChevronDownIcon,
-  MoonIcon as MoonIconRenderFn,
-  SunIcon as SunIconRenderFn,
+  MoonIcon,
+  SunIcon,
 } from "@heroicons/vue/outline"
-
-// @ts-expect-error (ts-tooling bug)
-const MoonIcon = MoonIconRenderFn()
-// @ts-expect-error (ts-tooling bug)
-const SunIcon = SunIconRenderFn()
 
 const authStore = useAuthStore()
 const route = useRoute()
