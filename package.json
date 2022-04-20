@@ -13,7 +13,7 @@
     "@vueuse/core": "8.2.6",
     "@vueuse/firebase": "8.2.5",
     "firebase": "9.6.10",
-    "moment": "2.29.2",
+    "moment": "2.29.3",
     "nanoid": "3.3.2",
     "pinia": "2.0.13",
     "vue": "3.2.33",
