@@ -1,4 +1,4 @@
-import { Todo } from "@/types/todo"
+import { Item } from "@/types/item"
 import {
   collection,
   doc,
@@ -11,7 +11,7 @@ import {
 async function fetchDataOnFirestore(
   podcastname: string,
   userId: string,
-): Promise<Todo[]> {
+): Promise<Item[]> {
   const db = getFirestore()
   const docRef = doc(collection(db, podcastname), userId)
   const snapshot = await getDoc(docRef)
@@ -20,30 +20,30 @@ async function fetchDataOnFirestore(
   return (data?.items ?? []).map((x: { createdAt: Timestamp }) => ({
     ...x,
     createdAt: x.createdAt.toDate(),
-  })) as Todo[]
+  })) as Item[]
 }
 
 async function saveDataOnFirestore(
-  todoList: Todo[],
+  itemList: Item[],
   podcastname: string,
   userId: string,
 ): Promise<void> {
   const db = getFirestore()
   const docRef = doc(collection(db, podcastname), userId)
-  await setDoc(docRef, { items: todoList })
+  await setDoc(docRef, { items: itemList })
 }
 
 export function fetchData(
   podcastname: string,
   userId: string,
-): Promise<Todo[]> {
+): Promise<Item[]> {
   return fetchDataOnFirestore(podcastname, userId)
 }
 
 export function saveData(
-  todoList: Todo[],
+  itemList: Item[],
   podcastname: string,
   userId: string,
 ): Promise<void> {
-  return saveDataOnFirestore(todoList, podcastname, userId)
+  return saveDataOnFirestore(itemList, podcastname, userId)
 }

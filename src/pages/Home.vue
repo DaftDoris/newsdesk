@@ -13,10 +13,10 @@
       </section>
       <section ref="t6">
         <List>
-          <template v-for="item in todoStore.getList" :key="item.id">
+          <template v-for="item in itemStore.getList" :key="item.id">
             <ListItem>
-              <TodoCard
-                :todo="item"
+              <ItemCard
+                :item="item"
                 @delete="events.onClickDelete"
                 @toggle="events.onClickToggle"
                 @update="events.onClickUpdate"
@@ -37,16 +37,16 @@
 import { watch, ref } from "vue"
 import { storeToRefs } from "pinia"
 import { useAuthStore } from "@/store/auth"
-import { useTodoStore } from "@/store/todo"
-import { Todo } from "@/types/todo"
+import { useItemStore } from "@/store/item"
+import { Item } from "@/types/item"
 
 import List from "@/components/atoms/List.vue"
 import ListItem from "@/components/atoms/ListItem.vue"
-import TodoCard from "@/components/molecules/Cards/TodoCard.vue"
+import ItemCard from "@/components/molecules/Cards/ItemCard.vue"
 import InputCard from "@/components/molecules/Cards/InputCard.vue"
 
 const authStore = useAuthStore()
-const todoStore = useTodoStore()
+const itemStore = useItemStore()
 
 const initiated = ref(false)
 
@@ -60,7 +60,7 @@ watch(
   isAuthenticated,
   async (authenticated) => {
     if (authenticated) {
-      await todoStore.fetchTodo(podcastname, docname)
+      await itemStore.fetchItem(podcastname, docname)
       initiated.value = true
     }
   },
@@ -71,16 +71,16 @@ watch(
 
 const events = {
   onClickSave(text: string) {
-    todoStore.addTodo({ text, level: 0 }, podcastname, docname)
+    itemStore.addItem({ text, slot:1 }, podcastname, docname)
   },
-  onClickDelete(todo: Todo) {
-    todoStore.removeTodo(todo, podcastname, docname)
+  onClickDelete(item: Item) {
+    itemStore.removeItem(item, podcastname, docname)
   },
-  onClickUpdate(todo: Todo) {
-    todoStore.updateTodo(todo, podcastname, docname)
+  onClickUpdate(item: Item) {
+    itemStore.updateItem(item, podcastname, docname)
   },
-  onClickToggle(todo: Todo) {
-    todoStore.modifyTodo({ ...todo, done: !todo.done }, podcastname, docname)
+  onClickToggle(item: Item) {
+    itemStore.modifyItem({ ...item, done: !item.done }, podcastname, docname)
   },
 }
 </script>
