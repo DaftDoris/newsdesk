@@ -1,10 +1,6 @@
 import { initializeApp } from "firebase/app"
 import { getAnalytics } from "firebase/analytics"
-// import "firebase/firestore";
 import { setLogLevel, getFirestore } from "firebase/firestore"
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAXBQG6b0_AKCY63dbQlcecWNKmiLAKjiI",
@@ -18,7 +14,8 @@ export const firebaseConfig = {
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig)
-// export db = app.firestore();
 export const db = getFirestore()
 export const analytics = getAnalytics(app)
+
+// TODO: remove this
 setLogLevel("debug")
