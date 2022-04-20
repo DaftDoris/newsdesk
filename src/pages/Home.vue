@@ -8,7 +8,7 @@
       <p>coming soon...</p>
     </div>
     <div class="px-4 mt-4 col-span-3">
-      <section v-for="slot in 7" :key="slot">
+      <section v-for="slot in Array.from({length:7}, (_, i) => 7 - i)" :key="slot">
         <h2 class="text-5xl dark:text-white">{{slot}}</h2>
         <List>
           <template v-for="item in itemStore.getSlotList(slot)" :key="item.id">
