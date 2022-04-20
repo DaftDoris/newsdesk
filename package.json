@@ -5,6 +5,7 @@
   "scripts": {
     "start": "vite --open",
     "dev": "vite",
+    "lint": "eslint .",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview"
   },
