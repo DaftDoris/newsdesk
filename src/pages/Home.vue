@@ -62,7 +62,7 @@ const initiated = ref(false)
 const { user, isAuthenticated } = storeToRefs(authStore)
 
 // @TODO: work with todays date
-const docname = "todaysdate"
+const docname = window.location.host === "localhost:3000" ? "todaysdate2" : "todaysdate"
 const podcastname = "smartseven"
 
 const dragged = (x:number, y:number, item:Item) => {
