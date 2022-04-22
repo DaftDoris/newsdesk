@@ -8,8 +8,15 @@
       <p>coming soon...</p>
     </div>
     <div class="px-4 mt-4 col-span-3">
-      <section v-for="slot in Array.from({length:7}, (_, i) => 7 - i)" :key="slot">
-        <h2 class="text-5xl dark:text-white">{{slot}}</h2>
+      <section
+        v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
+        :key="slot"
+      >
+        <SlotTitleInput
+          v-model="itemStore.getSlotTitleList[slot]"
+          :slotno="slot"
+          :updateEvent="events.onUpdateSaveDoc"
+        />
         <List>
           <template v-for="item in itemStore.getSlotList(slot)" :key="item.id">
             <ListItem>
@@ -43,6 +50,7 @@ import List from "@/components/atoms/List.vue"
 import ListItem from "@/components/atoms/ListItem.vue"
 import ItemCard from "@/components/molecules/Cards/ItemCard.vue"
 import InputCard from "@/components/molecules/Cards/InputCard.vue"
+import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
 
 const authStore = useAuthStore()
 const itemStore = useItemStore()
@@ -72,6 +80,9 @@ const events = {
   onClickSave(text: string, slot: Item["slot"]) {
     itemStore.addItem({ text, slot }, podcastname, docname)
   },
+  onUpdateSaveDoc() {
+    itemStore.saveData(podcastname, docname)
+  },
   onClickDelete(item: Item) {
     itemStore.removeItem(item, podcastname, docname)
   },
@@ -87,6 +98,6 @@ const events = {
 
 <style scoped lang="scss">
 ListItem {
-  display:none;
+  display: none;
 }
 </style>
