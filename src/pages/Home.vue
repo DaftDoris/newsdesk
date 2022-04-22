@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-import { watch, ref, computed } from "vue"
+import { watch, ref } from "vue"
 import { storeToRefs } from "pinia"
 import { useAuthStore } from "@/store/auth"
 import { useItemStore } from "@/store/item"
@@ -61,30 +61,38 @@ const initiated = ref(false)
 
 const { user, isAuthenticated } = storeToRefs(authStore)
 
-// @TODO: work with todays date
-const docname = "todaysdate"
-const podcastname = "smartseven"
+const props = defineProps({
+  podcastId: {
+    type: String,
+    default: "smartseven",
+  },
+})
 
-const dragged = (x:number, y:number, item:Item) => {
-  const slot = <Item["slot"]>(
-    parseInt(<string>
-    // @ts-ignore
-      document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]
-        ?.value,
-    )
+// @TODO: work with todays date
+const docname =
+  window.location.host === "localhost:3000" ? "todaysdate2" : "todaysdate"
+
+const dragged = (x: number, y: number, item: Item) => {
+  const slot = <Item["slot"]>parseInt(
+    <string>// @ts-ignore
+    document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
   )
   if (slot) {
     item.slot = slot
-    itemStore.saveData(podcastname, docname)
+    itemStore.saveData(props.podcastId, docname)
   }
+}
+
+const connect = () => {
+  if (initiated.value) itemStore.connect(props.podcastId, docname)
 }
 
 watch(
   isAuthenticated,
   async (authenticated) => {
     if (authenticated) {
-      await itemStore.connect(podcastname, docname)
       initiated.value = true
+      connect()
     }
   },
   {
@@ -92,22 +100,26 @@ watch(
   },
 )
 
+watch(() => props.podcastId, connect, {
+  immediate: true,
+})
+
 const events = {
   onClickSave(text: string, slot: Item["slot"]) {
-    itemStore.addItem({ text, slot }, podcastname, docname)
+    itemStore.addItem({ text, slot }, props.podcastId, docname)
   },
   onUpdateSaveDoc() {
-    itemStore.saveData(podcastname, docname)
+    itemStore.saveData(props.podcastId, docname)
   },
   onClickDelete(item: Item) {
-    itemStore.removeItem(item, podcastname, docname)
+    itemStore.removeItem(item, props.podcastId, docname)
   },
   onClickUpdate(item: Item) {
-    itemStore.updateItem(item, podcastname, docname)
+    itemStore.updateItem(item, props.podcastId, docname)
   },
   onClickToggle(item: Item) {
     item.shared = !item.shared
-    itemStore.updateItem(item, podcastname, docname)
+    itemStore.updateItem(item, props.podcastId, docname)
   },
 }
 </script>

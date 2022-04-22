@@ -20,6 +20,12 @@ const routes: RouteRecordRaw[] = [
         component: Home,
         meta: { title: "Daft Doris" },
       },
+      {
+        path: ":podcastId",
+        component: Home,
+        meta: { title: "Daft Doris" },
+        props: true,
+      },
     ],
     ...useAuthentication(),
   },

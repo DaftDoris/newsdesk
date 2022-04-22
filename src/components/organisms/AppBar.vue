@@ -4,14 +4,17 @@
       <div
         class="text-2xl font-bold flex items-center dark:text-gray-50 transition-colors"
       >
-      <img src="/daftdoris.svg" alt="DaftDoris" class="h-8 dark:invert" />
+        <img src="/daftdoris.svg" alt="DaftDoris" class="h-8 dark:invert" />
       </div>
       <Menu as="div" class="relative inline-block text-left">
         <div>
           <MenuButton
             class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
           >
-            Smart Seven 🇬🇧
+            {{
+              //@ts-ignore
+              this.$route.params.podcastId || "SELECT PODCAST"
+            }}
             <ChevronDownIcon class="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
           </MenuButton>
         </div>
@@ -30,7 +33,7 @@
             <div class="py-1">
               <MenuItem v-slot="{ active }">
                 <a
-                  href="#"
+                  href="#smartseven"
                   :class="[
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'block px-4 py-2 text-sm',
@@ -40,7 +43,7 @@
               </MenuItem>
               <MenuItem v-slot="{ active }">
                 <a
-                  href="#"
+                  href="#smartseven-ireland"
                   :class="[
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'block px-4 py-2 text-sm',
@@ -102,11 +105,7 @@ import { useRoute, useRouter } from "vue-router"
 import { useDark, useToggle } from "@vueuse/core"
 import { useAuthStore } from "@/store/auth"
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
-import {
-  ChevronDownIcon,
-  MoonIcon,
-  SunIcon,
-} from "@heroicons/vue/outline"
+import { ChevronDownIcon, MoonIcon, SunIcon } from "@heroicons/vue/outline"
 
 const authStore = useAuthStore()
 const route = useRoute()
