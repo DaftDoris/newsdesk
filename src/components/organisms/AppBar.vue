@@ -4,7 +4,7 @@
       <div
         class="text-2xl font-bold flex items-center dark:text-gray-50 transition-colors"
       >
-        {{ title }}
+      <img src="/daftdoris.svg" alt="DaftDoris" class="h-8 dark:invert" />
       </div>
       <Menu as="div" class="relative inline-block text-left">
         <div>
