@@ -17,6 +17,7 @@
           :slotno="slot"
           :updateEvent="events.onUpdateSaveDoc"
         />
+        <InputCard @save="events.onClickSave" :slot="slot" />
         <List>
           <template v-for="item in itemStore.getSlotList(slot)" :key="item.id">
             <ListItem>
@@ -28,7 +29,6 @@
               />
             </ListItem>
           </template>
-          <InputCard @save="events.onClickSave" :slot="slot" />
         </List>
       </section>
     </div>
