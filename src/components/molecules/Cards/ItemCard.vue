@@ -11,7 +11,9 @@
 
   <div class="flex justify-end">
     <ListActionButton title="Delete" @click="emits('delete', item)">
-      🗑
+                        <BackspaceIcon
+              class="dark:text-white bg-transparent transition-colors "
+            />
     </ListActionButton>
     <ListActionButton @click="emits('toggle', item)" title="Share">
       {{ item.shared ? "🙅‍♂️" : "💁" }}
@@ -25,6 +27,8 @@ import { PropType, computed, ref } from "vue"
 import { Item } from "@/types/item"
 import Button from "@/components/atoms/Button.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
+
+import { BackspaceIcon } from "@heroicons/vue/outline"
 
 const linkify = LinkifyIt()
 
@@ -55,4 +59,8 @@ const props = defineProps({
 const emits = defineEmits(["delete", "update", "save", "toggle"])
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+button svg {
+  @apply w-6;
+}
+</style>
