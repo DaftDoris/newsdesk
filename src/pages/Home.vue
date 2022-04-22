@@ -37,6 +37,8 @@
     <div class="px-4">
       <h2 class="text-2xl dark:text-white">Script</h2>
       <p>coming soon...</p>
+       {{podcastId}}
+
     </div>
   </main>
 </template>
@@ -61,9 +63,19 @@ const initiated = ref(false)
 
 const { user, isAuthenticated } = storeToRefs(authStore)
 
+
+const props = defineProps({
+  podcastId: {
+    type: String,
+    default: "smartseven",
+  },
+})
+
+const podcastname = props.podcastId
+
+
 // @TODO: work with todays date
 const docname = window.location.host === "localhost:3000" ? "todaysdate2" : "todaysdate"
-const podcastname = "smartseven"
 
 const dragged = (x:number, y:number, item:Item) => {
   const slot = <Item["slot"]>(
@@ -91,6 +103,8 @@ watch(
     immediate: true,
   },
 )
+
+
 
 const events = {
   onClickSave(text: string, slot: Item["slot"]) {
