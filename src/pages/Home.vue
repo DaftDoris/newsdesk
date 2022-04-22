@@ -97,7 +97,7 @@ const events = {
 </script>
 
 <style scoped lang="scss">
-ListItem {
-  display: none;
+h2 {
+  @apply ss-furniture;
 }
 </style>

@@ -35,6 +35,6 @@ const value = useVModel(props, "modelValue", emit)
   @apply appearance-none text-5xl dark:text-white bg-transparent focus:outline-none;
 }
 label {
-  @apply text-5xl dark:text-white;
+  @apply ss-furniture text-5xl dark:text-white;
 }
 </style>

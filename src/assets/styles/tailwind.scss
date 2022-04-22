@@ -50,3 +50,11 @@ span.emphasis {
 .bg-container {
   @apply dark:bg-gray-800 bg-white;
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap');
+
+@layer base {
+  .ss-furniture {
+    font-family: 'Bree Serif', serif;
+  }
+}
