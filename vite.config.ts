@@ -17,7 +17,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "./",
+  base: "/",
   plugins: [vue(), VitePWA(pwaOptions)],
   build: {
     minify: "esbuild",
