@@ -1,7 +1,7 @@
 <template>
   <label class="block text-sm font-bold mb-2">
     {{ label }}
-    <input
+    <textarea
       class="input"
       :type="type"
       :placeholder="placeholder"

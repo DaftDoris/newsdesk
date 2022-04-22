@@ -3,7 +3,7 @@
     <Input
       v-model="text"
       :placeholder="`Enter things into ${slot}...`"
-      @keydown.enter.prevent="save"
+      @keydown.enter.exact.prevent="save"
     />
   </div>
 </template>
