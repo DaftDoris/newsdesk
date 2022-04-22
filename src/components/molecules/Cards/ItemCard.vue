@@ -11,12 +11,17 @@
 
   <div class="flex justify-end">
     <ListActionButton title="Delete" @click="emits('delete', item)">
-                        <BackspaceIcon
-              class="dark:text-white bg-transparent transition-colors "
-            />
+      <BackspaceIcon class="dark:text-white bg-transparent transition-colors" />
     </ListActionButton>
     <ListActionButton @click="emits('toggle', item)" title="Share">
-      {{ item.shared ? "🙅‍♂️" : "💁" }}
+      <BookmarkIconSolid
+        v-if="item.shared"
+        class="dark:text-white bg-transparent transition-colors"
+      />
+      <BookmarkIcon
+        v-else
+        class="dark:text-white bg-transparent transition-colors"
+      />
     </ListActionButton>
   </div>
 </template>
@@ -28,7 +33,8 @@ import { Item } from "@/types/item"
 import Button from "@/components/atoms/Button.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
 
-import { BackspaceIcon } from "@heroicons/vue/outline"
+import { BackspaceIcon, BookmarkIcon } from "@heroicons/vue/outline"
+import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/solid"
 
 const linkify = LinkifyIt()
 
@@ -43,7 +49,10 @@ const htmlstring = computed(() => {
   return (
     matches?.reduce(
       (acc: string, match) =>
-        acc.replace(match.raw, `<a onclick="window.open('${match.url}', '_blank').focus()" href="${match.url}">${match.raw}</a>`),
+        acc.replace(
+          match.raw,
+          `<a onclick="window.open('${match.url}', '_blank').focus()" href="${match.url}">${match.raw}</a>`,
+        ),
       props.item.text,
     ) || props.item.text
   ).replace(/\n/g, "<br/>")
