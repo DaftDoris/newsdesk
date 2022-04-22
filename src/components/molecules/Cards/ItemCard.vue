@@ -10,18 +10,15 @@
   ></component>
 
   <div class="flex justify-end">
+    <div class="handle" draggable="true" @dragend="dropped">
+      <HandIcon />
+    </div>
     <ListActionButton title="Delete" @click="emits('delete', item)">
       <BackspaceIcon class="dark:text-white bg-transparent transition-colors" />
     </ListActionButton>
     <ListActionButton @click="emits('toggle', item)" title="Share">
-      <BookmarkIconSolid
-        v-if="item.shared"
-        class="dark:text-white bg-transparent transition-colors"
-      />
-      <BookmarkIcon
-        v-else
-        class="dark:text-white bg-transparent transition-colors"
-      />
+      <BookmarkIconSolid v-if="item.shared" />
+      <BookmarkIcon v-else />
     </ListActionButton>
   </div>
 </template>
@@ -33,7 +30,7 @@ import { Item } from "@/types/item"
 import Button from "@/components/atoms/Button.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
 
-import { BackspaceIcon, BookmarkIcon } from "@heroicons/vue/outline"
+import { BackspaceIcon, BookmarkIcon, HandIcon } from "@heroicons/vue/outline"
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/solid"
 
 const linkify = LinkifyIt()
@@ -43,6 +40,10 @@ const update = (text: string) => {
   emits("update", props.item)
 }
 const element = ref<HTMLElement | null>(null)
+
+const dropped = (e: DragEvent) => {
+  emits("dragged", e.clientX, e.clientY, props.item)
+}
 
 const htmlstring = computed(() => {
   const matches = linkify.match(props.item.text)
@@ -65,11 +66,14 @@ const props = defineProps({
   },
 })
 
-const emits = defineEmits(["delete", "update", "save", "toggle"])
+const emits = defineEmits(["delete", "update", "save", "toggle", "dragged"])
 </script>
 
 <style scoped lang="scss">
-button svg {
-  @apply w-6;
+button,
+.handle {
+  svg {
+    @apply dark:text-white w-6 cursor-pointer;
+  }
 }
 </style>

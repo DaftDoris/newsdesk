@@ -11,6 +11,7 @@
       <section
         v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
         :key="slot"
+        :slotno="slot"
       >
         <SlotTitleInput
           v-model="itemStore.getSlotTitleList[slot]"
@@ -26,6 +27,7 @@
                 @delete="events.onClickDelete"
                 @toggle="events.onClickToggle"
                 @update="events.onClickUpdate"
+                @dragged="dragged"
               />
             </ListItem>
           </template>
@@ -62,6 +64,20 @@ const { user, isAuthenticated } = storeToRefs(authStore)
 // @TODO: work with todays date
 const docname = "todaysdate"
 const podcastname = "smartseven"
+
+const dragged = (x:number, y:number, item:Item) => {
+  const slot = <Item["slot"]>(
+    parseInt(<string>
+    // @ts-ignore
+      document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]
+        ?.value,
+    )
+  )
+  if (slot) {
+    item.slot = slot
+    itemStore.saveData(podcastname, docname)
+  }
+}
 
 watch(
   isAuthenticated,
