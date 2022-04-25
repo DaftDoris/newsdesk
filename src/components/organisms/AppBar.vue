@@ -11,7 +11,11 @@
           <MenuButton
             class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
           >
-            {{ route.params.podcastId || "smartseven" }}
+            {{
+              podcasts.filter(
+                (podcast) => podcast.id === route.params.podcastId,
+              )[0]?.name || "select a podcast"
+            }}
             <ChevronDownIcon class="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
           </MenuButton>
         </div>
@@ -28,34 +32,18 @@
             class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
           >
             <div class="py-1">
-              <MenuItem v-slot="{ active }">
+              <MenuItem
+                v-slot="{ active }"
+                v-for="podcast in podcasts"
+                :key="podcast.id"
+              >
                 <a
-                  href="#smartseven"
+                  :href="`#${podcast.id}`"
                   :class="[
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'block px-4 py-2 text-sm',
                   ]"
-                  >Smart Seven 🇬🇧</a
-                >
-              </MenuItem>
-              <MenuItem v-slot="{ active }">
-                <a
-                  href="#smartseven-ireland"
-                  :class="[
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm',
-                  ]"
-                  >Smart Seven Ireland 🇮🇪</a
-                >
-              </MenuItem>
-              <MenuItem v-slot="{ active }">
-                <a
-                  href="#"
-                  :class="[
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm',
-                  ]"
-                  >Another podcast 🤖</a
+                  >{{ podcast.name }}</a
                 >
               </MenuItem>
             </div>
@@ -103,6 +91,7 @@ import { useDark, useToggle } from "@vueuse/core"
 import { useAuthStore } from "@/store/auth"
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
 import { ChevronDownIcon, MoonIcon, SunIcon } from "@heroicons/vue/outline"
+import { podcasts } from "@/store/podcasts"
 
 const authStore = useAuthStore()
 const route = useRoute()

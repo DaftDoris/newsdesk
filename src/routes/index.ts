@@ -6,6 +6,7 @@ import authenticatedLayout from "@/layouts/authenticated.vue"
 
 //  Pages
 import Home from "@/pages/Home.vue"
+import SelectPodcast from "@/pages/SelectPodcast.vue"
 import Login from "@/pages/Login.vue"
 import { useAuthentication } from "@/hooks/routes/auth"
 
@@ -17,7 +18,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: "",
-        component: Home,
+        component: SelectPodcast,
         meta: { title: "Daft Doris" },
       },
       {
