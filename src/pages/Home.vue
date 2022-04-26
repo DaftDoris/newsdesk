@@ -5,7 +5,10 @@
   >
     <div class="px-4">
       <h2 class="text-2xl dark:text-white">Longer List</h2>
-      <p>coming soon...</p>
+      <LongerList
+      :podcastId = "podcastId"
+      :docname = "docname"
+      />
     </div>
     <div class="px-4 mt-4 col-span-3">
       <section
@@ -50,6 +53,7 @@ import { Item } from "@/types/item"
 
 import List from "@/components/atoms/List.vue"
 import ListItem from "@/components/atoms/ListItem.vue"
+import LongerList from "@/components/LongerList.vue"
 import ItemCard from "@/components/molecules/Cards/ItemCard.vue"
 import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
@@ -69,8 +73,7 @@ const props = defineProps({
 })
 
 // @TODO: work with todays date
-const docname =
-  window.location.host === "localhost:3000" ? "todaysdate2" : "todaysdate"
+const docname = "todaysdate"
 
 const dragged = (x: number, y: number, item: Item) => {
   const slot = <Item["slot"]>parseInt(
