@@ -13,7 +13,6 @@
           :key="item.id"
         >
           <component :is="'p'" v-html="linkify(item.text)" />
-          <!-- {{ linkify(item.text) }} -->
         </li>
       </ul>
     </div>
@@ -54,14 +53,8 @@ const linkify = (text: string) => {
 </script>
 
 <style scoped lang="scss">
-p {
+.podcast {
   @apply prose prose-a:text-blue-600;
-}
-h3 {
-  @apply text-xl;
-}
-h4 {
-  @apply text-lg;
 }
 h3,
 h4 {
