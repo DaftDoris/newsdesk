@@ -1,25 +1,26 @@
 /* eslint-disable vue/no-mutating-props */
 <template>
-  <component
-    :is="'p'"
-    @focusout="update"
-    contenteditable="true"
-    class="prose prose-a:text-blue-600"
-    v-html="htmlstring"
-    ref="element"
-  ></component>
-
-  <div class="flex justify-end">
-    <div class="handle" draggable="true" @dragend="dropped">
+  <div class="handle flex justify-between	items-center" draggable="true" @dragend="dropped">
+    <component
+      :is="'p'"
+      @focusout="update"
+      contenteditable="true"
+      class="prose prose-a:text-blue-600 grow"
+      v-html="htmlstring"
+      ref="element"
+    ></component>
+    <div class="flex justify-end">
       <HandIcon />
+      <ListActionButton title="Delete" @click="emits('delete', item)">
+        <BackspaceIcon
+          class="dark:text-white bg-transparent transition-colors"
+        />
+      </ListActionButton>
+      <ListActionButton @click="emits('toggle', item)" title="Share">
+        <BookmarkIconSolid v-if="item.shared" />
+        <BookmarkIcon v-else />
+      </ListActionButton>
     </div>
-    <ListActionButton title="Delete" @click="emits('delete', item)">
-      <BackspaceIcon class="dark:text-white bg-transparent transition-colors" />
-    </ListActionButton>
-    <ListActionButton @click="emits('toggle', item)" title="Share">
-      <BookmarkIconSolid v-if="item.shared" />
-      <BookmarkIcon v-else />
-    </ListActionButton>
   </div>
 </template>
 
@@ -70,10 +71,20 @@ const emits = defineEmits(["delete", "update", "save", "toggle", "dragged"])
 </script>
 
 <style scoped lang="scss">
-button,
+
 .handle {
   svg {
     @apply dark:text-white w-6 cursor-pointer;
   }
+  border: 1px solid #ececec;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 10%);
+}
+.prose {
+  max-width: 100%;
+}
+.prose:focus {
+  outline: 0;
 }
 </style>
