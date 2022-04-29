@@ -27,6 +27,7 @@
             <ListItem>
               <ItemCard
                 :item="item"
+                :data-id="item.id"
                 @delete="events.onClickDelete"
                 @toggle="events.onClickToggle"
                 @update="events.onClickUpdate"
@@ -50,7 +51,7 @@ import { storeToRefs } from "pinia"
 import { useAuthStore } from "@/store/auth"
 import { useItemStore } from "@/store/item"
 import { Item } from "@/types/item"
-
+import { useRoute, useRouter } from "vue-router"
 import List from "@/components/atoms/List.vue"
 import ListItem from "@/components/atoms/ListItem.vue"
 import LongerList from "@/components/LongerList.vue"
@@ -60,6 +61,7 @@ import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
 
 const authStore = useAuthStore()
 const itemStore = useItemStore()
+const route = useRoute()
 
 const initiated = ref(false)
 
@@ -80,11 +82,32 @@ const dragged = (x: number, y: number, item: Item) => {
     <string>// @ts-ignore
     document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
   )
+  if(slot && slot == item.slot){
+    const id = document.elementFromPoint(x, y)?.attributes["data-id"]?.value
+    if(id){
+      const slotItem =itemStore.getList
+      const index1 = slotItem.findIndex(ele => ele.id === item.id);
+      const index2 = slotItem.findIndex(ele => ele.id === id);
+      const data= moveArrayItemToNewIndex(slotItem, index1, index2);
+      itemStore.updatesoltItem(data,slot,props.podcastId, docname);
+    }
+  }
   if (slot) {
     item.slot = slot
     itemStore.saveData(props.podcastId, docname)
   }
 }
+
+const moveArrayItemToNewIndex= (arr, old_index, new_index) =>{
+    if (new_index >= arr.length) {
+        var k = new_index - arr.length + 1;
+        while (k--) {
+            arr.push(undefined);
+        }
+    }
+    arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+    return arr; 
+};
 
 const connect = () => {
   if (initiated.value) itemStore.connect(props.podcastId, docname)
@@ -112,10 +135,13 @@ const events = {
     itemStore.addItem({ text, slot }, props.podcastId, docname)
   },
   onUpdateSaveDoc() {
+    console.log(props.podcastId,"props.podcastId")
     itemStore.saveData(props.podcastId, docname)
   },
   onClickDelete(item: Item) {
-    itemStore.removeItem(item, props.podcastId, docname)
+    if (window.confirm("are you sure?")) {
+      itemStore.removeItem(item, props.podcastId, docname)
+    }
   },
   onClickUpdate(item: Item) {
     itemStore.updateItem(item, props.podcastId, docname)

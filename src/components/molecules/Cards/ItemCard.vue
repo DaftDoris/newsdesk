@@ -3,6 +3,7 @@
   <div class="handle flex justify-between	items-center" draggable="true" @dragend="dropped">
     <component
       :is="'p'"
+      :data-id="item.id"
       @focusout="update"
       contenteditable="true"
       class="prose prose-a:text-blue-600 grow"
@@ -37,7 +38,7 @@ import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/solid"
 const linkify = LinkifyIt()
 
 const update = (text: string) => {
-  props.item.text = element.value?.innerText || ""
+  props.item.text = text.target.innerText || ""
   emits("update", props.item)
 }
 const element = ref<HTMLElement | null>(null)
