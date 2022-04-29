@@ -30,6 +30,11 @@ export const useItemStore = defineStore("item", {
       return this.saveData(podcastname, docname)
     },
 
+    async updatesoltItem(state: State,item: any, podcastname: string, docname: string) {
+      state.itemList = item;
+      return this.saveData(podcastname, docname)
+      },
+
     async removeItem(item: Item, podcastname: string, docname: string) {
       const index = this.itemList.findIndex((x) => x.id === item.id)
 
