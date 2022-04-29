@@ -8,6 +8,8 @@
       <LongerList
       :podcastId = "podcastId"
       :docname = "docname"
+      @draggedLongList = "draggedLongList"
+      @update="events.onClickUpdate"
       />
     </div>
     <div class="px-4 mt-4 col-span-3">
@@ -90,6 +92,17 @@ const connect = () => {
   if (initiated.value) itemStore.connect(props.podcastId, docname)
 }
 
+const moveArrayItemToNewIndex = (arr, old_index, new_index) =>{
+    if (new_index >= arr.length) {
+        var k = new_index - arr.length + 1;
+        while (k--) {
+            arr.push(undefined);
+        }
+    }
+    arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+    return arr; 
+};
+
 watch(
   isAuthenticated,
   async (authenticated) => {
@@ -106,6 +119,22 @@ watch(
 watch(() => props.podcastId, connect, {
   immediate: true,
 })
+
+	const draggedLongList = (x: number, y: number, item: Item, podcastId: string) => {
+  const id = document.elementFromPoint(x, y)?.attributes["item-id"]?.value
+  const slot = document.elementFromPoint(x, y)?.attributes["item-slot"]?.value
+  if(slot && slot == item.slot){
+    const slotItem =itemStore.getList
+    const index1 = slotItem.findIndex(ele => ele.id === item.id);
+    const index2 = slotItem.findIndex(ele => ele.id === id);
+    const data= moveArrayItemToNewIndex(slotItem, index1, index2);
+    itemStore.updatesoltItem(data,slot,podcastId, docname);
+  }
+  if(slot){
+    item.slot = parseInt(slot)
+    itemStore.updateSlot(podcastId, docname,item)
+  }
+}
 
 const events = {
   onClickSave(text: string, slot: Item["slot"]) {

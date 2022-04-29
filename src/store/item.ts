@@ -62,6 +62,20 @@ export const useItemStore = defineStore("item", {
         this.itemList = (doc.data()?.items ?? []) as Item[]
       })
     },
+
+    async updatesoltItem(state: State,item: any, slot:Number, podcastname: string, docname: string) {
+      state.itemList = item;
+      return this.saveData(podcastname, docname)
+    },
+
+    async updateSlot(podcastname: string, docname: string,item: Item) {
+      this.itemList.map((el)=> {
+        if(item.id=== el.id){
+          el.slot = item.slot
+        }
+      })
+      return this.saveData(podcastname, docname)
+    }
   },
   getters: {
     getList: (state: State) => state.itemList,
