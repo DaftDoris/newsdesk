@@ -115,7 +115,9 @@ const events = {
     itemStore.saveData(props.podcastId, docname)
   },
   onClickDelete(item: Item) {
-    itemStore.removeItem(item, props.podcastId, docname)
+    if (window.confirm("are you sure?")) {
+      itemStore.removeItem(item, props.podcastId, docname)
+    }
   },
   onClickUpdate(item: Item) {
     itemStore.updateItem(item, props.podcastId, docname)
