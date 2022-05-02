@@ -14,7 +14,7 @@
           draggable="true"
           @dragend="dropped($event, item, podcast.id)"
         >
-          <component :item-slot="item.slot" :item-id="item.id" :is="'p'" v-html="linkify(item.text)" />
+          <component class="border-b" :item-slot="item.slot" :item-id="item.id" :is="'p'" v-html="linkify(item.text)" />
         </li>
       </ul>
     </div>
