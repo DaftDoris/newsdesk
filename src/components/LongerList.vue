@@ -11,8 +11,8 @@
         <li
           v-for="item in podcast.items.filter((item) => item.slot === slotno)"
           :key="item.id"
-          draggable="true" 
-          @dragend="dropped($event,item,podcast.id)"
+          draggable="true"
+          @dragend="dropped($event, item, podcast.id)"
         >
           <component :item-slot="item.slot" :item-id="item.id" :is="'p'" v-html="linkify(item.text)" />
         </li>
@@ -53,8 +53,8 @@ const linkify = (text: string) => {
   ).replace(/\n/g, "<br/>")
 }
 
-const dropped = (e: DragEvent,item,name) => {
-  emits("draggedLongList", e.clientX, e.clientY,item,name)
+const dropped = (e: DragEvent, item: any, name: string) => {
+  emits("draggedLongList", e.clientX, e.clientY, item, name)
   emits("update", item)
 }
 
