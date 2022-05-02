@@ -41,9 +41,9 @@ import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/solid"
 
 const linkify = LinkifyIt()
 
-const update = (text: string) => {
+const update = (text: any) => {
   // eslint-disable-next-line vue/no-mutating-props
-  props.item.text = text.target.innerText || ""
+  props.item.text = text.target?.innerHTML || ""
   emits("update", props.item)
 }
 const element = ref<HTMLElement | null>(null)

@@ -82,7 +82,10 @@ const dragged = (x: number, y: number, item: Item) => {
   )
 
   if(slot && slot === item.slot){
-    const id = document.elementFromPoint(x, y)?.attributes["data-id"]?.value
+    const id =
+    <string>// @ts-ignore
+     document.elementFromPoint(x, y)?.attributes["data-id"]?.value
+    
     if(id){
       const slotItem =itemStore.getList
       const index1 = slotItem.findIndex(ele => ele.id === item.id);
@@ -97,7 +100,7 @@ const dragged = (x: number, y: number, item: Item) => {
   }
 }
 
-const moveArrayItemToNewIndex= (arr, old_index, new_index) =>{
+const moveArrayItemToNewIndex= (arr: any, old_index: number, new_index: number) =>{
     if (new_index >= arr.length) {
         var k = new_index - arr.length + 1;
         while (k--) {

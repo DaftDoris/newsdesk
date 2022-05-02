@@ -30,13 +30,8 @@ export const useItemStore = defineStore("item", {
       return this.saveData(podcastname, docname)
     },
 
-    async updatesoltItem(
-      state: State,
-      item: [],
-      podcastname: string,
-      docname: string,
-    ) {
-      state.itemList = item
+    async updatesoltItem(item: [], podcastname: string, docname: string) {
+      this.itemList = item
       return this.saveData(podcastname, docname)
     },
 
