@@ -11,6 +11,7 @@
       />
     </div>
     <div class="px-4 mt-4 col-span-3">
+      <h2 class="text-2xl dark:text-white">Draft</h2>
       <section
         v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
         :key="slot"
