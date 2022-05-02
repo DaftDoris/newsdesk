@@ -80,11 +80,36 @@ const dragged = (x: number, y: number, item: Item) => {
     <string>// @ts-ignore
     document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
   )
+
+  if(slot && slot === item.slot){
+    const id =
+    <string>// @ts-ignore
+     document.elementFromPoint(x, y)?.attributes["data-id"]?.value
+    
+    if(id){
+      const slotItem =itemStore.getList
+      const index1 = slotItem.findIndex(ele => ele.id === item.id);
+      const index2 = slotItem.findIndex(ele => ele.id === id);
+      const data= moveArrayItemToNewIndex(slotItem, index1, index2);
+      itemStore.updateSlotItem(data,props.podcastId, docname);
+    }
+  }
   if (slot) {
     item.slot = slot
     itemStore.saveData(props.podcastId, docname)
   }
 }
+
+const moveArrayItemToNewIndex= (arr: any, old_index: number, new_index: number) =>{
+    if (new_index >= arr.length) {
+        var k = new_index - arr.length + 1;
+        while (k--) {
+            arr.push(undefined);
+        }
+    }
+    arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+    return arr; 
+};
 
 const connect = () => {
   if (initiated.value) itemStore.connect(props.podcastId, docname)
