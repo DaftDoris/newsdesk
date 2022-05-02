@@ -91,7 +91,7 @@ const dragged = (x: number, y: number, item: Item) => {
       const index1 = slotItem.findIndex(ele => ele.id === item.id);
       const index2 = slotItem.findIndex(ele => ele.id === id);
       const data= moveArrayItemToNewIndex(slotItem, index1, index2);
-      itemStore.updatesoltItem(data,props.podcastId, docname);
+      itemStore.updateSlotItem(data,props.podcastId, docname);
     }
   }
   if (slot) {
