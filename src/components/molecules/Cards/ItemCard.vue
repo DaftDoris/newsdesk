@@ -1,6 +1,11 @@
 /* eslint-disable vue/no-mutating-props */
 <template>
-  <div class="handle flex justify-between	items-center" draggable="true" @dragend="dropped">
+  <div
+    :data-id="item.id"
+    class="handle flex justify-between items-center"
+    draggable="true"
+    @dragend="dropped"
+  >
     <component
       :is="'p'"
       :data-id="item.id"
@@ -29,7 +34,6 @@
 import LinkifyIt from "linkify-it"
 import { PropType, computed, ref } from "vue"
 import { Item } from "@/types/item"
-import Button from "@/components/atoms/Button.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
 
 import { BackspaceIcon, BookmarkIcon, HandIcon } from "@heroicons/vue/outline"
@@ -38,6 +42,7 @@ import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/solid"
 const linkify = LinkifyIt()
 
 const update = (text: string) => {
+  // eslint-disable-next-line vue/no-mutating-props
   props.item.text = text.target.innerText || ""
   emits("update", props.item)
 }
@@ -72,7 +77,6 @@ const emits = defineEmits(["delete", "update", "save", "toggle", "dragged"])
 </script>
 
 <style scoped lang="scss">
-
 .handle {
   svg {
     @apply dark:text-white w-6 cursor-pointer;

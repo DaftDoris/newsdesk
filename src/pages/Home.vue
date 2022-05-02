@@ -81,7 +81,7 @@ const dragged = (x: number, y: number, item: Item) => {
     document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
   )
 
-  if(slot && slot == item.slot){
+  if(slot && slot === item.slot){
     const id = document.elementFromPoint(x, y)?.attributes["data-id"]?.value
     if(id){
       const slotItem =itemStore.getList
