@@ -39,6 +39,20 @@ export const uselongListItemsStore = defineStore("longListItems", {
     },
   },
   getters: {
-    getLongList: (state: State) => state.itemLongList,
+    getLongList: (state: State) => {
+      // eslint-disable-next-line prefer-const
+      const longListItemData: longListItem[] = []
+      state.itemLongList.map((item) => {
+        longListItemData.push(item)
+        const itemData: Item[] = []
+        item.items.map((el) => {
+          if (el.shared) {
+            itemData.push(el)
+          }
+        })
+        item.items = itemData
+      })
+      return longListItemData
+    },
   },
 })

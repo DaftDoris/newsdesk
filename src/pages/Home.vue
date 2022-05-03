@@ -82,6 +82,7 @@ const dragged = (x: number, y: number, item: Item) => {
   )
   if (slot) {
     item.slot = slot
+    item.shared = false
     itemStore.saveData(props.podcastId, docname)
   }
 }
