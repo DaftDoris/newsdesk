@@ -3,16 +3,48 @@
     v-show="initiated && isAuthenticated"
     class="h-full grid grid-cols-5 gap-4 divide-x"
   >
-    <div class="px-4 col-span-3">
-      <h2 class="text-2xl dark:text-white pb-1">Inbox</h2>
+    <div class="px-4" :class="{'col-span-3':hideShowColumn.inbox}" >
+      <div class="flex justify-between items-center">
+        <h2 class="text-2xl dark:text-white pb-1">Inbox</h2>
+        <ListActionButton 
+          title="cloumn"
+        >
+          <PlusIcon
+            @click="hideShowColumn.inbox = true,hideShowColumn.script= hideShowColumn.draft = false"
+            v-if="!hideShowColumn.inbox"
+            class="dark:text-white bg-transparent transition-colors w-6"
+          />
+          <MinusIcon
+            class="dark:text-white bg-transparent transition-colors w-6"
+            @click="hideShowColumn.inbox = false, hideShowColumn.draft =true"
+            v-else
+          />
+        </ListActionButton>
+      </div>
       <LongerList
       :podcastId = "podcastId"
       :docname = "docname"
       @deleteInboxItem = "deleteInboxItem"
       />
     </div>
-    <div class="px-4 mt-4">
-      <h2 class="text-2xl dark:text-white">Draft</h2>
+    <div class="px-4" :class="{'col-span-3':hideShowColumn.draft}">
+      <div class="flex justify-between items-center">
+        <h2 class="text-2xl dark:text-white">Draft</h2>
+        <ListActionButton 
+          title="cloumn"
+        >
+          <PlusIcon
+            @click="hideShowColumn.draft = true,hideShowColumn.script= hideShowColumn.inbox = false"
+            v-if="!hideShowColumn.draft"
+            class="dark:text-white bg-transparent transition-colors w-6"
+          />
+          <MinusIcon
+            class="dark:text-white bg-transparent transition-colors w-6"
+            @click="hideShowColumn.draft = false, hideShowColumn.inbox =true"
+            v-else
+          />
+        </ListActionButton>
+      </div>
       <section
         v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
         :key="slot"
@@ -39,15 +71,31 @@
         </List>
       </section>
     </div>
-    <div class="px-4">
-      <h2 class="text-2xl dark:text-white">Script</h2>
+    <div class="px-4" :class="{'col-span-3':hideShowColumn.script}">
+      <div class="flex justify-between items-center">
+        <h2 class="text-2xl dark:text-white">Script</h2>
+        <ListActionButton 
+          title="cloumn"
+        >
+          <PlusIcon
+            @click="hideShowColumn.script = true,hideShowColumn.draft= hideShowColumn.inbox = false"
+            v-if="!hideShowColumn.script"
+            class="dark:text-white bg-transparent transition-colors w-6"
+          />
+          <MinusIcon
+            class="dark:text-white bg-transparent transition-colors w-6"
+            @click="hideShowColumn.script = false, hideShowColumn.inbox =true"
+            v-else
+          />
+      </ListActionButton>
+      </div>
       <p>coming soon...</p>
     </div>
   </main>
 </template>
 
 <script lang="ts" setup>
-import { watch, ref } from "vue"
+import { watch, ref, reactive } from "vue"
 import { storeToRefs } from "pinia"
 import { useAuthStore } from "@/store/auth"
 import { useItemStore } from "@/store/item"
@@ -59,6 +107,8 @@ import LongerList from "@/components/LongerList.vue"
 import ItemCard from "@/components/molecules/Cards/ItemCard.vue"
 import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
+import ListActionButton from "@/components/atoms/ListActionButton.vue"
+import { PlusIcon, MinusIcon } from "@heroicons/vue/outline"
 
 const authStore = useAuthStore()
 const itemStore = useItemStore()
@@ -76,6 +126,11 @@ const props = defineProps({
 
 // @TODO: work with todays date
 const docname = "todaysdate"
+const hideShowColumn = reactive({
+  inbox: true,
+  draft: false,
+  script:false
+})
 
 const dragged = (x: number, y: number, item: Item) => {
   const slot = <Item["slot"]>parseInt(
