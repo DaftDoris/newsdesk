@@ -12,7 +12,11 @@
           v-for="item in podcast.items.filter((item) => item.slot === slotno)"
           :key="item.id"
         >
-          <component :is="'p'" v-html="linkify(item.text)" />
+          <component
+            class="w-100 break-all"
+            :is="'p'"
+            v-html="linkify(item.text)"
+          />
         </li>
       </ul>
     </div>
