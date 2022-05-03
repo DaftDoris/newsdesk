@@ -6,11 +6,16 @@
     >
       <ul>
         <li
+          class="list-none"
           v-for="item in podcast.items.filter((item) => item.slot === slotno)"
           :key="item.id"
           class="flex justify-between items-center border-b"
         >
-          <component :is="'p'" class="pb-1" v-html="linkify(item.text)" />
+          <component
+            class="border-b border-slate-400 pb-1 w-100 break-all"
+            :is="'p'"
+            v-html="linkify(item.text)"
+          />
           <div class="flex justify-end">
             <HandIcon class="w-6 cursor-pointer" />
             <ListActionButton
@@ -71,6 +76,8 @@ const emits = defineEmits(["deleteInboxItem"])
   @apply prose prose-li:my-0;
   @apply prose prose-p:mb-0;
   max-width: 100%;
+  @apply prose prose-ul:pl-0;
+
 }
 h3,
 h4 {
