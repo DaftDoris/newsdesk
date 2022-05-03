@@ -3,14 +3,15 @@
     v-show="initiated && isAuthenticated"
     class="h-full grid grid-cols-5 gap-4 divide-x"
   >
-    <div class="px-4">
+    <div class="px-4 col-span-3">
       <h2 class="text-2xl dark:text-white">Longer List</h2>
       <LongerList
       :podcastId = "podcastId"
       :docname = "docname"
+      @deleteInboxItem = "deleteInboxItem"
       />
     </div>
-    <div class="px-4 mt-4 col-span-3">
+    <div class="px-4 mt-4 ">
       <section
         v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
         :key="slot"
@@ -106,6 +107,13 @@ watch(
 watch(() => props.podcastId, connect, {
   immediate: true,
 })
+
+const deleteInboxItem = (item: Item, podcastId: string) =>{
+  if (window.confirm('Are you sure to remove the Item in the inbox?')) {
+    item.shared = false
+    itemStore.updateItem(item,podcastId, docname)
+  }
+}
 
 const events = {
   onClickSave(text: string, slot: Item["slot"]) {

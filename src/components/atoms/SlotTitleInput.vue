@@ -2,7 +2,7 @@
   <label>
     {{ slotno }}:
     <input
-      class="input"
+      class="input max-w-fit"
       :placeholder="`${slotno} title`"
       v-model="value"
       @keydown.enter.prevent="updateEvent"

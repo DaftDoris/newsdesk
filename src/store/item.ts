@@ -41,6 +41,13 @@ export const useItemStore = defineStore("item", {
     },
 
     async updateItem(item: Item, podcastname: string, docname: string) {
+      this.itemList = this.itemList.map((el) => {
+        if (el.id === item.id) {
+          return item
+        } else {
+          return el
+        }
+      })
       //TODO: update only the individual item
       return this.saveData(podcastname, docname)
     },

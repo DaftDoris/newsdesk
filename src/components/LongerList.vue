@@ -1,18 +1,28 @@
 <template>
   <div class="podcast" v-for="podcast in store.getLongList" :key="podcast.id">
-    <h3>{{ podcast.name }}</h3>
     <div
       v-for="slotno in Array.from({ length: 7 }, (_, i) => 7 - i)"
       :key="slotno"
     >
-      <h4>{{ slotno }}: {{ podcast.slotTitles[slotno] }}</h4>
-
       <ul>
         <li
           v-for="item in podcast.items.filter((item) => item.slot === slotno)"
           :key="item.id"
+          class="flex justify-between items-center border-b"
         >
-          <component :is="'p'" v-html="linkify(item.text)" />
+          <component :is="'p'" class="pb-1" v-html="linkify(item.text)" />
+          <div class="flex justify-end">
+            <HandIcon class="w-6 cursor-pointer" />
+            <ListActionButton
+              title="Delete"
+              class="cursor-pointer"
+              @click="emits('deleteInboxItem', item, podcast.id)"
+            >
+              <BackspaceIcon
+                class="dark:text-white bg-transparent transition-colors w-6"
+              />
+            </ListActionButton>
+          </div>
         </li>
       </ul>
     </div>
@@ -23,6 +33,8 @@
 import { Item } from "@/types/item"
 import { uselongListItemsStore } from "@/store/longListItems"
 import LinkifyIt from "linkify-it"
+import ListActionButton from "@/components/atoms/ListActionButton.vue"
+import { BackspaceIcon, HandIcon } from "@heroicons/vue/outline"
 
 const props = defineProps({
   podcastId: {
@@ -50,11 +62,15 @@ const linkify = (text: string) => {
     ) || text
   ).replace(/\n/g, "<br/>")
 }
+const emits = defineEmits(["deleteInboxItem"])
 </script>
 
 <style scoped lang="scss">
 .podcast {
   @apply prose prose-a:text-blue-600;
+  @apply prose prose-li:my-0;
+  @apply prose prose-p:mb-0;
+  max-width: 100%;
 }
 h3,
 h4 {
