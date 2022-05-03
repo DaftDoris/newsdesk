@@ -12,7 +12,11 @@
           v-for="item in podcast.items.filter((item) => item.slot === slotno)"
           :key="item.id"
         >
-          <component :is="'p'" v-html="linkify(item.text)" />
+          <component
+            class="w-full break-all"
+            :is="'p'"
+            v-html="linkify(item.text)"
+          />
         </li>
       </ul>
     </div>
@@ -45,7 +49,12 @@ const linkify = (text: string) => {
   return (
     matches?.reduce(
       (acc: string, match) =>
-        acc.replace(match.raw, `<a href="${match.url}">${match.raw}</a>`),
+        acc.replace(
+          match.raw,
+          `<a href="${match.url}">${
+            match.raw.length > 50 ? match.raw.slice(0, 50) + "..." : match.raw
+          }</a>`,
+        ),
       text,
     ) || text
   ).replace(/\n/g, "<br/>")
