@@ -11,7 +11,7 @@
       :data-id="item.id"
       @focusout="update"
       contenteditable="true"
-      class="prose prose-a:text-blue-600 grow"
+      class="prose prose-a:text-blue-600 break-all"
       v-html="htmlstring"
       ref="element"
     ></component>

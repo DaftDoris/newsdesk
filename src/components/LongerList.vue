@@ -13,7 +13,7 @@
           @dragend="dropped($event, item, podcast.id)"
         >
           <component
-            class="border-b border-slate-400 pb-1"
+            class="border-b border-slate-400 pb-1 w-100 break-all"
             :item-slot="item.slot"
             :item-id="item.id"
             :is="'p'"
