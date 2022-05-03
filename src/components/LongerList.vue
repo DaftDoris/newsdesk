@@ -1,18 +1,20 @@
 <template>
   <div class="podcast" v-for="podcast in store.getLongList" :key="podcast.id">
-    <h3>{{ podcast.name }}</h3>
     <div
       v-for="slotno in Array.from({ length: 7 }, (_, i) => 7 - i)"
       :key="slotno"
     >
-      <h4>{{ slotno }}: {{ podcast.slotTitles[slotno] }}</h4>
-
       <ul>
         <li
+          class="list-none"
           v-for="item in podcast.items.filter((item) => item.slot === slotno)"
           :key="item.id"
         >
-          <component :is="'p'" v-html="linkify(item.text)" />
+          <component
+            class="border-b border-slate-400 pb-1 w-100 break-all"
+            :is="'p'"
+            v-html="linkify(item.text)"
+          />
         </li>
       </ul>
     </div>
@@ -55,6 +57,7 @@ const linkify = (text: string) => {
 <style scoped lang="scss">
 .podcast {
   @apply prose prose-a:text-blue-600;
+  @apply prose prose-ul:pl-0;
 }
 h3,
 h4 {
