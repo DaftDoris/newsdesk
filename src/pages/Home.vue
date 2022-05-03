@@ -4,7 +4,7 @@
     class="h-full grid grid-cols-5 gap-4 divide-x"
   >
     <div class="px-4">
-      <h2 class="text-2xl dark:text-white">Longer List</h2>
+      <h2 class="text-2xl dark:text-white pb-1">Inbox</h2>
       <LongerList
       :podcastId = "podcastId"
       :docname = "docname"
