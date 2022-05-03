@@ -61,7 +61,7 @@
               <ItemCard
                 :item="item"
                 @delete="events.onClickDelete"
-                @toggle="events.onClickToggle"
+                @share="events.onClickShare"
                 @update="events.onClickUpdate"
                 @dragged="dragged"
               />
@@ -98,6 +98,7 @@ import { watch, ref, reactive } from "vue"
 import { storeToRefs } from "pinia"
 import { useAuthStore } from "@/store/auth"
 import { useItemStore } from "@/store/item"
+import { useShareStore } from "@/store/itemshare"
 import { Item } from "@/types/item"
 
 import List from "@/components/atoms/List.vue"
@@ -111,7 +112,7 @@ import { PlusIcon, MinusIcon } from "@heroicons/vue/outline"
 
 const authStore = useAuthStore()
 const itemStore = useItemStore()
-
+const shareStore = useShareStore()
 const initiated = ref(false)
 
 const { user, isAuthenticated } = storeToRefs(authStore)
@@ -217,9 +218,13 @@ const events = {
   onClickUpdate(item: Item) {
     itemStore.updateItem(item, props.podcastId, docname)
   },
-  onClickToggle(item: Item) {
-    item.shared = !item.shared
+  onClickShare(item: Item, destination: string) {
+    if (item.shared) {
+      return alert(`This item is already shared to ${destination}`)
+    }
+    item.shared = true
     itemStore.updateItem(item, props.podcastId, docname)
+    shareStore.sendItem(item, destination)
   },
 }
 </script>
