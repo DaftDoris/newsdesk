@@ -11,7 +11,7 @@
           :key="item.id"
         >
           <component
-            class="border-b border-slate-400 pb-1"
+            class="border-b border-slate-400 pb-1 w-100 break-all"
             :is="'p'"
             v-html="linkify(item.text)"
           />
