@@ -3,13 +3,13 @@ import { getAnalytics } from "firebase/analytics"
 import { getFirestore } from "firebase/firestore"
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyAXBQG6b0_AKCY63dbQlcecWNKmiLAKjiI",
-  authDomain: "daftdoris-cns.firebaseapp.com",
-  projectId: "daftdoris-cns",
-  storageBucket: "daftdoris-cns.appspot.com",
-  messagingSenderId: "785842200541",
-  appId: "1:785842200541:web:8b34412472e7aa2feaa034",
-  measurementId: "G-CCEL9G8W59",
+  apiKey: "AIzaSyBvk41kRWgCj9cQ2Bn_WRcxuULTcV3TwqI",
+  authDomain: "newsroom-bec1a.firebaseapp.com",
+  projectId: "newsroom-bec1a",
+  storageBucket: "newsroom-bec1a.appspot.com",
+  messagingSenderId: "479379145905",
+  appId: "1:479379145905:web:8ceabb2b56f2d542190e90",
+  measurementId: "G-JWJXD9J650",
 }
 
 // Initialize Firebase
