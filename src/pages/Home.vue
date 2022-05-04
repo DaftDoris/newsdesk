@@ -126,8 +126,8 @@ const props = defineProps({
 // @TODO: work with todays date
 const docname = "todaysdate"
 const hideShowColumn = reactive({
-  inbox: true,
-  draft: false,
+  inbox: false,
+  draft: true,
   script:false
 })
 
