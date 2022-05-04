@@ -12,7 +12,7 @@
             class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
           >
             {{
-              podcasts.filter(
+              store.getPodcasts.filter(
                 (podcast) => podcast.id === route.params.podcastId,
               )[0]?.name || "select a podcast"
             }}
@@ -34,7 +34,7 @@
             <div class="py-1">
               <MenuItem
                 v-slot="{ active }"
-                v-for="podcast in podcasts"
+                v-for="podcast in store.getPodcasts"
                 :key="podcast.id"
               >
                 <a
@@ -91,11 +91,12 @@ import { useDark, useToggle } from "@vueuse/core"
 import { useAuthStore } from "@/store/auth"
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
 import { ChevronDownIcon, MoonIcon, SunIcon } from "@heroicons/vue/outline"
-import { podcasts } from "@/store/podcasts"
+import { usePodcastStore } from "@/store/podcasts"
 
 const authStore = useAuthStore()
 const route = useRoute()
 const router = useRouter()
+const store = usePodcastStore()
 
 const title = computed(() => route.meta.title || "Home")
 const user = computed(() => authStore.user)
