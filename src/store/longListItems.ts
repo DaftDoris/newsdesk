@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import { Item } from "@/types/item"
-import { podcasts } from "@/store/podcasts"
+import { usePodcastStore } from "@/store/podcasts"
 
 import { doc, getFirestore, onSnapshot } from "firebase/firestore"
 
@@ -17,7 +17,7 @@ interface State {
 
 export const uselongListItemsStore = defineStore("longListItems", {
   state: (): State => ({
-    itemLongList: podcasts.map((podcast) => ({
+    itemLongList: usePodcastStore().getPodcasts.map((podcast) => ({
       id: podcast.id,
       name: podcast.name,
       slotTitles: [],
@@ -27,7 +27,7 @@ export const uselongListItemsStore = defineStore("longListItems", {
   actions: {
     connect(docname: string) {
       const db = getFirestore()
-      podcasts.forEach((podcast, i) =>
+      usePodcastStore().getPodcasts.forEach((podcast, i) =>
         onSnapshot(doc(db, podcast.id, docname), (doc) => {
           this.itemLongList[i] = {
             slotTitles: (doc.data()?.slotTitles ?? []) as string[],
