@@ -24,7 +24,6 @@
 <script lang="ts" setup>
 import { Item } from "@/types/item"
 import { uselongListItemsStore } from "@/store/longListItems"
-import LinkifyIt from "linkify-it"
 
 const props = defineProps({
   podcastId: {
@@ -40,22 +39,16 @@ const props = defineProps({
 const store = uselongListItemsStore()
 store.connect(props.docname)
 
-const linkifyit = LinkifyIt()
-
 const linkify = (text: string) => {
-  const matches = linkifyit.match(text)
-  return (
-    matches?.reduce(
-      (acc: string, match) =>
-        acc.replace(
-          match.raw,
-          `<a href="${match.url}">${
-            match.raw.length > 50 ? match.raw.slice(0, 50) + "..." : match.raw
-          }</a>`,
-        ),
-      text,
-    ) || text
-  ).replace(/\n/g, "<br/>")
+  const itemText = text.replace(/<\/a>/g, "").replace(/<a.*?>/g, "")
+
+  const replacePattern =
+    /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim
+  const replacedText = itemText.replace(replacePattern, function (link, m1) {
+    return `<a class="cursor-pointer" style="color:rgb(37 99 235 / 1)" onclick="window.open('${link}').focus()" target="_blank">${link.length > 50 ? link.slice(0, 50) + "..." : link}</a>`
+  })
+
+  return replacedText.replace(/\n/g, "<br/>")
 }
 </script>
 
