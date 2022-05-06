@@ -14,7 +14,7 @@
     "@heroicons/vue": "1.0.6",
     "@types/linkify-it": "^3.0.2",
     "@vueuse/core": "8.4.2",
-    "firebase": "9.7.0",
+    "firebase": "9.8.0",
     "linkify-it": "4.0.1",
     "moment": "2.29.3",
     "nanoid": "3.3.4",
