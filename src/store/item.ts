@@ -68,11 +68,6 @@ export const useItemStore = defineStore("item", {
       })
     },
 
-    async updatesoltItem(item: [], podcastname: string, docname: string) {
-      this.itemList = item
-      return this.saveData(podcastname, docname)
-    },
-
     async updateSlot(podcastname: string, docname: string, item: Item) {
       this.itemList.map((el) => {
         if (item.id === el.id) {
