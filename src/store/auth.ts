@@ -4,7 +4,7 @@ import { Provider } from "@/types/auth"
 import { Nullable } from "@/types/base"
 import {
   AuthProvider,
-  browserSessionPersistence,
+  browserLocalPersistence,
   User,
   getAuth,
   signInWithPopup,
@@ -52,7 +52,7 @@ export const useAuthStore = defineStore("auth", () => {
     providedBy: Provider,
   ) {
     const auth = getAuth()
-    await auth.setPersistence(browserSessionPersistence)
+    await auth.setPersistence(browserLocalPersistence)
     const userCredential = await signInWithPopup(auth, provider)
 
     saveUserToStore(userCredential.user, providedBy)
