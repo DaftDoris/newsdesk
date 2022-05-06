@@ -3,7 +3,7 @@
     v-show="initiated && isAuthenticated"
     class="h-full grid grid-cols-5 gap-4 divide-x"
   >
-    <div class="px-4" :class="{'col-span-3':hideShowColumn.inbox}" >
+    <div class="px-4 column-h overflow-y-auto" :class="{'col-span-3':hideShowColumn.inbox}" >
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Inbox</h2>
         <ListActionButton 
@@ -26,7 +26,7 @@
       :docname = "docname"
       />
     </div>
-    <div class="px-4" :class="{'col-span-3':hideShowColumn.draft}">
+    <div class="px-4 column-h overflow-y-auto" :class="{'col-span-3':hideShowColumn.draft}">
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Draft</h2>
         <ListActionButton 
@@ -70,7 +70,7 @@
         </List>
       </section>
     </div>
-    <div class="px-4" :class="{'col-span-3':hideShowColumn.script}">
+    <div class="px-4 column-h overflow-y-auto" :class="{'col-span-3':hideShowColumn.script}">
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Script</h2>
         <ListActionButton 
@@ -213,5 +213,8 @@ const events = {
 <style scoped lang="scss">
 h2 {
   @apply ss-furniture;
+}
+.column-h {
+  height: calc(100vh - 72px);
 }
 </style>

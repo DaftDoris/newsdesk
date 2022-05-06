@@ -1,22 +1,35 @@
 <template>
   <header v-if="isAuthenticated" v-bind="$attrs">
-    <div class="mx-auto w-full flex justify-between">
+    <div class="mx-auto w-full sm:flex flex justify-between">
       <div
         class="text-2xl font-bold flex items-center dark:text-gray-50 transition-colors"
       >
         <img src="/daftdoris.svg" alt="DaftDoris" class="h-8 dark:invert" />
       </div>
-      <Menu as="div" class="relative inline-block text-left">
+      <Menu
+        as="div"
+        v-slot="{ open }"
+        class="relative inline-block text-left sm:w-64"
+      >
         <div>
           <MenuButton
-            class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+            class="inline-flex justify-between w-full items-center rounded-lg border-2 border-black shadow-sm px-4 py-1 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
           >
             {{
               store.getPodcasts.filter(
                 (podcast) => podcast.id === route.params.podcastId,
               )[0]?.name || "select a podcast"
             }}
-            <ChevronDownIcon class="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
+            <ArrowCircleDownIcon
+              v-if="!open"
+              class="-mr-1 ml-2 h-7 w-7"
+              aria-hidden="true"
+            />
+            <ArrowCircleUpIcon
+              v-if="open"
+              class="-mr-1 ml-2 h-7 w-7"
+              aria-hidden="true"
+            />
           </MenuButton>
         </div>
 
@@ -29,7 +42,7 @@
           leave-to-class="transform opacity-0 scale-95"
         >
           <MenuItems
-            class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+            class="origin-top-right absolute left-0 mt-2 sm:w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
           >
             <div class="py-1">
               <MenuItem
@@ -90,7 +103,7 @@ import { useRoute, useRouter } from "vue-router"
 import { useDark, useToggle } from "@vueuse/core"
 import { useAuthStore } from "@/store/auth"
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
-import { ChevronDownIcon, MoonIcon, SunIcon } from "@heroicons/vue/outline"
+import { ArrowCircleDownIcon,ArrowCircleUpIcon, MoonIcon, SunIcon } from "@heroicons/vue/outline"
 import { usePodcastStore } from "@/store/podcasts"
 
 const authStore = useAuthStore()
