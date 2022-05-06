@@ -19,12 +19,12 @@ const routes: RouteRecordRaw[] = [
       {
         path: "",
         component: SelectPodcast,
-        meta: { title: "Daft Doris" },
+        meta: { title: "Daft Doris", requiresAuth: true },
       },
       {
         path: ":podcastId",
         component: Home,
-        meta: { title: "Daft Doris" },
+        meta: { title: "Daft Doris", requiresAuth: true },
         props: true,
       },
     ],
@@ -38,8 +38,10 @@ const routes: RouteRecordRaw[] = [
       {
         path: "Login",
         component: Login,
+        meta: { requiresVisitor: true },
       },
     ],
+    ...useAuthentication(),
   },
 ]
 
