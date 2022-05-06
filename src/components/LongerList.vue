@@ -9,9 +9,13 @@
           class="list-none"
           v-for="item in podcast.items.filter((item) => item.slot === slotno)"
           :key="item.id"
+          draggable="true"
+          @dragend="dropped($event, item, podcast.id)"
         >
           <component
             class="border-b border-slate-400 pb-1 w-100 break-all"
+            :item-slot="item.slot"
+            :item-id="item.id"
             :is="'p'"
             v-html="linkify(item.text)"
           />
@@ -52,6 +56,14 @@ const linkify = (text: string) => {
     ) || text
   ).replace(/\n/g, "<br/>")
 }
+
+const dropped = (e: DragEvent, item: any, name: string) => {
+  emits("draggedLongList", e.clientX, e.clientY, item, name)
+  emits("update", item)
+}
+
+const emits = defineEmits(["draggedLongList", "update"])
+
 </script>
 
 <style scoped lang="scss">
