@@ -58,6 +58,7 @@ const linkify = (text: string) => {
 .podcast {
   @apply prose prose-a:text-blue-600;
   @apply prose prose-ul:pl-0;
+  max-width: 100%;
 }
 h3,
 h4 {

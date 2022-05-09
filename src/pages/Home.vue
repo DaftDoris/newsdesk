@@ -56,7 +56,7 @@
         />
         <InputCard @save="events.onClickSave" :slot="slot" />
         <List>
-          <template v-for="item in itemStore.getSlotList(slot)" :key="item.id">
+          <template v-for="item in itemStore.getSlotList(slot).reverse()" :key="item.id">
             <ListItem>
               <ItemCard
                 :item="item"
