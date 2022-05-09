@@ -41,7 +41,9 @@ import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/solid"
 
 const update = (text: any) => {
   const itemText = text.target?.innerHTML || ""
-  const filterItemText = itemText.replace(/<\/a>/g, "").replace(/<a.*?>/g, "")
+  const filterItemText = itemText
+    .replace(/(">.*?)<\/a>/g, "")
+    .replace(/<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)/g, "")
   // eslint-disable-next-line vue/no-mutating-props
   props.item.text = getItemText(filterItemText)
   emits("update", props.item)
@@ -58,16 +60,17 @@ const getItemText = (itemText: string) => {
   //URLs starting with http://, https://, https://.www or ftp://
   const replacePattern =
     /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim
-  replacedText = itemText.replace(
-    replacePattern,
-    `<a class="cursor-pointer" onclick="window.open('$1').focus()" target="_blank">$1</a>`,
-  )
+  replacedText = itemText.replace(replacePattern, function (link, m1) {
+    return `<a class="cursor-pointer" style="color:rgb(37 99 235 / 1)" onclick="window.open('${link}').focus()" target="_blank" href="${link}">${link.length > 50 ? link.slice(0, 50) + "..." : link}</a>`
+  })
 
   return replacedText.replace(/\n/g, "<br/>")
 }
 
 const htmlstring = computed(() => {
-  const itemText = props.item.text.replace(/<\/a>/g, "").replace(/<a.*?>/g, "")
+  const itemText = props.item.text
+    .replace(/(">.*?)<\/a>/g, "")
+    .replace(/<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)/g, "")
   return getItemText(itemText)
 })
 

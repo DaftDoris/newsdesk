@@ -40,12 +40,14 @@ const store = uselongListItemsStore()
 store.connect(props.docname)
 
 const linkify = (text: string) => {
-  const itemText = text.replace(/<\/a>/g, "").replace(/<a.*?>/g, "")
+  const itemText = text
+    .replace(/(">.*?)<\/a>/g, "")
+    .replace(/<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)/g, "")
 
   const replacePattern =
     /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim
   const replacedText = itemText.replace(replacePattern, function (link, m1) {
-    return `<a class="cursor-pointer" style="color:rgb(37 99 235 / 1)" onclick="window.open('${link}').focus()" target="_blank">${link.length > 50 ? link.slice(0, 50) + "..." : link}</a>`
+    return `<a class="cursor-pointer" style="color:rgb(37 99 235 / 1)" onclick="window.open('${link}').focus()" target="_blank" href="${link}">${link.length > 50 ? link.slice(0, 50) + "..." : link}</a>`
   })
 
   return replacedText.replace(/\n/g, "<br/>")
@@ -56,6 +58,7 @@ const linkify = (text: string) => {
 .podcast {
   @apply prose prose-a:text-blue-600;
   @apply prose prose-ul:pl-0;
+  max-width: 100%;
 }
 h3,
 h4 {
