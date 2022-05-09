@@ -31,7 +31,7 @@ export const uselongListItemsStore = defineStore("longListItems", {
         onSnapshot(doc(db, podcast.id, docname), (doc) => {
           this.itemLongList[i] = {
             slotTitles: (doc.data()?.slotTitles ?? []) as string[],
-            items: (doc.data()?.items ?? []) as Item[],
+            items: (doc.data()?.items.reverse() ?? []) as Item[],
             ...podcast,
           }
         }),
