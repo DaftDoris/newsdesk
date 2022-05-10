@@ -22,9 +22,47 @@
           class="dark:text-white bg-transparent transition-colors"
         />
       </ListActionButton>
-      <ListActionButton @click="emits('toggle', item)" title="Share">
-        <BookmarkIconSolid v-if="item.shared" />
-        <BookmarkIcon v-else />
+      <ListActionButton title="Share to podcast">
+        <Popover as="div" class="relative pt-1">
+          <div>
+            <PopoverButton>
+              <BookmarkIconSolid v-if="item.shared" />
+              <BookmarkIcon v-else />
+            </PopoverButton>
+          </div>
+
+          <transition
+            enter-active-class="transition ease-out duration-100"
+            enter-from-class="transform opacity-0 scale-95"
+            enter-to-class="transform opacity-100 scale-100"
+            leave-active-class="transition ease-in duration-75"
+            leave-from-class="transform opacity-100 scale-100"
+            leave-to-class="transform opacity-0 scale-95"
+          >
+            <PopoverPanel
+              class="origin-top-right absolute right-6 top-1 sm:w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-2"
+            >
+              <div
+                v-for="podcast in store.getPodcasts"
+                :key="podcast.id"
+                class="flex justify-between py-1 items-center"
+              >
+                <span v-if="podcast.id != route.params.podcastId">{{
+                  podcast.name
+                }}</span>
+                <input
+                  type="checkbox"
+                  id="podcast-name"
+                  class="cursor-pointer"
+                  v-model="podcastNameToShare"
+                  :value="podcast.id"
+                  v-if="podcast.id != route.params.podcastId"
+                  @change="getPodcastToShare(item, route.params.podcastId)"
+                />
+              </div>
+            </PopoverPanel>
+          </transition>
+        </Popover>
       </ListActionButton>
     </div>
   </div>
@@ -35,9 +73,16 @@ import LinkifyIt from "linkify-it"
 import { PropType, computed, ref } from "vue"
 import { Item } from "@/types/item"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
+// import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue"
 
 import { BackspaceIcon, BookmarkIcon, HandIcon } from "@heroicons/vue/outline"
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/solid"
+import { usePodcastStore } from "@/store/podcasts"
+import { useRoute } from "vue-router"
+
+const store = usePodcastStore()
+const route = useRoute()
 
 const linkify = LinkifyIt()
 
@@ -47,7 +92,9 @@ const update = (text: any) => {
   emits("update", props.item)
 }
 const element = ref<HTMLElement | null>(null)
-
+const podcastNameToShare = ref(
+  props.item?.sharePodcast ? props.item?.sharePodcast : [],
+)
 const dropped = (e: DragEvent) => {
   emits("dragged", e.clientX, e.clientY, props.item)
 }
@@ -73,7 +120,11 @@ const props = defineProps({
   },
 })
 
-const emits = defineEmits(["delete", "update", "save", "toggle", "dragged"])
+const getPodcastToShare = (item: any, podcastName: string) => {
+  emits("share", item, podcastNameToShare.value, podcastName)
+}
+
+const emits = defineEmits(["delete", "update", "save", "dragged", "share"])
 </script>
 
 <style scoped lang="scss">

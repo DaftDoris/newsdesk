@@ -61,7 +61,7 @@
               <ItemCard
                 :item="item"
                 @delete="events.onClickDelete"
-                @toggle="events.onClickToggle"
+                @share="events.onClickShare"
                 @update="events.onClickUpdate"
                 @dragged="dragged"
               />
@@ -98,6 +98,7 @@ import { watch, ref, reactive } from "vue"
 import { storeToRefs } from "pinia"
 import { useAuthStore } from "@/store/auth"
 import { useItemStore } from "@/store/item"
+import { useShareStore } from "@/store/itemShare"
 import { Item } from "@/types/item"
 
 import List from "@/components/atoms/List.vue"
@@ -111,7 +112,7 @@ import { PlusIcon, MinusIcon } from "@heroicons/vue/outline"
 
 const authStore = useAuthStore()
 const itemStore = useItemStore()
-
+const shareStore = useShareStore()
 const initiated = ref(false)
 
 const { user, isAuthenticated } = storeToRefs(authStore)
@@ -169,6 +170,7 @@ const moveArrayItemToNewIndex= (arr: any, old_index: number, new_index: number) 
 
 const connect = () => {
   if (initiated.value) itemStore.connect(props.podcastId, docname)
+  if (initiated.value) shareStore.connect(props.podcastId, docname)
 }
 
 watch(
@@ -203,9 +205,9 @@ const events = {
   onClickUpdate(item: Item) {
     itemStore.updateItem(item, props.podcastId, docname)
   },
-  onClickToggle(item: Item) {
-    item.shared = !item.shared
-    itemStore.updateItem(item, props.podcastId, docname)
+  onClickShare(item: Item, podcastNameToShare: any, podcastName: string) {
+    shareStore.sendItem(item, podcastName, docname, podcastNameToShare)
+    // itemStore.updateItem(item, props.podcastId, docname)
   },
 }
 </script>
