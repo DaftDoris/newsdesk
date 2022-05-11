@@ -4,7 +4,7 @@
       v-for="slotno in Array.from({ length: 7 }, (_, i) => 7 - i)"
       :key="slotno"
     >
-      <ul>
+      <ul v-if="podcast.id === props.podcastId">
         <li
           class="list-none"
           v-for="item in podcast.items.filter((item) => item.slot === slotno)"

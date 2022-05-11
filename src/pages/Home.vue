@@ -170,7 +170,6 @@ const moveArrayItemToNewIndex= (arr: any, old_index: number, new_index: number) 
 
 const connect = () => {
   if (initiated.value) itemStore.connect(props.podcastId, docname)
-  if (initiated.value) shareStore.connect(props.podcastId, docname)
 }
 
 watch(
@@ -192,7 +191,7 @@ watch(() => props.podcastId, connect, {
 
 const events = {
   onClickSave(text: string, slot: Item["slot"]) {
-    itemStore.addItem({ text, slot }, props.podcastId, docname)
+    itemStore.addItem({ text, slot, sharePodcast: [] }, props.podcastId, docname)
   },
   onUpdateSaveDoc() {
     itemStore.saveData(props.podcastId, docname)
@@ -205,9 +204,15 @@ const events = {
   onClickUpdate(item: Item) {
     itemStore.updateItem(item, props.podcastId, docname)
   },
-  onClickShare(item: Item, podcastNameToShare: any, podcastName: string) {
-    shareStore.sendItem(item, podcastName, docname, podcastNameToShare)
-    // itemStore.updateItem(item, props.podcastId, docname)
+  async onClickShare(item: Item, podcastNameToShare: any, podcastName: string) {
+    const data= await shareStore.sendItem(item, podcastName, docname, podcastNameToShare)
+    item.sharePodcast = podcastNameToShare
+    if (podcastNameToShare.length > 0) {
+      item.shared = true
+    } else {
+      item.shared = false
+    }
+    itemStore.updateItem(item, props.podcastId, docname)
   },
 }
 </script>

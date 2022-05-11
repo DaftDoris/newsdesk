@@ -40,7 +40,7 @@
             leave-to-class="transform opacity-0 scale-95"
           >
             <PopoverPanel
-              class="origin-top-right absolute right-6 top-1 sm:w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-2"
+              class="origin-top-right absolute right-6 top-1 sm:w-60 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-2"
             >
               <div
                 v-for="podcast in store.getPodcasts"
@@ -53,7 +53,7 @@
                 <input
                   type="checkbox"
                   id="podcast-name"
-                  class="cursor-pointer"
+                  class="cursor-pointer checked:bg-black w-4 h-4"
                   v-model="podcastNameToShare"
                   :value="podcast.id"
                   v-if="podcast.id != route.params.podcastId"

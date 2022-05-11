@@ -8,6 +8,8 @@ import {
   getFirestore,
   setDoc,
   onSnapshot,
+  getDoc,
+  getDocFromCache
 } from "firebase/firestore"
 
 interface State {
@@ -24,8 +26,7 @@ export const useItemStore = defineStore("item", {
     async addItem(params: Item, podcastname: string, docname: string) {
       const id = nanoid()
       const shared = false
-      const sharePodcast: never[] = []
-      const item: Item = { ...params, id, shared, sharePodcast }
+      const item: Item = { ...params, id, shared }
 
       this.itemList.push(item)
       return this.saveData(podcastname, docname)
@@ -62,7 +63,7 @@ export const useItemStore = defineStore("item", {
 
     connect(podcastname: string, docname: string) {
       const db = getFirestore()
-
+      this.itemList = []
       onSnapshot(doc(db, podcastname, docname), (doc) => {
         this.slotTitleList = (doc.data()?.slotTitles ?? []) as string[]
         this.itemList = (doc.data()?.items ?? []) as Item[]
