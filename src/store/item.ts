@@ -8,8 +8,6 @@ import {
   getFirestore,
   setDoc,
   onSnapshot,
-  getDoc,
-  getDocFromCache
 } from "firebase/firestore"
 
 interface State {

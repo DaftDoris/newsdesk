@@ -27,6 +27,9 @@
       />
     </div>
     <div class="px-4 column-h overflow-y-auto" :class="{'col-span-3':hideShowColumn.draft}">
+      <div v-if="getErrorStatus" class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
+        <span class="font-medium"> {{ getErrorForSharePodcast }} </span>
+      </div>
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Draft</h2>
         <ListActionButton 
@@ -94,7 +97,7 @@
 </template>
 
 <script lang="ts" setup>
-import { watch, ref, reactive } from "vue"
+import { watch, ref, reactive, computed } from "vue"
 import { storeToRefs } from "pinia"
 import { useAuthStore } from "@/store/auth"
 import { useItemStore } from "@/store/item"
@@ -116,6 +119,8 @@ const shareStore = useShareStore()
 const initiated = ref(false)
 
 const { user, isAuthenticated } = storeToRefs(authStore)
+const getErrorStatus = computed(() => shareStore.getErrorStatus)
+const getErrorForSharePodcast = computed(() => shareStore.getErrorForSharePodcast)
 
 const props = defineProps({
   podcastId: {
@@ -204,8 +209,16 @@ const events = {
   onClickUpdate(item: Item) {
     itemStore.updateItem(item, props.podcastId, docname)
   },
-  async onClickShare(item: Item, podcastNameToShare: any, podcastName: string) {
-    const data= await shareStore.sendItem(item, podcastName, docname, podcastNameToShare)
+  async onClickShare(item: Item, podcastNameToShare: any, deletePodcastId = "", AddPodcastId = "") {
+    if (deletePodcastId) {
+      await shareStore.deteleSendItem(item, docname, deletePodcastId)
+    } else {
+      await shareStore.sendItem(item, docname, AddPodcastId)
+      //  if(getErrorStatus.value){
+      //   const index = podcastNameToShare.findIndex((x: string) => x === AddPodcastId)
+      //   podcastNameToShare.splice(index, 1)
+      // }
+    }
     item.sharePodcast = podcastNameToShare
     if (podcastNameToShare.length > 0) {
       item.shared = true

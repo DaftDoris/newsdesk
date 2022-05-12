@@ -42,23 +42,23 @@
             <PopoverPanel
               class="origin-top-right absolute right-6 top-1 sm:w-60 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-2"
             >
-              <div
-                v-for="podcast in store.getPodcasts"
-                :key="podcast.id"
-                class="flex justify-between py-1 items-center"
-              >
-                <span v-if="podcast.id != route.params.podcastId">{{
-                  podcast.name
-                }}</span>
-                <input
-                  type="checkbox"
-                  id="podcast-name"
-                  class="cursor-pointer checked:bg-black w-4 h-4"
-                  v-model="podcastNameToShare"
-                  :value="podcast.id"
+              <div v-for="podcast in store.getPodcasts" :key="podcast.id">
+                <div
+                  class="flex justify-between items-center"
+                  :class="{ 'py-1': podcast.id != route.params.podcastId }"
                   v-if="podcast.id != route.params.podcastId"
-                  @change="getPodcastToShare(item, route.params.podcastId)"
-                />
+                >
+                  <span>{{ podcast.name }}</span>
+                  <input
+                    type="checkbox"
+                    id="podcast-name"
+                    class="cursor-pointer checked:bg-black w-4 h-4"
+                    v-model="podcastNameToShare"
+                    :value="podcast.id"
+                    @change="getPodcastToShare(item)"
+                    @click="getCurrentPodcast()"
+                  />
+                </div>
               </div>
             </PopoverPanel>
           </transition>
@@ -92,9 +92,6 @@ const update = (text: any) => {
   emits("update", props.item)
 }
 const element = ref<HTMLElement | null>(null)
-const podcastNameToShare = ref(
-  props.item?.sharePodcast ? props.item?.sharePodcast : [],
-)
 const dropped = (e: DragEvent) => {
   emits("dragged", e.clientX, e.clientY, props.item)
 }
@@ -120,8 +117,28 @@ const props = defineProps({
   },
 })
 
-const getPodcastToShare = (item: any, podcastName: string) => {
-  emits("share", item, podcastNameToShare.value, podcastName)
+const podcastNameToShare = ref(
+  props.item?.sharePodcast ? props.item?.sharePodcast : [],
+)
+
+const deletePodcastItem = ref([])
+
+const getPodcastToShare = (item: Item) => {
+  if (podcastNameToShare.value.length > deletePodcastItem.value.length) {
+    const getAddPodcastId = podcastNameToShare.value.filter(function (obj) {
+      return deletePodcastItem.value.indexOf(obj) == -1
+    })
+    emits("share", item, podcastNameToShare.value, "", getAddPodcastId[0])
+  } else {
+    const getDeletePodcastId = deletePodcastItem.value.filter(function (obj) {
+      return podcastNameToShare.value.indexOf(obj) == -1
+    })
+    emits("share", item, podcastNameToShare.value, getDeletePodcastId[0], "")
+  }
+}
+
+const getCurrentPodcast = () => {
+  deletePodcastItem.value = podcastNameToShare.value
 }
 
 const emits = defineEmits(["delete", "update", "save", "dragged", "share"])
