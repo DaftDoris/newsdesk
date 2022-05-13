@@ -22,7 +22,10 @@
           class="dark:text-white bg-transparent transition-colors"
         />
       </ListActionButton>
-      <ListActionButton title="Share to podcast">
+      <ListActionButton
+        title="Share to podcast"
+        v-if="store.getReadAccessPodcasts.length > 1"
+      >
         <Popover as="div" class="relative pt-1">
           <div>
             <PopoverButton>
@@ -42,7 +45,10 @@
             <PopoverPanel
               class="origin-top-right absolute right-6 top-1 sm:w-60 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-2"
             >
-              <div v-for="podcast in store.getPodcasts" :key="podcast.id">
+              <div
+                v-for="podcast in store.getReadAccessPodcasts"
+                :key="podcast.id"
+              >
                 <div
                   class="flex justify-between items-center"
                   :class="{ 'py-1': podcast.id != route.params.podcastId }"
@@ -73,7 +79,6 @@ import LinkifyIt from "linkify-it"
 import { PropType, computed, ref } from "vue"
 import { Item } from "@/types/item"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
-// import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue"
 
 import { BackspaceIcon, BookmarkIcon, HandIcon } from "@heroicons/vue/outline"

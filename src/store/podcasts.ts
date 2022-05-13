@@ -1,10 +1,12 @@
 import { defineStore } from "pinia"
+import { collection, doc, getFirestore, getDoc } from "firebase/firestore"
 interface podcasts {
   id: string
   name: string
 }
 interface State {
   podcasts: podcasts[]
+  readAccessPodcasts: podcasts[]
 }
 export const usePodcastStore = defineStore("podcasts", {
   state: (): State => ({
@@ -21,8 +23,26 @@ export const usePodcastStore = defineStore("podcasts", {
       { id: "dev", name: "dev sandbox" },
       { id: "dev2", name: "dev 2 sandbox" },
     ],
+    readAccessPodcasts: [],
   }),
   getters: {
     getPodcasts: (state: State) => state.podcasts,
+    getReadAccessPodcasts: (state: State) => state.readAccessPodcasts,
+  },
+  actions: {
+    async getReadAccessPodcast() {
+      const db = getFirestore()
+      this.podcasts.map(async (el) => {
+        await getDoc(doc(collection(db, el.id), "todaysdate"))
+          .then((res) => {
+            if (res.data()) {
+              this.readAccessPodcasts.push(el)
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      })
+    },
   },
 })

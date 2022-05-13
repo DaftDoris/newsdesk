@@ -97,12 +97,13 @@
 </template>
 
 <script lang="ts" setup>
-import { watch, ref, reactive, computed } from "vue"
+import { watch, ref, reactive, computed, onMounted } from "vue"
 import { storeToRefs } from "pinia"
 import { useAuthStore } from "@/store/auth"
 import { useItemStore } from "@/store/item"
 import { useShareStore } from "@/store/itemShare"
 import { Item } from "@/types/item"
+import { usePodcastStore } from "@/store/podcasts"
 
 import List from "@/components/atoms/List.vue"
 import ListItem from "@/components/atoms/ListItem.vue"
@@ -117,6 +118,7 @@ const authStore = useAuthStore()
 const itemStore = useItemStore()
 const shareStore = useShareStore()
 const initiated = ref(false)
+const store = usePodcastStore()
 
 const { user, isAuthenticated } = storeToRefs(authStore)
 const getErrorStatus = computed(() => shareStore.getErrorStatus)
@@ -127,6 +129,10 @@ const props = defineProps({
     type: String,
     default: "smartseven",
   },
+})
+
+onMounted(() => {
+  store.getReadAccessPodcast()
 })
 
 // @TODO: work with todays date
@@ -214,10 +220,6 @@ const events = {
       await shareStore.deteleSendItem(item, docname, deletePodcastId)
     } else {
       await shareStore.sendItem(item, docname, AddPodcastId)
-      //  if(getErrorStatus.value){
-      //   const index = podcastNameToShare.findIndex((x: string) => x === AddPodcastId)
-      //   podcastNameToShare.splice(index, 1)
-      // }
     }
     item.sharePodcast = podcastNameToShare
     if (podcastNameToShare.length > 0) {
