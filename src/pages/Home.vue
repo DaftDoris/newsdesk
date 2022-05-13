@@ -3,7 +3,7 @@
     v-show="initiated && isAuthenticated"
     class="h-full grid grid-cols-5 gap-4 divide-x"
   >
-    <div class="px-4 column-h overflow-y-auto" :class="{'col-span-3':hideShowColumn.inbox}" >
+    <div class="px-4 column-h overflow-y-auto" id="inbox-column" :class="{'col-span-3':hideShowColumn.inbox}" >
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Inbox</h2>
         <ListActionButton 
@@ -73,7 +73,7 @@
         </List>
       </section>
     </div>
-    <div class="px-4 column-h overflow-y-auto" :class="{'col-span-3':hideShowColumn.script}">
+    <div class="px-4 column-h overflow-y-auto" id="script-column" :class="{'col-span-3':hideShowColumn.script}">
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Script</h2>
         <ListActionButton 
@@ -148,6 +148,20 @@ const dragged = (x: number, y: number, item: Item) => {
     <string>// @ts-ignore
     document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
   )
+
+  const inboxColumn = document.elementFromPoint(x, y)?.closest("div #inbox-column")
+  const scriptColumn = document.elementFromPoint(x, y)?.closest("div #script-column")
+
+  if (inboxColumn) {
+    hideShowColumn.inbox = true
+    hideShowColumn.script = hideShowColumn.draft = false
+  } else if (scriptColumn) {
+    hideShowColumn.script = true
+    hideShowColumn.inbox = hideShowColumn.draft = false
+  } else {
+    hideShowColumn.draft = true
+    hideShowColumn.script = hideShowColumn.inbox = false
+  }
 
   if(slot && slot === item.slot){
     const id =
