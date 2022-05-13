@@ -49,11 +49,19 @@
         :key="slot"
         :slotno="slot"
       >
+      <div class="flex items-center justify-between">
         <SlotTitleInput
           v-model="itemStore.getSlotTitleList[slot]"
           :slotno="slot"
           :updateEvent="events.onUpdateSaveDoc"
         />
+        <span class="relative flex">
+          <button title="Copy Slot item" @click="copySlotText(slot)" class=" text-white font-bold p-2 rounded transition-colors">
+            <ClipboardCopyIcon class="h-6 w-6 text-black" />
+            <div class="rounded-md absolute bottom-10 w-fit right-1 text-white bg-black p-1 border-radius" v-if="showTooltip[slot]">Copied</div>
+          </button>
+        </span>
+      </div>
         <InputCard @save="events.onClickSave" :slot="slot" />
         <List>
           <template v-for="item in itemStore.getSlotList(slot).reverse()" :key="item.id">
@@ -107,7 +115,7 @@ import ItemCard from "@/components/molecules/Cards/ItemCard.vue"
 import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
-import { PlusIcon, MinusIcon } from "@heroicons/vue/outline"
+import { PlusIcon, MinusIcon, ClipboardCopyIcon } from "@heroicons/vue/outline"
 
 const authStore = useAuthStore()
 const itemStore = useItemStore()
@@ -123,6 +131,7 @@ const props = defineProps({
   },
 })
 
+const showTooltip = ref(Array.from({ length: 7 }, (_, i) => false))
 // @TODO: work with todays date
 const docname = "todaysdate"
 const hideShowColumn = reactive({
@@ -201,6 +210,24 @@ watch(
 watch(() => props.podcastId, connect, {
   immediate: true,
 })
+
+const copySlotText = (slot: number) => {
+  const itemData = itemStore.getSlotList(slot)
+  let textValue = ''
+  itemData.map((el) => {
+    if(el.text) {
+      textValue += el.text.replace(/&nbsp;/g," ").replace(/<br\s*[\/]?>/g, "\r\n").replace(/(<([^>]+)>)/g, "")
+      textValue += "\r\n\n"
+    }
+  })
+  navigator.clipboard.writeText(textValue)
+  if(textValue){
+    showTooltip.value[slot] =true
+    setTimeout(() => {
+      showTooltip.value[slot] = false
+    }, 500);
+  }
+}
 
 const events = {
   onClickSave(text: string, slot: Item["slot"]) {
