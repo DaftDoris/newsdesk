@@ -1,5 +1,5 @@
 <template>
-  <div class="podcast" v-for="podcast in store.getLongList" :key="podcast.id">
+  <div class="podcast" v-for="podcast in store.getInboxList" :key="podcast.id">
     <div
       v-for="slotno in Array.from({ length: 7 }, (_, i) => 7 - i)"
       :key="slotno"
@@ -23,7 +23,7 @@
 
 <script lang="ts" setup>
 import { Item } from "@/types/item"
-import { uselongListItemsStore } from "@/store/longListItems"
+import { useInboxItemsStore } from "@/store/inboxItems"
 import LinkifyIt from "linkify-it"
 
 const props = defineProps({
@@ -37,7 +37,7 @@ const props = defineProps({
   },
 })
 
-const store = uselongListItemsStore()
+const store = useInboxItemsStore()
 store.connect(props.docname)
 
 const linkifyit = LinkifyIt()

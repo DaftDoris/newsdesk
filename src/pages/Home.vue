@@ -21,7 +21,7 @@
           />
         </ListActionButton>
       </div>
-      <LongerList
+      <Inbox
       :podcastId = "podcastId"
       :docname = "docname"
       />
@@ -107,7 +107,7 @@ import { usePodcastStore } from "@/store/podcasts"
 
 import List from "@/components/atoms/List.vue"
 import ListItem from "@/components/atoms/ListItem.vue"
-import LongerList from "@/components/LongerList.vue"
+import Inbox from "@/components/Inbox.vue"
 import ItemCard from "@/components/molecules/Cards/ItemCard.vue"
 import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
@@ -136,7 +136,9 @@ onMounted(() => {
 })
 
 // @TODO: work with todays date
-const docname = "todaysdate"
+const authdetail = authStore.user
+const docname = `${authdetail?.userId}`
+
 const hideShowColumn = reactive({
   inbox: false,
   draft: true,

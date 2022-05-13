@@ -4,7 +4,7 @@ import { usePodcastStore } from "@/store/podcasts"
 
 import { doc, getFirestore, onSnapshot } from "firebase/firestore"
 
-interface longListItem {
+interface inboxItem {
   id: string
   name: string
   slotTitles: string[]
@@ -12,12 +12,12 @@ interface longListItem {
 }
 
 interface State {
-  itemLongList: longListItem[]
+  inboxItems: inboxItem[]
 }
 
-export const uselongListItemsStore = defineStore("longListItems", {
+export const useInboxItemsStore = defineStore("inboxItems", {
   state: (): State => ({
-    itemLongList: usePodcastStore().getPodcasts.map((podcast) => ({
+    inboxItems: usePodcastStore().getPodcasts.map((podcast) => ({
       id: podcast.id,
       name: podcast.name,
       slotTitles: [],
@@ -29,7 +29,7 @@ export const uselongListItemsStore = defineStore("longListItems", {
       const db = getFirestore()
       usePodcastStore().getPodcasts.forEach((podcast, i) =>
         onSnapshot(doc(db, podcast.id, docname), (doc) => {
-          this.itemLongList[i] = {
+          this.inboxItems[i] = {
             slotTitles: (doc.data()?.slotTitles ?? []) as string[],
             items: (doc.data()?.items.reverse() ?? []) as Item[],
             ...podcast,
@@ -39,6 +39,6 @@ export const uselongListItemsStore = defineStore("longListItems", {
     },
   },
   getters: {
-    getLongList: (state: State) => state.itemLongList,
+    getInboxList: (state: State) => state.inboxItems,
   },
 })

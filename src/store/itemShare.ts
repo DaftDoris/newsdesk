@@ -29,13 +29,13 @@ export const useShareStore = defineStore("share", {
       const docRef = doc(collection(db, podcastNameToShare), docname)
       await getDoc(doc(collection(db, podcastNameToShare), docname))
         .then((getData) => {
-          const itemForShare = getData.data()?.items
+          const itemForShare = (getData.data()?.items ?? []) as Item[]
           const getFilterData = itemForShare.filter(
             (itmeData: { text: string; slot: number }) =>
               itmeData.text.toLowerCase() === item.text.toLowerCase() &&
               itmeData.slot === item.slot,
           )
-          if (getFilterData.length == 0) {
+          if (getFilterData.length == 0 || !itemForShare) {
             itemForShare.push({
               id: item.id,
               text: item.text,
@@ -45,7 +45,7 @@ export const useShareStore = defineStore("share", {
             })
             setDoc(docRef, {
               items: itemForShare,
-              slotTitles: getData.data()?.slotTitles,
+              slotTitles: (getData.data()?.slotTitles ?? []) as string[],
             })
           } else {
             throw new Error(`Duplicate text found.`)
@@ -66,9 +66,9 @@ export const useShareStore = defineStore("share", {
       const docRef = doc(collection(db, deletePodcastId), docname)
       await getDoc(doc(collection(db, deletePodcastId), docname))
         .then((getData) => {
-          const itemForShare = getData.data()?.items
+          const itemForShare = (getData.data()?.items ?? []) as Item[]
           const index = itemForShare.findIndex(
-            (x: { id: string; slot: number; shared: boolean }) =>
+            (x) =>
               x.id === item.id && x.slot === item.slot && x.shared === false,
           )
           if (index < 0)
@@ -78,7 +78,7 @@ export const useShareStore = defineStore("share", {
           itemForShare.splice(index, 1)
           setDoc(docRef, {
             items: itemForShare,
-            slotTitles: getData.data()?.slotTitles,
+            slotTitles: (getData.data()?.slotTitles ?? []) as string[],
           })
         })
         .catch((error) => {

@@ -31,6 +31,7 @@ export const usePodcastStore = defineStore("podcasts", {
   },
   actions: {
     async getReadAccessPodcast() {
+      this.readAccessPodcasts = []
       const db = getFirestore()
       this.podcasts.map(async (el) => {
         await getDoc(doc(collection(db, el.id), "todaysdate"))
