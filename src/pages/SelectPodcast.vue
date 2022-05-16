@@ -1,6 +1,8 @@
 <template>
   <main>
-<h2>⬆️ select a podcast ⬆️</h2>
+    <div class="select-podcast">
+      <h2>Select Podcast</h2>
+    </div>
   </main>
 </template>
 
@@ -9,6 +11,6 @@
 
 <style scoped lang="scss">
 h2 {
-  @apply ss-furniture text-center	text-white text-4xl;
+  @apply ss-furniture text-center text-4xl;
 }
 </style>
