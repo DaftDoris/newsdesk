@@ -13,7 +13,7 @@
     "@headlessui/vue": "1.6.1",
     "@heroicons/vue": "1.0.6",
     "@types/linkify-it": "^3.0.2",
-    "@vueuse/core": "8.4.2",
+    "@vueuse/core": "8.5.0",
     "firebase": "9.8.1",
     "linkify-it": "4.0.1",
     "moment": "2.29.3",
