@@ -14,7 +14,7 @@
 import { Item } from "@/types/item"
 import { uselongListItemsStore } from "@/store/longListItems"
 import LinkifyIt from "linkify-it"
-import { useShareStore } from "@/store/itemshare"
+import { useShareStore } from "@/store/itemShare"
 
 const props = defineProps({
   podcastId: {
