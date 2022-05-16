@@ -20,8 +20,7 @@ export const usePodcastStore = defineStore("podcasts", {
       { id: "blipblip", name: "Blip Blip!" },
       { id: "dev", name: "dev sandbox" },
       { id: "dev2", name: "dev 2 sandbox" },
-      { id: "dev3", name: "dev 2 sandbox" }
-
+      { id: "dev3", name: "dev 3 sandbox" },
     ],
   }),
   getters: {
