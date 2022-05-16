@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-interface podcasts {
+export interface podcasts {
   id: string
   name: string
 }

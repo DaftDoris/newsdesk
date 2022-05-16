@@ -11,12 +11,12 @@ import {
 } from "firebase/firestore"
 
 interface State {
-  inbox: string[]
+  inbox: { [key: string]: string[] }
 }
 
 export const useShareStore = defineStore("share", {
   state: (): State => ({
-    inbox: {} as string[],
+    inbox: {} as State["inbox"],
   }),
   actions: {
     async connect(podcastname: string) {
@@ -44,7 +44,8 @@ export const useShareStore = defineStore("share", {
         await updateDoc(docRef, {
           items: arrayUnion(item.text),
         })
-      } catch (e: unknown) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
         // create doc if it doesn't exist
         if (e.code === "not-found" && e.name === "FirebaseError")
           await setDoc(docRef, { items: arrayUnion(item.text) })
