@@ -11,8 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Item } from "@/types/item"
-import { uselongListItemsStore } from "@/store/longListItems"
+import { watch } from "vue"
 import LinkifyIt from "linkify-it"
 import { useShareStore } from "@/store/itemShare"
 
@@ -28,7 +27,14 @@ const props = defineProps({
 })
 
 const store = useShareStore()
-store.connect(props.podcastId)
+const connect = () => {
+  store.connect(props.podcastId)
+}
+watch(() => props.podcastId, connect, {
+  immediate: true,
+})
+
+
 
 const linkifyit = LinkifyIt()
 

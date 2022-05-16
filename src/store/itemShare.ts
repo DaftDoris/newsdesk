@@ -16,7 +16,7 @@ interface State {
 
 export const useShareStore = defineStore("share", {
   state: (): State => ({
-    inbox: {},
+    inbox: {} as string[],
   }),
   actions: {
     async connect(podcastname: string) {
