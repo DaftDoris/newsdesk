@@ -4,7 +4,11 @@
       <div
         class="text-2xl font-bold flex items-center dark:text-gray-50 transition-colors"
       >
-        <img src="/daftdoris.svg" alt="DaftDoris" class="h-8 dark:invert" />
+        <img
+          src="/logo.svg"
+          alt="News Desk Daft Doris"
+          class="h-8 dark:invert"
+        />
       </div>
       <Menu
         as="div"
