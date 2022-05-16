@@ -1,4 +1,5 @@
 import { defineStore } from "pinia"
+import { useAuthStore } from "@/store/auth"
 import { collection, doc, getFirestore, getDoc } from "firebase/firestore"
 interface podcasts {
   id: string
@@ -34,7 +35,9 @@ export const usePodcastStore = defineStore("podcasts", {
       this.readAccessPodcasts = []
       const db = getFirestore()
       this.podcasts.map(async (el) => {
-        await getDoc(doc(collection(db, el.id), "todaysdate"))
+        await getDoc(
+          doc(collection(db, el.id), `${useAuthStore().user?.userId}`),
+        )
           .then((res) => {
             if (res.data()) {
               this.readAccessPodcasts.push(el)

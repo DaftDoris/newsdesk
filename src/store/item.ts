@@ -51,6 +51,9 @@ export const useItemStore = defineStore("item", {
     },
 
     async saveData(podcastname: string, docname: string) {
+      if (this.slotTitleList.length == 0) {
+        this.slotTitleList = Array.from({ length: 7 }, () => "")
+      }
       const db = getFirestore()
       const docRef = doc(collection(db, podcastname), docname)
       return setDoc(docRef, {
@@ -63,7 +66,8 @@ export const useItemStore = defineStore("item", {
       const db = getFirestore()
       this.itemList = []
       onSnapshot(doc(db, podcastname, docname), (doc) => {
-        this.slotTitleList = (doc.data()?.slotTitles ?? []) as string[]
+        this.slotTitleList = (doc.data()?.slotTitles ??
+          Array.from({ length: 7 }, () => "")) as string[]
         this.itemList = (doc.data()?.items ?? []) as Item[]
       })
     },
