@@ -98,7 +98,7 @@ import { watch, ref, reactive } from "vue"
 import { storeToRefs } from "pinia"
 import { useAuthStore } from "@/store/auth"
 import { useItemStore } from "@/store/item"
-import { useShareStore } from "@/store/itemshare"
+import { useShareStore } from "@/store/itemShare"
 import { Item } from "@/types/item"
 
 import List from "@/components/atoms/List.vue"
@@ -219,12 +219,7 @@ const events = {
     itemStore.updateItem(item, props.podcastId, docname)
   },
   onClickShare(item: Item, destination: string) {
-    if (item.shared) {
-      return alert(`This item is already shared to ${destination}`)
-    }
-    item.shared = true
-    itemStore.updateItem(item, props.podcastId, docname)
-    shareStore.sendItem(item, destination)
+    shareStore.sendItem(item, destination, props.podcastId)
   },
 }
 </script>

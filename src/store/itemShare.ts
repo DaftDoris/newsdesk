@@ -1,34 +1,58 @@
-import { nanoid } from "nanoid"
 import { defineStore } from "pinia"
 import { Item } from "@/types/item"
-
+import { usePodcastStore, podcasts } from "@/store/podcasts"
 import {
-  collection,
   doc,
   getFirestore,
   setDoc,
+  arrayUnion,
+  updateDoc,
   onSnapshot,
 } from "firebase/firestore"
 
 interface State {
-  // itemList: Item[]
-  // slotTitleList: string[]
+  inbox: string[]
 }
 
 export const useShareStore = defineStore("share", {
   state: (): State => ({
-    // itemList: [],
-    // slotTitleList: [],
+    inbox: {},
   }),
   actions: {
-    async sendItem(item: Item, podcastname: string) {
+    async connect(podcastname: string) {
       const db = getFirestore()
-      const docRef = doc(collection(db, podcastname), docname)
-      return setDoc(docRef, {
-        items: this.itemList,
-        slotTitles: this.slotTitleList,
+
+      // TODO: swap this out with a collectionGroup query
+      usePodcastStore().getPodcasts.forEach((podcast: podcasts) => {
+        onSnapshot(
+          doc(db, podcastname, "inbox", podcast.id, "shares"),
+          (doc) => {
+            this.inbox[podcast.id] = doc.data()?.items ?? []
+          },
+        )
       })
     },
+
+    // TODO:
+    // async deleteItem(item: Item, podcastname: string, from: string) {
+    // })
+
+    async sendItem(item: Item, destination: string, from: string) {
+      const db = getFirestore()
+      const docRef = doc(db, destination, "inbox", from, "shares")
+      try {
+        await updateDoc(docRef, {
+          items: arrayUnion(item.text),
+        })
+      } catch (e: unknown) {
+        // create doc if it doesn't exist
+        if (e.code === "not-found" && e.name === "FirebaseError")
+          await setDoc(docRef, { items: arrayUnion(item.text) })
+        else throw e
+      }
+    },
   },
-  getters: {},
+  getters: {
+    getInbox: (state: State) => Object.values(state.inbox).flat(),
+  },
 })

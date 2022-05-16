@@ -22,9 +22,12 @@
           class="dark:text-white bg-transparent transition-colors"
         />
       </ListActionButton>
+      <!-- TODO: "dev" below needs to be dynamic based on each  -->
       <ListActionButton @click="emits('share', item, 'dev')" title="Share to dev">
-        <BookmarkIconSolid v-if="item.shared" />
-        <BookmarkIcon v-else />
+        <BookmarkIcon />
+      </ListActionButton>
+      <ListActionButton @click="emits('share', item, 'dev2')" title="Share to dev2">
+        <BookmarkIcon />
       </ListActionButton>
     </div>
   </div>
