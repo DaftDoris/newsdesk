@@ -40,6 +40,7 @@ jobs:
 
           # install: false
           # # to run component tests we need to use "cypress run-ct"
+          build: npm run build
           command: npm run test
       - uses: actions/upload-artifact@v2
         if: failure()
