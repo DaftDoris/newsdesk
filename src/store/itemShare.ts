@@ -1,9 +1,10 @@
 import { defineStore } from "pinia"
 import { Item } from "@/types/item"
 import { usePodcastStore, podcasts } from "@/store/podcasts"
+import { db } from "@/plugins/firebase"
+
 import {
   doc,
-  getFirestore,
   setDoc,
   arrayUnion,
   updateDoc,
@@ -20,8 +21,6 @@ export const useShareStore = defineStore("share", {
   }),
   actions: {
     async connect(podcastname: string) {
-      const db = getFirestore()
-
       // TODO: swap this out with a collectionGroup query
       usePodcastStore().getPodcasts.forEach((podcast: podcasts) => {
         onSnapshot(
@@ -38,7 +37,7 @@ export const useShareStore = defineStore("share", {
     // })
 
     async sendItem(item: Item, destination: string, from: string) {
-      const db = getFirestore()
+      // const db = getFirestore()
       const docRef = doc(db, destination, "inbox", from, "shares")
       try {
         await updateDoc(docRef, {

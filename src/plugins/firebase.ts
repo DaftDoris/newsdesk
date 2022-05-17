@@ -4,6 +4,8 @@ import {
   getFirestore,
   connectFirestoreEmulator,
   setLogLevel,
+  initializeFirestore,
+  FirestoreSettings,
 } from "firebase/firestore"
 
 export const firebaseConfig = {
@@ -14,13 +16,20 @@ export const firebaseConfig = {
   messagingSenderId: "479379145905",
   appId: "1:479379145905:web:8ceabb2b56f2d542190e90",
   measurementId: "G-JWJXD9J650",
+  // experimentalForceLongPolling: true,
+  experimentalAutoDetectLongPolling: true,
+  timeout: 5000,
 }
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig)
-export const db = getFirestore()
+const initialdb = initializeFirestore(app, {
+  experimentalAutoDetectLongPolling: true,
+})
 if (window.location.hostname === "localhost") {
-  connectFirestoreEmulator(db, "localhost", 8080)
-  setLogLevel("info")
+  connectFirestoreEmulator(initialdb, "localhost", 8082)
+  setLogLevel("debug")
 }
+export const db = getFirestore()
+
 export const analytics = getAnalytics(app)

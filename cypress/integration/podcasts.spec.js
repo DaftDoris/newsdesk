@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 
+const homeurl = "http://localhost:3000"
 // Welcome to Cypress!
 //
 // This spec file contains a variety of sample tests
@@ -11,13 +12,9 @@
 // please read our getting started guide:
 // https://on.cypress.io/introduction-to-cypress
 
-describe("example to-do app", () => {
+describe("newsdesk login", () => {
   beforeEach(() => {
-    // Cypress starts out with a blank slate for each test
-    // so we must tell it to visit our website with the `cy.visit()` command.
-    // Since we want to visit the same URL at the start of all our tests,
-    // we include it in our beforeEach function so that it runs before each test
-    cy.visit("http://localhost:3000")
+    cy.visit(homeurl)
   })
 
   it("should have login button", function () {
@@ -27,7 +24,51 @@ describe("example to-do app", () => {
 
   it("should login", function () {
     cy.contains("Login with Google").click()
+    cy.contains("Peach Otter").click()
+    cy.get("h2").should("have.text", "⬆️ select a podcast ⬆️")
   })
+})
+
+describe("newsdesk logged in", () => {
+  before(() => {
+    cy.visit(homeurl)
+    cy.contains("Login with Google").click()
+    cy.contains("Peach Otter").click()
+  })
+  beforeEach(() => {
+    // cy.visit(homeurl)
+  })
+
+  it("select podcast", function () {
+    cy.get("#headlessui-menu-button-1").click()
+    cy.contains("dev sandbox").click()
+    cy.url().should("include", "/#/dev")
+  })
+
+  it("should be able to create and delete a new item", () => {
+    cy.get("#headlessui-menu-button-1").click()
+    cy.contains("dev sandbox").click()
+
+    cy.get("section[slotno=7] textarea").type("new item{enter}")
+    cy.get("section[slotno=7]").should("contain", "new item")
+    cy.get("section[slotno=7] button[title='Delete']").click()
+    cy.get("section[slotno=7]").should("not.contain", "new item")
+  })
+
+  it("should be able to create and share a new item", () => {
+    cy.get("#headlessui-menu-button-1").click()
+    cy.contains("dev sandbox").click()
+
+    cy.get("section[slotno=7] textarea").type("new share item{enter}")
+    cy.get("section[slotno=7]").should("contain", "new share item")
+    cy.get("section[slotno=7] button[title='Share to dev2']").click()
+    cy.get("section[slotno=7] button[title='Delete']").click()
+    cy.get("section[slotno=7]").should("not.contain", "new share item")
+    cy.get("#headlessui-menu-button-1").click()
+    cy.contains("dev 2 sandbox").click()
+    cy.get("#inbox-column").should("contain", "new share item")
+  })
+})
 
   // it("can add new todo items", () => {
   //   // We'll store our item text in a variable so we can reuse it
@@ -135,4 +176,4 @@ describe("example to-do app", () => {
   //     cy.contains("Clear completed").should("not.exist")
   //   })
   // })
-})
+// })

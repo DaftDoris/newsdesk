@@ -49,15 +49,21 @@ export const useAuthStore = defineStore("auth", function () {
     }
   }
 
+  function emulator(auth: any) {
+    if (!auth?.emulatorConfig && window.location.hostname === "localhost") {
+      connectAuthEmulator(auth, "http://localhost:9099")
+    }
+  }
+
   async function loginWithFirebase(
     provider: AuthProvider,
     providedBy: Provider,
   ) {
     const auth = getAuth()
+
     emulator(auth)
 
     await auth.setPersistence(browserLocalPersistence)
-    console.log("providedBy", providedBy)
 
     if (auth.currentUser) return saveUserToStore(auth.currentUser, providedBy)
 
@@ -68,12 +74,7 @@ export const useAuthStore = defineStore("auth", function () {
     saveUserToStore(userCredential.user, providedBy)
   }
 
-  function emulator(auth: FirebaseApp) {
-    console.log(window.location.hostname)
-    if (!auth?.emulatorConfig && window.location.hostname === "localhost") {
-      connectAuthEmulator(auth, "http://localhost:9099")
-    }
-  }
+
 
   async function checkAuth() {
     const auth = getAuth()
