@@ -21,7 +21,7 @@
           />
         </ListActionButton>
       </div>
-      <LongerList
+      <inbox
       :podcastId = "podcastId"
       :docname = "docname"
       />
@@ -103,7 +103,7 @@ import { Item } from "@/types/item"
 
 import List from "@/components/atoms/List.vue"
 import ListItem from "@/components/atoms/ListItem.vue"
-import LongerList from "@/components/LongerList.vue"
+import Inbox from "@/components/Inbox.vue"
 import ItemCard from "@/components/molecules/Cards/ItemCard.vue"
 import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
