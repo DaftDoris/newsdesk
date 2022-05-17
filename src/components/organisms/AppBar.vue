@@ -1,24 +1,24 @@
 <template>
   <header v-if="isAuthenticated" v-bind="$attrs">
-    <div class="mx-auto w-full sm:flex flex justify-between">
+    <div class="mx-auto w-full sm:flex block sm:justify-between">
       <div
-        class="text-2xl font-bold flex items-center dark:text-gray-50 transition-colors"
+        class="text-2xl font-bold flex items-center dark:text-gray-50 transition-colors w-full"
       >
         <img
           src="/logo.svg"
           alt="News Desk Daft Doris"
-          class="h-8 dark:invert"
+          class="h-8 dark:invert mx-auto sm:mx-0 mb-1 sm:mb-0"
         />
       </div>
-      <div class="flex">
+      <div class="block sm:flex sm:ml-0 mb-1 sm:mb-0">
         <Menu
           as="div"
           v-slot="{ open }"
-          class="relative inline-block text-left sm:w-64"
+          class="relative inline-block text-left w-56 sm:w-64 menu-show left-2/4 sm:left-0"
         >
           <div>
             <MenuButton
-              class="inline-flex justify-between w-full items-center rounded-lg border-2 border-black shadow-sm px-4 py-1 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+              class="inline-flex whitespace-nowrap justify-between w-full items-center rounded-lg border-2 border-black shadow-sm px-4 py-1 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
             >
               {{
                 store.getPodcasts.filter(
@@ -27,12 +27,12 @@
               }}
               <ArrowCircleDownIcon
                 v-if="!open"
-                class="-mr-1 ml-2 h-7 w-7"
+                class="-mr-1 ml-2 h-6 w-6"
                 aria-hidden="true"
               />
               <ArrowCircleUpIcon
                 v-if="open"
-                class="-mr-1 ml-2 h-7 w-7"
+                class="-mr-1 ml-2 h-6 w-6"
                 aria-hidden="true"
               />
             </MenuButton>
@@ -68,9 +68,9 @@
             </MenuItems>
           </transition>
         </Menu>
-        <div class="date-input">
+        <div class="date-input sm:ml-3 sm:mt-0 mt-1 w-56 sm:w-auto mx-auto sm:mx-0">
           <input
-            class="px-2 py-1 rounded-lg border-2 border-black ml-4"
+            class="inline-flex justify-between w-full items-center rounded-lg border-2 border-black shadow-sm px-4 py-1 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
             type="date"
             v-model="date"
           />
@@ -113,7 +113,12 @@ header {
   @apply w-10 h-10 rounded-full;
 }
 .date-input input::-webkit-calendar-picker-indicator {
-  background: url('/arrow-down-circle.svg')center/110% no-repeat;
+  background: url("/arrow-down-circle.svg") center/110% no-repeat;
   opacity: 1;
+}
+@media (max-width: 640px) {
+  .menu-show {
+    transform: translateX(-50%);
+  }
 }
 </style>
