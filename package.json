@@ -4,10 +4,17 @@
   "version": "0.0.0",
   "scripts": {
     "start": "vite --open",
-    "dev": "vite",
+    "dev": "vite --host",
     "lint": "eslint .",
     "build": "vue-tsc --noEmit && vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "test": "start-server-and-test firebase:emulator ':3000|:9099|http-get://localhost:8082' 'cypress run'",
+    "test:local": "start-server-and-test dev 'http-get://localhost:3000' firebase:emulator-nohost ':9099|http-get://localhost:8082' 'cypress open'",
+    "cypress:run": "cypress run",
+    "firebase:update-fixtures": "firebase emulators:export cypress/dump",
+    "cypress:open": "cypress open",
+    "firebase:emulator": "firebase emulators:start --import cypress/dump",
+    "firebase:emulator-nohost": "firebase emulators:start --only=firestore,auth --import cypress/dump"
   },
   "dependencies": {
     "@headlessui/vue": "1.6.1",
@@ -36,10 +43,13 @@
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^10.0.0",
     "autoprefixer": "10.4.7",
+    "cypress": "^9.6.1",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-vue": "8.7.1",
+    "firebase-tools": "^10.9.2",
     "postcss": "8.4.13",
     "sass": "1.51.0",
+    "start-server-and-test": "^1.14.0",
     "tailwindcss": "3.0.24",
     "typescript": "4.6.4",
     "vite": "2.9.9",
