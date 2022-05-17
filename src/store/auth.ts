@@ -9,6 +9,7 @@ import {
   getAuth,
   signInWithPopup,
   onAuthStateChanged,
+  connectAuthEmulator,
 } from "firebase/auth"
 
 export interface IUser {
@@ -52,6 +53,7 @@ export const useAuthStore = defineStore("auth", () => {
     providedBy: Provider,
   ) {
     const auth = getAuth()
+    connectAuthEmulator(auth, "http://localhost:9099")
     await auth.setPersistence(browserLocalPersistence)
     const userCredential = await signInWithPopup(auth, provider)
 
