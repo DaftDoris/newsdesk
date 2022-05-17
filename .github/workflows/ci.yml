@@ -56,18 +56,6 @@ jobs:
           echo Cypress finished with: ${{ steps.cypress.outcome }}
           echo See results at ${{ steps.cypress.outputs.dashboardUrl }}
 
-      - uses: actions/github-script@v5
-        if: github.event_name == 'pull_request'
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Cypress finished with: ${{ steps.cypress.outcome }} See results at ${{ steps.cypress.outputs.dashboardUrl }}'
-            })
-
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
