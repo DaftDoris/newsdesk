@@ -34,6 +34,7 @@ jobs:
           node-version-file: '.nvmrc'
       - uses: cypress-io/github-action@v2
         with:
+          record: true
           # we have already installed everything
           # start: npm run firebase:emulator
           # wait-on: 'http://localhost:3000, http://localhost:9099, http-get://localhost:8082''
@@ -42,6 +43,9 @@ jobs:
           # # to run component tests we need to use "cypress run-ct"
           build: npm run build
           command: npm run test
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
