@@ -37,12 +37,14 @@ jobs:
           record: true
           # we have already installed everything
           # start: npm run firebase:emulator
-          # wait-on: 'http://localhost:3000, http://localhost:9099, http-get://localhost:8082''
+          wait-on: 'http://localhost:3000, http://localhost:9099, http-get://localhost:8082'
 
           # install: false
           # # to run component tests we need to use "cypress run-ct"
           build: npm run build
-          command: npm run test
+          start: npm run firebase:emulator
+
+          # command: npm run test
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
