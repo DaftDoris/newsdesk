@@ -23,8 +23,7 @@ export const useItemStore = defineStore("item", {
   actions: {
     async addItem(params: Item, podcastname: string, docname: string) {
       const id = nanoid()
-      const shared = false
-      const item: Item = { ...params, id, shared }
+      const item: Item = { ...params, id }
 
       this.itemList.push(item)
       return this.saveData(podcastname, docname)

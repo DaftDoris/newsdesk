@@ -16,3 +16,5 @@ export const firebaseConfig = {
 export const app = initializeApp(firebaseConfig)
 export const db = getFirestore()
 export const analytics = getAnalytics(app)
+// import { setLogLevel } from "firebase/firestore"
+// setLogLevel("debug")
