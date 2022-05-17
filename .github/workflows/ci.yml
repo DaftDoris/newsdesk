@@ -33,6 +33,8 @@ jobs:
         with:
           node-version-file: '.nvmrc'
       - uses: cypress-io/github-action@v2
+        continue-on-error: true
+        id: cypress
         with:
           record: true
           # we have already installed everything
@@ -48,6 +50,24 @@ jobs:
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Print Dashboard URL
+        run: |
+          echo Cypress finished with: ${{ steps.cypress.outcome }}
+          echo See results at ${{ steps.cypress.outputs.dashboardUrl }}
+
+      - uses: actions/github-script@v5
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Cypress finished with: ${{ steps.cypress.outcome }} See results at ${{ steps.cypress.outputs.dashboardUrl }}'
+            })
+
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
