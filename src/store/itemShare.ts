@@ -20,6 +20,7 @@ export const useShareStore = defineStore("share", {
   }),
   actions: {
     async connect(podcastname: string) {
+      this.inbox = {}
       const db = getFirestore()
 
       // TODO: swap this out with a collectionGroup query

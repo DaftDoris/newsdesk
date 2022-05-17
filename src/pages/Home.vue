@@ -205,7 +205,7 @@ watch(() => props.podcastId, connect, {
 
 const events = {
   onClickSave(text: string, slot: Item["slot"]) {
-    itemStore.addItem({ text, slot }, props.podcastId, docname)
+    itemStore.addItem({ text, slot, sharePodcast: [] }, props.podcastId, docname)
   },
   onUpdateSaveDoc() {
     itemStore.saveData(props.podcastId, docname)
@@ -218,8 +218,15 @@ const events = {
   onClickUpdate(item: Item) {
     itemStore.updateItem(item, props.podcastId, docname)
   },
-  onClickShare(item: Item, destination: string) {
+  onClickShare(item: Item, destination: string, podcastNameToShare: []) {
     shareStore.sendItem(item, destination, props.podcastId)
+    item.sharePodcast = podcastNameToShare
+    if (podcastNameToShare.length > 0) {
+      item.shared = true
+    } else {
+      item.shared = false
+    }
+    itemStore.updateItem(item, props.podcastId, docname)
   },
 }
 </script>

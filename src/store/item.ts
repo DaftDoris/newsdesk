@@ -60,7 +60,8 @@ export const useItemStore = defineStore("item", {
 
     connect(podcastname: string, docname: string) {
       const db = getFirestore()
-
+      this.slotTitleList = []
+      this.itemList = []
       onSnapshot(doc(db, podcastname, docname), (doc) => {
         this.slotTitleList = (doc.data()?.slotTitles ?? []) as string[]
         this.itemList = (doc.data()?.items ?? []) as Item[]
