@@ -11,7 +11,6 @@ import {
   getRedirectResult,
   connectAuthEmulator,
 } from "firebase/auth"
-import { FirebaseApp } from "firebase/app"
 
 export interface IUser {
   nickName?: string
@@ -49,6 +48,7 @@ export const useAuthStore = defineStore("auth", function () {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function emulator(auth: any) {
     if (!auth?.emulatorConfig && window.location.hostname === "localhost") {
       connectAuthEmulator(auth, "http://localhost:9099")
@@ -73,8 +73,6 @@ export const useAuthStore = defineStore("auth", function () {
     console.log("providedBy", providedBy)
     saveUserToStore(userCredential.user, providedBy)
   }
-
-
 
   async function checkAuth() {
     const auth = getAuth()

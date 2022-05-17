@@ -5,7 +5,6 @@ import {
   connectFirestoreEmulator,
   setLogLevel,
   initializeFirestore,
-  FirestoreSettings,
 } from "firebase/firestore"
 
 export const firebaseConfig = {
