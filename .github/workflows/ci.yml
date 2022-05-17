@@ -37,7 +37,7 @@ jobs:
           record: true
           # we have already installed everything
           # start: npm run firebase:emulator
-          wait-on: 'http://localhost:3000, http://localhost:9099, http-get://localhost:8082'
+          wait-on: 'http://localhost:3000, http://localhost:9099, http://localhost:8082'
 
           # install: false
           # # to run component tests we need to use "cypress run-ct"
