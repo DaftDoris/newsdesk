@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-interface podcasts {
+export interface podcasts {
   id: string
   name: string
   image: string
@@ -32,6 +32,8 @@ export const usePodcastStore = defineStore("podcasts", {
       { id: "tsn7aus", name: "TSN7: AUS", image: "" },
       { id: "blipblip", name: "Blip Blip!", image: "/blip-blip.jpg" },
       { id: "dev", name: "dev sandbox", image: "" },
+      { id: "dev2", name: "dev 2 sandbox", image: "" },
+      { id: "dev3", name: "dev 3 sandbox", image: "" },
     ],
   }),
   getters: {

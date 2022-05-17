@@ -1,10 +1,10 @@
 <template>
   <main class="overflow-y-auto h-full">
-    <div class="select-podcast h-full mb-5">
-      <h2 class="mt-5">Select Podcast</h2>
-      <div class="container mx-auto px-4 xl:px-0">
+    <div class="select-podcast sm:mx-32 sm:mt-10 md:mx-44 xl:mx-96 sm:mb-5">
+      <h2 class="sm:my-12">Select Podcast</h2>
+      <div class="mx-auto px-4 xl:px-0">
         <div
-          class="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-4 gap-4 text-white my-5"
+          class="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-4 gap-5 text-white mx-5 sm:mx-0 my-5"
         >
           <template
             :key="podcast.image"
@@ -33,5 +33,6 @@ h2 {
 }
 .select-podcast {
   height: calc(100vh - 72px);
+      // transform: translate(-50%, -50%);
 }
 </style>
