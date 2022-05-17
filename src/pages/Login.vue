@@ -6,7 +6,7 @@
         <template v-for="(provider, index) in loginProviderList" :key="index">
           <ListItem>
             <Button
-              class="btn border border-black text-black flex items-center mx-auto w-fit rounded-lg"
+              class="btn border border-black flex items-center mx-auto w-fit"
               @click="events.onClickLogin(provider.provider, provider.name)"
             >
               Login <ArrowCircleRightIcon class="h-8 w-8 pl-2" />
@@ -59,10 +59,5 @@ const events = {
 <style scoped lang="scss">
 .login-logo {
   transform: translatey(-50%);
-  button {
-    color: black !important;
-    border-radius: 0.6rem;
-    padding: 4px 12px !important;
-  }
 }
 </style>
