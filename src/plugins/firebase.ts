@@ -1,6 +1,10 @@
 import { initializeApp } from "firebase/app"
 import { getAnalytics } from "firebase/analytics"
-import { getFirestore, connectFirestoreEmulator } from "firebase/firestore"
+import {
+  getFirestore,
+  connectFirestoreEmulator,
+  setLogLevel,
+} from "firebase/firestore"
 
 export const firebaseConfig = {
   apiKey: "AIzaSyBvk41kRWgCj9cQ2Bn_WRcxuULTcV3TwqI",
@@ -15,8 +19,8 @@ export const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig)
 export const db = getFirestore()
-connectFirestoreEmulator(db, "localhost", 8080)
-
+if (window.location.hostname === "localhost") {
+  connectFirestoreEmulator(db, "localhost", 8080)
+  setLogLevel("info")
+}
 export const analytics = getAnalytics(app)
-// import { setLogLevel } from "firebase/firestore"
-// setLogLevel("debug")

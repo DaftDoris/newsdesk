@@ -6,4 +6,5 @@ dist-ssr
 .idea
 .vscode
 cypress/videos
+cypress/screenshots
 *.log

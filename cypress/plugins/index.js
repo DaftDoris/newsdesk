@@ -1,4 +1,3 @@
-/// <reference types="cypress" />
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
 //
@@ -15,8 +14,19 @@
 /**
  * @type {Cypress.PluginConfig}
  */
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-undef
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
 }
+
+// import admin from "firebase-admin"
+// import { plugin as cypressFirebasePlugin } from "cypress-firebase"
+
+// module.exports = (
+//   on: Cypress.PluginEvents,
+//   config: Cypress.PluginConfigOptions,
+// ) => {
+//   const extendedConfig = cypressFirebasePlugin(on, config, admin)
+//   return extendedConfig
+// }

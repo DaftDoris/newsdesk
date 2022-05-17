@@ -8,14 +8,14 @@
       "port": 9099
     },
     "firestore": {
-      "port": 8080
+      "port": 8082
     },
     "ui": {
       "port": 8000,
       "enabled": true
     },
     "hosting": {
-      "port": 8081
+      "port": 3000
     }
   },
   "hosting": {

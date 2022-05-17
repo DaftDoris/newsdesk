@@ -20,8 +20,13 @@ describe("example to-do app", () => {
     cy.visit("http://localhost:3000")
   })
 
-  it("should have login button", () => {
+  it("should have login button", function () {
     cy.get("button").should("have.text", "Login with Google")
+    cy.contains("Login with Google").click()
+  })
+
+  it("should login", function () {
+    cy.contains("Login with Google").click()
   })
 
   // it("can add new todo items", () => {
