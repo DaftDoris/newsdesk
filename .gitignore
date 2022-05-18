@@ -5,3 +5,6 @@ dist-ssr
 *.local
 .idea
 .vscode
+cypress/videos
+cypress/screenshots
+*.log

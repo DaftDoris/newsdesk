@@ -21,7 +21,7 @@
           />
         </ListActionButton>
       </div>
-      <LongerList
+      <inbox
       :podcastId = "podcastId"
       :docname = "docname"
       />
@@ -69,7 +69,7 @@
               <ItemCard
                 :item="item"
                 @delete="events.onClickDelete"
-                @toggle="events.onClickToggle"
+                @share="events.onClickShare"
                 @update="events.onClickUpdate"
                 @dragged="dragged"
               />
@@ -106,11 +106,12 @@ import { watch, ref, reactive } from "vue"
 import { storeToRefs } from "pinia"
 import { useAuthStore } from "@/store/auth"
 import { useItemStore } from "@/store/item"
+import { useShareStore } from "@/store/itemShare"
 import { Item } from "@/types/item"
 
 import List from "@/components/atoms/List.vue"
 import ListItem from "@/components/atoms/ListItem.vue"
-import LongerList from "@/components/LongerList.vue"
+import Inbox from "@/components/Inbox.vue"
 import ItemCard from "@/components/molecules/Cards/ItemCard.vue"
 import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
@@ -119,7 +120,7 @@ import { PlusIcon, MinusIcon, ClipboardCopyIcon } from "@heroicons/vue/outline"
 
 const authStore = useAuthStore()
 const itemStore = useItemStore()
-
+const shareStore = useShareStore()
 const initiated = ref(false)
 
 const { user, isAuthenticated } = storeToRefs(authStore)
@@ -244,9 +245,8 @@ const events = {
   onClickUpdate(item: Item) {
     itemStore.updateItem(item, props.podcastId, docname)
   },
-  onClickToggle(item: Item) {
-    item.shared = !item.shared
-    itemStore.updateItem(item, props.podcastId, docname)
+  onClickShare(item: Item, destination: string) {
+    shareStore.sendItem(item, destination, props.podcastId)
   },
 }
 </script>

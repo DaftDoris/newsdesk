@@ -7,8 +7,9 @@ import {
   browserLocalPersistence,
   User,
   getAuth,
-  signInWithPopup,
-  onAuthStateChanged,
+  signInWithRedirect,
+  getRedirectResult,
+  connectAuthEmulator,
 } from "firebase/auth"
 
 export interface IUser {
@@ -18,7 +19,7 @@ export interface IUser {
   userId?: string
 }
 
-export const useAuthStore = defineStore("auth", () => {
+export const useAuthStore = defineStore("auth", function () {
   const userRef = ref<Nullable<IUser>>(null)
   const provider = ref<Nullable<Provider>>(null)
   const isAuthenticated = computed<boolean>(() => userRef.value !== null)
@@ -47,15 +48,39 @@ export const useAuthStore = defineStore("auth", () => {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function emulator(auth: any) {
+    if (!auth?.emulatorConfig && window.location.hostname === "localhost") {
+      connectAuthEmulator(auth, "http://localhost:9099")
+    }
+  }
+
   async function loginWithFirebase(
     provider: AuthProvider,
     providedBy: Provider,
   ) {
     const auth = getAuth()
-    await auth.setPersistence(browserLocalPersistence)
-    const userCredential = await signInWithPopup(auth, provider)
 
+    emulator(auth)
+
+    await auth.setPersistence(browserLocalPersistence)
+
+    if (auth.currentUser) return saveUserToStore(auth.currentUser, providedBy)
+
+    const userCredential = await getRedirectResult(auth)
+    console.log(userCredential)
+    if (userCredential === null) return signInWithRedirect(auth, provider)
+    console.log("providedBy", providedBy)
     saveUserToStore(userCredential.user, providedBy)
+  }
+
+  async function checkAuth() {
+    const auth = getAuth()
+    emulator(auth)
+
+    await auth.setPersistence(browserLocalPersistence)
+    if (!auth.currentUser) return
+    saveUserToStore(auth.currentUser, "Google")
   }
 
   async function logout() {
@@ -64,22 +89,11 @@ export const useAuthStore = defineStore("auth", () => {
     localStorage.clear()
   }
 
-  function getPersistenceFirebaseUser(providedBy: Provider): Promise<boolean> {
-    return new Promise((resolve) => {
-      const auth = getAuth()
-
-      onAuthStateChanged(auth, (user) => {
-        if (user) saveUserToStore(user, providedBy)
-        resolve(user !== null)
-      })
-    })
-  }
-
   return {
     user: userRef,
     provider,
     isAuthenticated,
-    getPersistenceFirebaseUser,
+    checkAuth,
     logout,
     loginWithFirebase,
   }
