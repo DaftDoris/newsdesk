@@ -1,13 +1,16 @@
 import { defineStore } from "pinia"
 import { Item } from "@/types/item"
 import { usePodcastStore, podcasts } from "@/store/podcasts"
+import { db } from "@/plugins/firebase"
+
 import {
   doc,
-  getFirestore,
   setDoc,
   arrayUnion,
   updateDoc,
-  onSnapshot,
+  arrayRemove,
+  getDoc,
+  collection,
 } from "firebase/firestore"
 
 interface State {
@@ -21,25 +24,24 @@ export const useShareStore = defineStore("share", {
   actions: {
     async connect(podcastname: string) {
       this.inbox = {}
-      const db = getFirestore()
-
       // TODO: swap this out with a collectionGroup query
       usePodcastStore().getPodcasts.forEach((podcast: podcasts) => {
-        onSnapshot(
-          doc(db, podcastname, "inbox", podcast.id, "shares"),
-          (doc) => {
-            this.inbox[podcast.id] = doc.data()?.items ?? []
-          },
-        )
+        getDoc(
+          doc(collection(db, podcastname, "inbox", podcast.id), "shares"),
+        ).then((getData) => {
+          this.inbox[podcast.id] = getData.data()?.items ?? []
+        })
       })
     },
 
-    // TODO:
-    // async deleteItem(item: Item, podcastname: string, from: string) {
-    // })
+    async deleteItem(item: Item, podcastname: string, from: string) {
+      const docRef = doc(db, podcastname, "inbox", from, "shares")
+      await updateDoc(docRef, {
+        items: arrayRemove(item.text),
+      })
+    },
 
     async sendItem(item: Item, destination: string, from: string) {
-      const db = getFirestore()
       const docRef = doc(db, destination, "inbox", from, "shares")
       try {
         await updateDoc(docRef, {

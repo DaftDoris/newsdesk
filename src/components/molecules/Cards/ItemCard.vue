@@ -47,7 +47,7 @@
                 :key="podcast.id"
               >
                 <div class="flex justify-between items-center pb-2">
-                  <label :for="podcast.id">{{ podcast.name }}</label>
+                  <sapn :for="podcast.id">{{ podcast.name }}</sapn>
                   <input
                     type="checkbox"
                     :id="podcast.id"
@@ -128,6 +128,11 @@ const getPodcastToShare = (item: Item) => {
       return deletePodcastItem.value.indexOf(obj) == -1
     })
     emits("share", item, getAddPodcastId[0], podcastNameToShare.value)
+  } else {
+    const getDeletePodcastId = deletePodcastItem.value.filter(function (obj) {
+      return podcastNameToShare.value.indexOf(obj) == -1
+    })
+    emits("share", item, "", podcastNameToShare.value, getDeletePodcastId[0])
   }
 }
 
