@@ -35,6 +35,11 @@ describe("newsdesk logged in", () => {
     cy.url().should("include", "/#/dev")
   })
 
+  it("should be able to create and delete a slot title", () => {
+    cy.get("#headlessui-menu-button-1").click()
+    cy.contains("dev sandbox").click()
+  })
+
   it("should be able to create and delete a new item", () => {
     cy.get("#headlessui-menu-button-1").click()
     cy.contains("dev sandbox").click()
@@ -56,7 +61,7 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7]").should("not.contain", "new share item")
     cy.get("#headlessui-menu-button-1").click()
     cy.contains("dev 2 sandbox").click()
-    // cy.scrollTo("top")
-    // cy.get("#inbox-column").should("contain", "new share item")
+    cy.scrollTo("top")
+    cy.get("#inbox-column").should("contain", "new share item")
   })
 })
