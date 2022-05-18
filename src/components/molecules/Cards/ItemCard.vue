@@ -46,7 +46,9 @@
                 v-for="podcast in podcastStore.getPodcasts"
                 :key="podcast.id"
               >
-                <div class="flex justify-between items-center pb-2">
+                <div
+                  class="flex justify-between items-center pb-2 font-normal podcast-list text-gray-700"
+                >
                   <sapn :for="podcast.id">{{ podcast.name }}</sapn>
                   <input
                     type="checkbox"
@@ -154,5 +156,8 @@ const emits = defineEmits(["delete", "update", "save", "dragged", "share"])
 }
 .prose:focus {
   outline: 0;
+}
+.podcast-list {
+  @apply ss-furniture;
 }
 </style>
