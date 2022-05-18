@@ -4,6 +4,9 @@
     "indexes": "firestore.indexes.json"
   },
   "emulators": {
+    "hub": {
+      "port": 4400
+    },
     "auth": {
       "port": 9099
     },
