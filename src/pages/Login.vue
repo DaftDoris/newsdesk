@@ -8,7 +8,7 @@
         <template v-for="(provider, index) in loginProviderList" :key="index">
           <ListItem>
             <Button class="btn-success flex items-center mx-auto w-full" :class="[provider.color]" @click="events.onClickLogin(provider.provider, provider.name)">
-              <img class="rounded-full w-8 h-8 mr-4" :src="provider.icon" :alt="provider.name"> Login with {{ provider.name }}
+              <img class="rounded-full w-8 h-8 mr-4" :src="provider.icon" :alt="provider.name">Login with {{ provider.name }}
             </Button>
           </ListItem>
         </template>

@@ -2,13 +2,9 @@ import { nanoid } from "nanoid"
 import { defineStore } from "pinia"
 import { Item } from "@/types/item"
 
-import {
-  collection,
-  doc,
-  getFirestore,
-  setDoc,
-  onSnapshot,
-} from "firebase/firestore"
+import { collection, doc, setDoc, onSnapshot } from "firebase/firestore"
+
+import { db } from "@/plugins/firebase"
 
 interface State {
   itemList: Item[]
@@ -50,7 +46,6 @@ export const useItemStore = defineStore("item", {
     },
 
     async saveData(podcastname: string, docname: string) {
-      const db = getFirestore()
       const docRef = doc(collection(db, podcastname), docname)
       return setDoc(docRef, {
         items: this.itemList,
@@ -59,8 +54,6 @@ export const useItemStore = defineStore("item", {
     },
 
     connect(podcastname: string, docname: string) {
-      const db = getFirestore()
-
       onSnapshot(doc(db, podcastname, docname), (doc) => {
         this.slotTitleList = (doc.data()?.slotTitles ?? []) as string[]
         this.itemList = (doc.data()?.items ?? []) as Item[]
