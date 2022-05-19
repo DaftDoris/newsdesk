@@ -52,7 +52,6 @@ const update = (text: any) => {
 const element = ref<HTMLElement | null>(null)
 
 const dropped = (e: DragEvent) => {
-  console.log(e.clientX, e.clientY,"e.clientX, e.clientYe.clientX, e.clientY")
   emits("dragged", e.clientX, e.clientY, props.item)
 }
 
