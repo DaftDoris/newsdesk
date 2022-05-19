@@ -4,7 +4,11 @@
       <div
         class="text-2xl font-bold flex items-center dark:text-gray-50 transition-colors"
       >
-        <img src="/daftdoris.svg" alt="DaftDoris" class="h-8 dark:invert" />
+        <img
+          src="/logo.svg"
+          alt="News Desk Daft Doris"
+          class="h-8 dark:invert"
+        />
       </div>
       <Menu
         as="div"
@@ -65,6 +69,7 @@
       </Menu>
       <div class="flex items-center">
         <button
+          id="darklight"
           type="button"
           class="round-btn mr-2 px-1 py-1"
           @click.prevent.stop="events.onClickToggleDarkMode"
@@ -81,6 +86,7 @@
           </transition>
         </button>
         <button
+          id="logout"
           v-ripple
           type="button"
           class="round-btn"
@@ -131,7 +137,8 @@ const events = {
 
 <style scoped lang="scss">
 header {
-  @apply ss-furniture px-4 py-4 flex justify-between sticky top-0 left-0 right-0 z-10 bg-white dark:bg-gray-800 transition-all outline-none border-none;
+  @apply ss-furniture;
+  // px-4 py-4 justify-between sticky top-0 left-0 right-0 z-10 bg-white dark:bg-gray-800 transition-all outline-none border-none;
 }
 .round-btn {
   @apply w-10 h-10 rounded-full;

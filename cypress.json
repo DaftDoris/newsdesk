@@ -1,0 +1,8 @@
+{
+  "port": 3001,
+  "chromeWebSecurity": false,
+  "experimentalStudio": true,
+  "viewportWidth": 1920,
+  "viewportHeight": 1920,
+  "projectId": "aoadny"
+}
