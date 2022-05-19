@@ -7,7 +7,7 @@
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Inbox</h2>
         <ListActionButton 
-          title="cloumn"
+          title="toggle inbox expansion"
         >
           <PlusIcon
             @click="hideShowColumn.inbox = true,hideShowColumn.script= hideShowColumn.draft = false"
@@ -21,16 +21,16 @@
           />
         </ListActionButton>
       </div>
-      <LongerList
+      <inbox
       :podcastId = "podcastId"
       :docname = "docname"
       />
     </div>
-    <div class="px-4 column-h overflow-y-auto" :class="{'col-span-3':hideShowColumn.draft}">
+    <div class="px-4 column-h overflow-y-auto" id="draft-column" :class="{'col-span-3':hideShowColumn.draft}">
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Draft</h2>
         <ListActionButton 
-          title="cloumn"
+          title="toggle draft expansion"
         >
           <PlusIcon
             @click="hideShowColumn.draft = true,hideShowColumn.script= hideShowColumn.inbox = false"
@@ -61,7 +61,7 @@
               <ItemCard
                 :item="item"
                 @delete="events.onClickDelete"
-                @toggle="events.onClickToggle"
+                @share="events.onClickShare"
                 @update="events.onClickUpdate"
                 @dragged="dragged"
               />
@@ -74,7 +74,7 @@
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Script</h2>
         <ListActionButton 
-          title="cloumn"
+          title="toggle script expansion"
         >
           <PlusIcon
             @click="hideShowColumn.script = true,hideShowColumn.draft= hideShowColumn.inbox = false"
@@ -98,11 +98,12 @@ import { watch, ref, reactive } from "vue"
 import { storeToRefs } from "pinia"
 import { useAuthStore } from "@/store/auth"
 import { useItemStore } from "@/store/item"
+import { useShareStore } from "@/store/itemShare"
 import { Item } from "@/types/item"
 
 import List from "@/components/atoms/List.vue"
 import ListItem from "@/components/atoms/ListItem.vue"
-import LongerList from "@/components/LongerList.vue"
+import Inbox from "@/components/Inbox.vue"
 import ItemCard from "@/components/molecules/Cards/ItemCard.vue"
 import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
@@ -111,7 +112,7 @@ import { PlusIcon, MinusIcon } from "@heroicons/vue/outline"
 
 const authStore = useAuthStore()
 const itemStore = useItemStore()
-
+const shareStore = useShareStore()
 const initiated = ref(false)
 
 const { user, isAuthenticated } = storeToRefs(authStore)
@@ -217,9 +218,8 @@ const events = {
   onClickUpdate(item: Item) {
     itemStore.updateItem(item, props.podcastId, docname)
   },
-  onClickToggle(item: Item) {
-    item.shared = !item.shared
-    itemStore.updateItem(item, props.podcastId, docname)
+  onClickShare(item: Item, destination: string) {
+    shareStore.sendItem(item, destination, props.podcastId)
   },
 }
 </script>

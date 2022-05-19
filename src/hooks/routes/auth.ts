@@ -1,7 +1,6 @@
 import { useAuthStore } from "@/store/auth"
 import { NavigationGuardNext, RouteLocationNormalized } from "vue-router"
 import { storeToRefs } from "pinia"
-import { Provider } from "@/types/auth"
 
 export function useAuthentication() {
   return {
@@ -11,13 +10,9 @@ export function useAuthentication() {
       next: NavigationGuardNext,
     ) {
       const authStore = useAuthStore()
-      const { getPersistenceFirebaseUser } = useAuthStore()
+
+      await authStore.checkAuth()
       const { isAuthenticated } = storeToRefs(authStore)
-      try {
-        await getPersistenceFirebaseUser(<Provider>"Google")
-      } catch {
-        next("/auth/login")
-      }
       if (to.meta.requiresAuth) {
         if (isAuthenticated.value) {
           next()

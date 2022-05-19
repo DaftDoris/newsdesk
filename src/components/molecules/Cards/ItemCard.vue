@@ -22,9 +22,12 @@
           class="dark:text-white bg-transparent transition-colors"
         />
       </ListActionButton>
-      <ListActionButton @click="emits('toggle', item)" title="Share">
-        <BookmarkIconSolid v-if="item.shared" />
-        <BookmarkIcon v-else />
+      <!-- TODO: "dev" below needs to be dynamic based on each  -->
+      <ListActionButton @click="emits('share', item, 'dev')" title="Share to dev">
+        <BookmarkIcon />
+      </ListActionButton>
+      <ListActionButton @click="emits('share', item, 'dev2')" title="Share to dev2">
+        <BookmarkIcon />
       </ListActionButton>
     </div>
   </div>
@@ -73,7 +76,7 @@ const props = defineProps({
   },
 })
 
-const emits = defineEmits(["delete", "update", "save", "toggle", "dragged"])
+const emits = defineEmits(["delete", "update", "save", "dragged", "share"])
 </script>
 
 <style scoped lang="scss">

@@ -23,3 +23,40 @@ jobs:
       - run: npm install
       - run: npm run lint
       - run: npm run build
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3.0.2
+
+      - uses: actions/setup-node@17f8bd926464a1afa4c6a11669539e9c1ba77048 # tag=v3.2.0
+        with:
+          node-version-file: '.nvmrc'
+      - uses: cypress-io/github-action@a45da79a2ea5457403a080c4fcc0ea3daf6924a0 # tag=v3.0.6
+        id: cypress
+        with:
+          record: true
+          # we have already installed everything
+          # start: npm run firebase:emulator
+          wait-on: 'http://localhost:3000, http://localhost:9099, http://localhost:8082'
+
+          # install: false
+          # # to run component tests we need to use "cypress run-ct"
+          build: npm run build
+          start: npm run firebase:emulator
+
+          # command: npm run test
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos
