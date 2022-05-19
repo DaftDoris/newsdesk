@@ -33,7 +33,6 @@ jobs:
         with:
           node-version-file: '.nvmrc'
       - uses: cypress-io/github-action@a45da79a2ea5457403a080c4fcc0ea3daf6924a0 # tag=v3.0.6
-        continue-on-error: true
         id: cypress
         with:
           record: true
@@ -50,11 +49,6 @@ jobs:
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Print Dashboard URL
-        run: |
-          echo Cypress finished with: ${{ steps.cypress.outcome }}
-          echo See results at ${{ steps.cypress.outputs.dashboardUrl }}
 
       - uses: actions/upload-artifact@v2
         if: failure()
