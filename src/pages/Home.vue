@@ -7,7 +7,7 @@
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Inbox</h2>
         <ListActionButton 
-          title="cloumn"
+          title="toggle inbox expansion"
         >
           <PlusIcon
             @click="hideShowColumn.inbox = true,hideShowColumn.script= hideShowColumn.draft = false"
@@ -26,11 +26,11 @@
       :docname = "docname"
       />
     </div>
-    <div class="px-4 column-h overflow-y-auto" :class="{'col-span-3':hideShowColumn.draft}">
+    <div class="px-4 column-h overflow-y-auto" id="draft-column" :class="{'col-span-3':hideShowColumn.draft}">
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Draft</h2>
         <ListActionButton 
-          title="cloumn"
+          title="toggle draft expansion"
         >
           <PlusIcon
             @click="hideShowColumn.draft = true,hideShowColumn.script= hideShowColumn.inbox = false"
@@ -82,7 +82,7 @@
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Script</h2>
         <ListActionButton 
-          title="cloumn"
+          title="toggle script expansion"
         >
           <PlusIcon
             @click="hideShowColumn.script = true,hideShowColumn.draft= hideShowColumn.inbox = false"
