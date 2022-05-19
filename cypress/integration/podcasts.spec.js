@@ -96,17 +96,40 @@ describe("newsdesk logged in", () => {
     // @TODO: cleanup
   })
 
-  it.skip("should be able to set slot titles", () => {
-    // @TODO: fix this test
+  it("should be able to set slot titles", () => {
     switchPodCast("dev sandbox")
     for (let section = 1; section <= 7; section++)
       cy.get(`section[slotno=${section}] input`).type(
-        `lot ${section} title {enter}`,
+        `Slot ${section} title {enter}`,
       )
   })
 
-  it.skip("should move item between slots when dragging")
-  it.skip("should move item within a slot when dragging")
+  it("should move item between slots when dragging", () => {
+    switchPodCast("dev sandbox")
+    cy.get("section[slotno=7] textarea").type("dragging item{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7] ul div")
+      .eq(0)
+      .trigger("dragend", { clientX: 820, clientY: 402 }, { force: true })
+    cy.get("section[slotno=6]").should("contain", "dragging item")
+    cy.get("section[slotno=6] button[title='Delete']").click()
+  })
+
+  it("should move item within a slot when dragging", () => {
+    switchPodCast("dev sandbox")
+    cy.get("section[slotno=7] textarea").type("dragging item{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7] textarea").type("dragging item in slot{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7] ul li")
+      .eq(0)
+      .children("div[draggable='true']")
+      .trigger("dragend", { clientX: 564, clientY: 289 }, { force: true })
+  })
+
   it.skip(
     "should add item to slot and remove from inbox when dragging from inbox",
   )
