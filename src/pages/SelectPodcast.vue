@@ -11,7 +11,7 @@
             v-for="podcast in podcastStore.getPodcasts"
           >
             <div class="mx-auto" v-if="podcast.image">
-              <a :href="`#${podcast.id}`">
+              <a id="select-podcast" :href="`#${podcast.id}`">
                 <img :src="podcast.image" />
               </a>
             </div>
@@ -29,10 +29,9 @@ const podcastStore = usePodcastStore()
 
 <style scoped lang="scss">
 h2 {
-  @apply ss-furniture text-center text-4xl;
+  @apply ss-furniture dark:text-white text-center text-4xl;
 }
 .select-podcast {
   height: calc(100vh - 72px);
-      // transform: translate(-50%, -50%);
 }
 </style>
