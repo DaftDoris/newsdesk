@@ -6,6 +6,7 @@
         <template v-for="(provider, index) in loginProviderList" :key="index">
           <ListItem>
             <Button
+              id="login"
               class="btn border border-black flex items-center mx-auto w-fit"
               @click="events.onClickLogin(provider.provider, provider.name)"
             >
