@@ -213,7 +213,7 @@ watch(() => props.podcastId, connect, {
 })
 
 const copySlotText = (slot: number) => {
-  const itemData = itemStore.getSlotList(slot)
+  const itemData = itemStore.getSlotList(slot).reverse()
   let textValue = ''
   itemData.map((el) => {
     if(el.text) {
