@@ -55,6 +55,15 @@ export const useShareStore = defineStore("share", {
         else throw e
       }
     },
+
+    async removeDraggedItem(item: Item, destination: string, sharePodcast: []) {
+      sharePodcast.forEach(async (podcast) => {
+        const docRef = doc(db, podcast, "inbox", destination, "shares")
+        await updateDoc(docRef, {
+          items: arrayRemove(item.text),
+        })
+      })
+    },
   },
   getters: {
     getInbox: (state: State) => Object.values(state.inbox).flat(),

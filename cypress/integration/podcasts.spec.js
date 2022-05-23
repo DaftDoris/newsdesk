@@ -110,9 +110,21 @@ describe("newsdesk logged in", () => {
 
   it.skip("should move item between slots when dragging")
   it.skip("should move item within a slot when dragging")
-  it.skip(
-    "should add item to slot and remove from inbox when dragging from inbox",
-  )
+
+  it("should add item to slot and remove from inbox when dragging from inbox", () => {
+    cy.get("section[slotno=7] textarea").type("Remove item in inbox{enter}")
+    cy.get("section[slotno=7]").should("contain", "Remove item in inbox")
+    cy.get("section[slotno=7] button[title='Share to podcast']").click()
+    cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
+    switchPodCast("dev 2 sandbox")
+    cy.get("#inbox-column").should("contain", "Remove item in inbox")
+    switchPodCast("dev sandbox")
+    cy.get("section[slotno=7] ul div")
+      .eq(0)
+      .trigger("dragend", { clientX: 820, clientY: 402 }, { force: true })
+    cy.get("section[slotno=6]").should("contain", "Remove item in inbox")
+    cy.get("section[slotno=6] button[title='Delete']").click()
+  })
 })
 
 import firebaseConfig from "../../firebase.json"

@@ -166,20 +166,26 @@ const dragged = (x: number, y: number, item: Item) => {
     }
   }
   if (slot) {
+     if(slot !== item.slot && item.sharePodcast?.length) {
+      shareStore.removeDraggedItem(item, props.podcastId, item.sharePodcast)
+      shareStore.connect(props.podcastId)
+      item.shared = false
+      item.sharePodcast = []
+    }
     item.slot = slot
     itemStore.saveData(props.podcastId, docname)
   }
 }
 
 const moveArrayItemToNewIndex= (arr: any, old_index: number, new_index: number) =>{
-    if (new_index >= arr.length) {
-        var k = new_index - arr.length + 1;
-        while (k--) {
-            arr.push(undefined);
-        }
+  if (new_index >= arr.length) {
+    var k = new_index - arr.length + 1;
+    while (k--) {
+      arr.push(undefined);
     }
-    arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
-    return arr; 
+  }
+  arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+  return arr; 
 };
 
 const connect = () => {
