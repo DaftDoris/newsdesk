@@ -100,7 +100,6 @@ import { useAuthStore } from "@/store/auth"
 import { useItemStore } from "@/store/item"
 import { useShareStore } from "@/store/itemShare"
 import { Item } from "@/types/item"
-import { usePodcastStore } from "@/store/podcasts"
 
 import List from "@/components/atoms/List.vue"
 import ListItem from "@/components/atoms/ListItem.vue"
@@ -110,7 +109,6 @@ import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
 import { PlusIcon, MinusIcon } from "@heroicons/vue/outline"
-const store = usePodcastStore()
 
 const authStore = useAuthStore()
 const itemStore = useItemStore()
@@ -134,9 +132,6 @@ const hideShowColumn = reactive({
   script:false
 })
 
-onMounted(() => {
-  store.getReadAccessPodcast()
-})
 
 const dragged = (x: number, y: number, item: Item) => {
   const slot = <Item["slot"]>parseInt(

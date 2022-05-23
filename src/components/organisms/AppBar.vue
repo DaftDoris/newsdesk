@@ -104,7 +104,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue"
+import { computed, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useDark, useToggle } from "@vueuse/core"
 import { useAuthStore } from "@/store/auth"
@@ -124,6 +124,9 @@ const isAuthenticated = computed(() => authStore.isAuthenticated)
 const isDarkMode = useDark()
 const toggleDarkMode = useToggle(isDarkMode)
 
+onMounted(() => {
+  store.getReadAccessPodcast()
+})
 const events = {
   async onClickProfile() {
     await authStore.logout()
