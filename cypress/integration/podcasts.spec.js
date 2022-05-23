@@ -105,6 +105,18 @@ describe("newsdesk logged in", () => {
   it.skip(
     "should add item to slot and remove from inbox when dragging from inbox",
   )
+
+  it("should copy slot text", () => {
+    cy.contains("dev sandbox").click()
+
+    cy.get("section[slotno=7] textarea").type("new items{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7]").should("contain", "new items")
+    cy.get("section[slotno=7] button[title='Copy Slot item']").click()
+    cy.get("section[slotno=7]").should("contain", "new items")
+    cy.get("section[slotno=7] button[title='Delete']").click()
+  })
 })
 
 import firebaseConfig from "../../firebase.json"
