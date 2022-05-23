@@ -94,12 +94,13 @@
 </template>
 
 <script lang="ts" setup>
-import { watch, ref, reactive } from "vue"
+import { watch, ref, reactive, onMounted } from "vue"
 import { storeToRefs } from "pinia"
 import { useAuthStore } from "@/store/auth"
 import { useItemStore } from "@/store/item"
 import { useShareStore } from "@/store/itemShare"
 import { Item } from "@/types/item"
+import { usePodcastStore } from "@/store/podcasts"
 
 import List from "@/components/atoms/List.vue"
 import ListItem from "@/components/atoms/ListItem.vue"
@@ -109,6 +110,7 @@ import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
 import { PlusIcon, MinusIcon } from "@heroicons/vue/outline"
+const store = usePodcastStore()
 
 const authStore = useAuthStore()
 const itemStore = useItemStore()
@@ -130,6 +132,10 @@ const hideShowColumn = reactive({
   inbox: false,
   draft: true,
   script:false
+})
+
+onMounted(() => {
+  store.getReadAccessPodcast()
 })
 
 const dragged = (x: number, y: number, item: Item) => {

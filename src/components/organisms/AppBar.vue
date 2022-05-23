@@ -20,7 +20,7 @@
             class="inline-flex justify-between w-full items-center rounded-lg border-2 border-black shadow-sm px-4 py-1 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
           >
             {{
-              store.getPodcasts.filter(
+              store.getReadAccessPodcasts.filter(
                 (podcast) => podcast.id === route.params.podcastId,
               )[0]?.name || "select a podcast"
             }}
@@ -51,7 +51,7 @@
             <div class="py-1">
               <MenuItem
                 v-slot="{ active }"
-                v-for="podcast in store.getPodcasts"
+                v-for="podcast in store.getReadAccessPodcasts"
                 :key="podcast.id"
               >
                 <a
