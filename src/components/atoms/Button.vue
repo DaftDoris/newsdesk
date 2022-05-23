@@ -1,6 +1,6 @@
 <template>
   <button
-    class="text-white font-bold py-2 px-4 rounded transition-colors"
+    class="text-black font-bold py-1 px-4 rounded-lg transition-colors"
     v-bind="$attrs"
   >
     <slot />
