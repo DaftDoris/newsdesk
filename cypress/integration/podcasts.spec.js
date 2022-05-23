@@ -14,7 +14,7 @@ describe("newsdesk logged in", () => {
       `http://localhost:${firebaseConfig.emulators.firestore.port}/emulator/v1/projects/${firebaseAppConfig.projectId}/databases/(default)/documents`,
     )
     cy.visit(homeurl)
-    cy.contains("Login with Google").click()
+    cy.get("#login").click()
     cy.contains("Peach Otter").click()
     cy.get("h2").should("have.text", "⬆️ select a podcast ⬆️")
     switchPodCast("dev sandbox")
@@ -22,7 +22,7 @@ describe("newsdesk logged in", () => {
 
   it("should be able to logout", () => {
     cy.get("#logout").click()
-    cy.contains("Login with Google")
+    cy.contains("Login")
   })
 
   it("should be toggle between dark/light", () => {
