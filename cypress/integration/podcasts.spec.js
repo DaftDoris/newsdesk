@@ -57,11 +57,6 @@ describe("newsdesk logged in", () => {
     cy.url().should("include", "/#/dev")
   })
 
-  it("should be able to create and delete a slot title", () => {
-    cy.get("#headlessui-menu-button-1").click()
-    cy.contains("dev sandbox").click()
-  })
-
   it("should be able to create and delete a new item", () => {
     cy.contains("dev sandbox").click()
 
@@ -128,6 +123,13 @@ describe("newsdesk logged in", () => {
       .eq(0)
       .children("div[draggable='true']")
       .trigger("dragend", { clientX: 564, clientY: 289 }, { force: true })
+    cy.get("section[slotno=7] button[title='Delete']").click({
+      multiple: true,
+      force: true,
+    })
+    cy.get("section[slotno=7]")
+      .should("not.contain", "dragging item")
+      .and("not.contain", "dragging item in slot")
   })
 
   it.skip(
@@ -136,14 +138,18 @@ describe("newsdesk logged in", () => {
 
   it("should copy slot text", () => {
     cy.contains("dev sandbox").click()
-
-    cy.get("section[slotno=7] textarea").type("new items{enter}", {
+    const textToCopy = "copy slot items"
+    cy.get("section[slotno=7] textarea").type(`${textToCopy}{enter}`, {
       force: true,
     })
-    cy.get("section[slotno=7]").should("contain", "new items")
+    cy.get("section[slotno=7]").should("contain", textToCopy)
     cy.get("section[slotno=7] button[title='Copy Slot item']").click()
-    cy.get("section[slotno=7]").should("contain", "new items")
+    cy.window()
+      .its("navigator.clipboard")
+      .invoke("readText")
+      .should("equal", textToCopy + "\r\n\n")
     cy.get("section[slotno=7] button[title='Delete']").click()
+    cy.get("section[slotno=7]").should("not.contain", textToCopy)
   })
 })
 
