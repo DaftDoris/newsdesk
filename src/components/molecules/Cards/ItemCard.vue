@@ -26,8 +26,7 @@
         <Popover as="div" class="relative pt-1 text-sm">
           <div>
             <PopoverButton>
-              <BookmarkIconSolid v-if="item.shared" />
-              <BookmarkIcon v-else />
+              <BookmarkIcon />
             </PopoverButton>
           </div>
 
@@ -75,8 +74,8 @@ import { PropType, computed, ref } from "vue"
 import { Item } from "@/types/item"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue"
-import { BackspaceIcon, BookmarkIcon, HandIcon } from "@heroicons/vue/outline"
-import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/solid"
+import { BackspaceIcon, HandIcon } from "@heroicons/vue/outline"
+import { BookmarkIcon } from "@heroicons/vue/solid"
 import { usePodcastStore } from "@/store/podcasts"
 import { useRoute } from "vue-router"
 

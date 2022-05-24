@@ -169,7 +169,6 @@ const dragged = (x: number, y: number, item: Item) => {
      if(slot !== item.slot && item.sharePodcast?.length) {
       shareStore.removeDraggedItem(item, props.podcastId, item.sharePodcast)
       shareStore.connect(props.podcastId)
-      item.shared = false
       item.sharePodcast = []
     }
     item.slot = slot
@@ -231,15 +230,10 @@ const events = {
     if(getDeletePodcastId !== ""){
       shareStore.deleteItem(item, getDeletePodcastId, props.podcastId)
     }
-    if(destination == props.podcastId || getDeletePodcastId ==props.podcastId){
+    if(destination == props.podcastId || getDeletePodcastId == props.podcastId){
       shareStore.connect(props.podcastId)
     }
     item.sharePodcast = podcastNameToShare
-    if (podcastNameToShare.length > 0) {
-      item.shared = true
-    } else {
-      item.shared = false
-    }
     itemStore.updateItem(item, props.podcastId, docname)
   },
 }
