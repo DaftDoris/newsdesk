@@ -2,7 +2,8 @@
 
 const homeurl = "http://localhost:3000"
 
-const switchPodCast = (podcast) => {
+const switchPodCast = (podcast, add) => {
+  if (add == true) cy.get("#select-podcast").eq(0).click()
   cy.get("#headlessui-menu-button-1").click()
   cy.contains(podcast).click()
 }
@@ -14,13 +15,13 @@ describe("newsdesk logged in", () => {
       `http://localhost:${firebaseConfig.emulators.firestore.port}/emulator/v1/projects/${firebaseAppConfig.projectId}/databases/(default)/documents`,
     )
     cy.visit(homeurl)
-    cy.contains("Login with Google").click()
+    cy.get("#login").click()
     cy.contains("Peach Otter").click()
   })
 
   it("should be able to logout", () => {
     cy.get("#logout").click()
-    cy.contains("Login with Google")
+    cy.contains("Login")
   })
 
   it("should be toggle between dark/light", () => {
@@ -59,8 +60,7 @@ describe("newsdesk logged in", () => {
   })
 
   it("should be able to create and delete a new item", () => {
-    cy.get("#select-podcast").eq(0).click()
-    switchPodCast("dev sandbox")
+    switchPodCast("dev sandbox", true)
 
     cy.get("section[slotno=7] textarea").type("new item{enter}", {
       force: true,
@@ -71,20 +71,18 @@ describe("newsdesk logged in", () => {
   })
 
   it("should be able to create and share a new item", () => {
-    cy.get("#select-podcast").eq(0).click()
-    switchPodCast("dev sandbox")
+    switchPodCast("dev sandbox", true)
     cy.get("section[slotno=7] textarea").type("new share item{enter}")
     cy.get("section[slotno=7]").should("contain", "new share item")
     cy.get("section[slotno=7] button[title='Share to dev2']").click()
     cy.get("section[slotno=7] button[title='Delete']").click()
     cy.get("section[slotno=7]").should("not.contain", "new share item")
-    switchPodCast("dev 2 sandbox")
+    switchPodCast("dev 2 sandbox", false)
     cy.get("#inbox-column").should("contain", "new share item")
   })
 
   it("should create and delete items", () => {
-    cy.get("#select-podcast").eq(0).click()
-    switchPodCast("dev sandbox")
+    switchPodCast("dev sandbox", true)
     for (let section = 1; section <= 7; section++) {
       for (let i = 1; i <= 3; i++)
         cy.get(`section[slotno=${section}] textarea`).type(
@@ -96,18 +94,40 @@ describe("newsdesk logged in", () => {
     // @TODO: cleanup
   })
 
-  it.skip("should be able to set slot titles", () => {
-    cy.get("#select-podcast").eq(0).click()
-    // @TODO: fix this test
-    switchPodCast("dev sandbox")
+  it("should be able to set slot titles", () => {
+    switchPodCast("dev sandbox", true)
     for (let section = 1; section <= 7; section++)
       cy.get(`section[slotno=${section}] input`).type(
-        `lot ${section} title {enter}`,
+        `Slot ${section} title {enter}`,
       )
   })
 
-  it.skip("should move item between slots when dragging")
-  it.skip("should move item within a slot when dragging")
+  it("should move item between slots when dragging", () => {
+    switchPodCast("dev sandbox", true)
+    cy.get("section[slotno=7] textarea").type("dragging item{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7] ul div")
+      .eq(0)
+      .trigger("dragend", { clientX: 820, clientY: 402 }, { force: true })
+    cy.get("section[slotno=6]").should("contain", "dragging item")
+    cy.get("section[slotno=6] button[title='Delete']").click()
+  })
+
+  it("should move item within a slot when dragging", () => {
+    switchPodCast("dev sandbox", true)
+    cy.get("section[slotno=7] textarea").type("dragging item{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7] textarea").type("dragging item in slot{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7] ul li")
+      .eq(0)
+      .children("div[draggable='true']")
+      .trigger("dragend", { clientX: 564, clientY: 289 }, { force: true })
+  })
+
   it.skip(
     "should add item to slot and remove from inbox when dragging from inbox",
   )
