@@ -55,7 +55,12 @@ export const useItemStore = defineStore("item", {
 
     connect(podcastname: string, docname: string) {
       onSnapshot(doc(db, podcastname, docname), (doc) => {
-        this.slotTitleList = (doc.data()?.slotTitles ?? []) as string[]
+        this.slotTitleList = (
+          doc.data()?.slotTitles.length > 0
+            ? doc.data()?.slotTitles
+            : Array.from({ length: 7 }, () => "") ??
+              Array.from({ length: 7 }, () => "")
+        ) as string[]
         this.itemList = (doc.data()?.items ?? []) as Item[]
       })
     },
