@@ -1,11 +1,29 @@
 <template>
   <ul>
-    <li class="list-none" v-for="item in store.getInbox.reverse()" :key="item">
-      <component
-        class="border-b border-slate-400 pb-1 w-100 break-all"
-        :is="'p'"
-        v-html="linkify(item)"
-      />
+    <li
+      class="list-none"
+      v-for="(item, podcastId) in store.getInbox"
+      :key="podcastId"
+    >
+      <template v-if="item">
+        <span v-for="(text, index) in item" :key="index">
+          <div
+            class="flex justify-between items-center border-b border-slate-400 pb-1"
+            @dragend="dropped($event, text, podcastId)"
+            draggable="true"
+          >
+            <component
+              class="w-100 break-all w-full"
+              :is="'p'"
+              :data-item="item"
+              v-html="linkify(text)"
+            />
+            <div>
+              <HandIcon class="w-5 h-5"/>
+            </div>
+          </div>
+        </span>
+      </template>
     </li>
   </ul>
 </template>
@@ -14,6 +32,7 @@
 import { watch } from "vue"
 import LinkifyIt from "linkify-it"
 import { useShareStore } from "@/store/itemShare"
+import { HandIcon } from "@heroicons/vue/outline"
 
 const props = defineProps({
   podcastId: {
@@ -30,11 +49,13 @@ const store = useShareStore()
 const connect = () => {
   store.connect(props.podcastId)
 }
+
+const dropped = (e: DragEvent, item: string, podcastId: any) => {
+  emits("draggedInbox", e.clientX, e.clientY, item, podcastId)
+}
 watch(() => props.podcastId, connect, {
   immediate: true,
 })
-
-
 
 const linkifyit = LinkifyIt()
 
@@ -48,6 +69,8 @@ const linkify = (text: string) => {
     ) || text
   ).replace(/\n/g, "<br/>")
 }
+
+const emits = defineEmits(["draggedInbox"])
 </script>
 
 <style scoped lang="scss">

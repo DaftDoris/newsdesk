@@ -24,6 +24,7 @@
       <inbox
       :podcastId = "podcastId"
       :docname = "docname"
+      @draggedInbox = "draggedInbox"
       />
     </div>
     <div class="px-4 column-h overflow-y-auto" id="draft-column" :class="{'col-span-3':hideShowColumn.draft}">
@@ -132,6 +133,19 @@ const hideShowColumn = reactive({
   script:false
 })
 
+const draggedInbox = (x: number, y: number, text: string, key: string) => {
+  const slot = <Item["slot"]>parseInt(
+    <string>// @ts-ignore
+    document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
+  )
+
+  if(slot) {
+    itemStore.addItem({ text, slot, sharePodcast: [] }, props.podcastId, docname)
+    shareStore.removeDraggedItem(text, props.podcastId, key)
+    shareStore.connect(props.podcastId)
+  }
+}
+
 const dragged = (x: number, y: number, item: Item) => {
   const slot = <Item["slot"]>parseInt(
     <string>// @ts-ignore
@@ -166,11 +180,6 @@ const dragged = (x: number, y: number, item: Item) => {
     }
   }
   if (slot) {
-     if(slot !== item.slot && item.sharePodcast?.length) {
-      shareStore.removeDraggedItem(item, props.podcastId, item.sharePodcast)
-      shareStore.connect(props.podcastId)
-      item.sharePodcast = []
-    }
     item.slot = slot
     itemStore.saveData(props.podcastId, docname)
   }

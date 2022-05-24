@@ -149,22 +149,20 @@ describe("newsdesk logged in", () => {
       .and("not.contain", "dragging item in slot")
   })
 
-  it("should add item to slot and remove from inbox when dragging from draft", () => {
+  it("should add item to slot and remove from inbox when dragging from inbox", () => {
     cy.get("section[slotno=7] textarea").type("Remove item in inbox{enter}")
     cy.get("section[slotno=7]").should("contain", "Remove item in inbox")
     cy.get("section[slotno=7] button[title='Share to podcast']").click()
     cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
     switchPodCast("dev 2 sandbox")
     cy.get("#inbox-column").should("contain", "Remove item in inbox")
-    switchPodCast("dev sandbox")
-    cy.get("section[slotno=7] ul div")
+    cy.get("#inbox-column ul li p")
       .eq(0)
-      .trigger("dragend", { clientX: 820, clientY: 402 }, { force: true })
+      .trigger("dragend", { clientX: 564, clientY: 289 }, { force: true })
     cy.get("section[slotno=6]").should("contain", "Remove item in inbox")
+    cy.get("#inbox-column ul").should("not.contain", "Remove item in inbox")
     cy.get("section[slotno=6] button[title='Delete']").click()
     cy.get("section[slotno=6]").should("not.contain", "Remove item in inbox")
-    switchPodCast("dev 2 sandbox")
-    cy.get("#inbox-column ul").should("not.contain", "Remove item in inbox")
   })
 })
 
