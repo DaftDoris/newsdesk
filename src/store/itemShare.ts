@@ -8,7 +8,6 @@ import {
   setDoc,
   arrayUnion,
   updateDoc,
-  arrayRemove,
   getDoc,
   collection,
 } from "firebase/firestore"
@@ -31,13 +30,6 @@ export const useShareStore = defineStore("share", {
         ).then((getData) => {
           this.inbox[podcast.id] = getData.data()?.items ?? []
         })
-      })
-    },
-
-    async deleteItem(item: Item, podcastname: string, from: string) {
-      const docRef = doc(db, podcastname, "inbox", from, "shares")
-      await updateDoc(docRef, {
-        items: arrayRemove(item.text),
       })
     },
 

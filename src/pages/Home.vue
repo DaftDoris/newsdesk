@@ -218,22 +218,14 @@ const events = {
   onClickUpdate(item: Item) {
     itemStore.updateItem(item, props.podcastId, docname)
   },
-  onClickShare(item: Item, destination: string = "", podcastNameToShare: [],getDeletePodcastId: string = "") {
+  onClickShare(item: Item, destination: string = "", podcastNameToShare: []) {
     if(destination !== ""){
       shareStore.sendItem(item, destination, props.podcastId)
     }
-    if(getDeletePodcastId !== ""){
-      shareStore.deleteItem(item, getDeletePodcastId, props.podcastId)
-    }
-    if(destination == props.podcastId || getDeletePodcastId ==props.podcastId){
+    if(destination == props.podcastId){
       shareStore.connect(props.podcastId)
     }
     item.sharePodcast = podcastNameToShare
-    if (podcastNameToShare.length > 0) {
-      item.shared = true
-    } else {
-      item.shared = false
-    }
     itemStore.updateItem(item, props.podcastId, docname)
   },
 }

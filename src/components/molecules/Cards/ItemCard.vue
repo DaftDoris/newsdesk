@@ -51,6 +51,9 @@
                 >
                   <sapn :for="podcast.id">{{ podcast.name }}</sapn>
                   <input
+                    v-if="
+                      !podcastNameToShare.some((item) => item === podcast.id)
+                    "
                     type="checkbox"
                     :id="podcast.id"
                     class="cursor-pointer checked:bg-black w-5 h-5 accent-black border-black"
@@ -59,6 +62,9 @@
                     @change="getPodcastToShare(item)"
                     @click="getCurrentPodcast()"
                   />
+                  <span v-else>
+                    <CheckIcon class="text-green-700" />
+                  </span>
                 </div>
               </div>
             </PopoverPanel>
@@ -75,7 +81,7 @@ import { PropType, computed, ref } from "vue"
 import { Item } from "@/types/item"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue"
-import { BackspaceIcon, BookmarkIcon, HandIcon } from "@heroicons/vue/outline"
+import { BackspaceIcon, BookmarkIcon, HandIcon, CheckIcon } from "@heroicons/vue/outline"
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/solid"
 import { usePodcastStore } from "@/store/podcasts"
 import { useRoute } from "vue-router"
@@ -118,23 +124,18 @@ const props = defineProps({
 const podcastNameToShare = ref(
   props.item?.sharePodcast ? props.item?.sharePodcast : [],
 )
-const deletePodcastItem = ref([])
+const addSharePodcastItem = ref([])
 
 const getCurrentPodcast = () => {
-  deletePodcastItem.value = podcastNameToShare.value
+  addSharePodcastItem.value = podcastNameToShare.value
 }
 
 const getPodcastToShare = (item: Item) => {
-  if (podcastNameToShare.value.length > deletePodcastItem.value.length) {
+  if (podcastNameToShare.value.length > addSharePodcastItem.value.length) {
     const getAddPodcastId = podcastNameToShare.value.filter(function (obj) {
-      return deletePodcastItem.value.indexOf(obj) == -1
+      return addSharePodcastItem.value.indexOf(obj) == -1
     })
     emits("share", item, getAddPodcastId[0], podcastNameToShare.value)
-  } else {
-    const getDeletePodcastId = deletePodcastItem.value.filter(function (obj) {
-      return podcastNameToShare.value.indexOf(obj) == -1
-    })
-    emits("share", item, "", podcastNameToShare.value, getDeletePodcastId[0])
   }
 }
 
