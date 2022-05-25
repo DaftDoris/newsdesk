@@ -35,15 +35,17 @@ export const usePodcastStore = defineStore("podcasts", {
       this.readAccessPodcasts = []
       const db = getFirestore()
       this.podcasts.map(async (el) => {
-        await getDoc(doc(collection(db, el.id)))
-          .then((res) => {
+        try {
+          await getDoc(doc(collection(db, el.id))).then((res) => {
             if (res) {
               this.readAccessPodcasts.push(el)
             }
           })
-          .catch((error) => {
-            console.log(error)
-          })
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (e: any) {
+          if (e.code === "permission-denied") return e.code
+          else return e
+        }
       })
     },
   },
