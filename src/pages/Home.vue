@@ -236,9 +236,6 @@ const events = {
     if(destination !== ""){
       shareStore.sendItem(item, destination, props.podcastId)
     }
-    if(destination == props.podcastId){
-      shareStore.connect(props.podcastId)
-    }
     item.sharePodcast = podcastNameToShare
     itemStore.updateItem(item, props.podcastId, docname)
   },

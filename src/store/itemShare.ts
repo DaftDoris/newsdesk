@@ -9,8 +9,7 @@ import {
   arrayUnion,
   updateDoc,
   arrayRemove,
-  getDoc,
-  collection,
+  onSnapshot,
 } from "firebase/firestore"
 
 interface State {
@@ -26,11 +25,12 @@ export const useShareStore = defineStore("share", {
       this.inbox = {}
       // TODO: swap this out with a collectionGroup query
       usePodcastStore().getPodcasts.forEach((podcast: podcasts) => {
-        getDoc(
-          doc(collection(db, podcastname, "inbox", podcast.id), "shares"),
-        ).then((getData) => {
-          this.inbox[podcast.id] = getData.data()?.items ?? []
-        })
+        onSnapshot(
+          doc(db, podcastname, "inbox", podcast.id, "shares"),
+          (doc) => {
+            this.inbox[podcast.id] = doc.data()?.items ?? []
+          },
+        )
       })
     },
 
@@ -40,6 +40,7 @@ export const useShareStore = defineStore("share", {
         await updateDoc(docRef, {
           items: arrayUnion(item.text),
         })
+        this.connect(from)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         // create doc if it doesn't exist
