@@ -73,7 +73,7 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7]").should("not.contain", "new item")
   })
 
-  it("should be able to create and share and unshare a new item", () => {
+  it("should be able to create and share a new item", () => {
     cy.get("section[slotno=7] textarea").type("new share item{enter}")
     cy.get("section[slotno=7]").should("contain", "new share item")
     cy.get("section[slotno=7] button[title='Share to podcast']").click()
@@ -82,16 +82,8 @@ describe("newsdesk logged in", () => {
     cy.get("#inbox-column").should("contain", "new share item")
     switchPodCast("dev sandbox")
     cy.get("section[slotno=7]").should("contain", "new share item")
-    cy.get("section[slotno=7] button[title='Share to podcast']").click()
-    cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
-    cy.get("section[slotno=7] button[title='Share to podcast']").click()
-    cy.get("section[slotno=7]").should("contain", "new share item", {
-      force: true,
-    })
     cy.get("section[slotno=7] button[title='Delete']").click()
     cy.get("section[slotno=7]").should("not.contain", "new share item")
-    switchPodCast("dev 2 sandbox")
-    cy.get("#inbox-column ul").should("not.contain", "new share item")
   })
 
   it("should create and delete items", () => {

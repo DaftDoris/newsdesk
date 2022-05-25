@@ -34,13 +34,6 @@ export const useShareStore = defineStore("share", {
       })
     },
 
-    async deleteItem(item: Item, podcastname: string, from: string) {
-      const docRef = doc(db, podcastname, "inbox", from, "shares")
-      await updateDoc(docRef, {
-        items: arrayRemove(item.text),
-      })
-    },
-
     async sendItem(item: Item, destination: string, from: string) {
       const docRef = doc(db, destination, "inbox", from, "shares")
       try {
