@@ -14,7 +14,7 @@ describe("newsdesk logged in", () => {
       `http://localhost:${firebaseConfig.emulators.firestore.port}/emulator/v1/projects/${firebaseAppConfig.projectId}/databases/(default)/documents`,
     )
     cy.visit(homeurl)
-    cy.contains("Login with Google").click()
+    cy.get("#login").click()
     cy.contains("Peach Otter").click()
     cy.get("h2").should("have.text", "⬆️ select a podcast ⬆️")
     switchPodCast("dev sandbox")
@@ -22,7 +22,7 @@ describe("newsdesk logged in", () => {
 
   it("should be able to logout", () => {
     cy.get("#logout").click()
-    cy.contains("Login with Google")
+    cy.contains("Login")
   })
 
   it("should be toggle between dark/light", () => {
@@ -55,6 +55,11 @@ describe("newsdesk logged in", () => {
 
   it("should select podcast", () => {
     cy.url().should("include", "/#/dev")
+  })
+
+  it("should be able to create and delete a slot title", () => {
+    cy.get("#headlessui-menu-button-1").click()
+    cy.contains("dev sandbox").click()
   })
 
   it("should be able to create and delete a new item", () => {
@@ -99,17 +104,40 @@ describe("newsdesk logged in", () => {
     // @TODO: cleanup
   })
 
-  it.skip("should be able to set slot titles", () => {
-    // @TODO: fix this test
+  it("should be able to set slot titles", () => {
     switchPodCast("dev sandbox")
     for (let section = 1; section <= 7; section++)
       cy.get(`section[slotno=${section}] input`).type(
-        `lot ${section} title {enter}`,
+        `Slot ${section} title {enter}`,
       )
   })
 
-  it.skip("should move item between slots when dragging")
-  it.skip("should move item within a slot when dragging")
+  it("should move item between slots when dragging", () => {
+    switchPodCast("dev sandbox")
+    cy.get("section[slotno=7] textarea").type("dragging item{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7] ul div")
+      .eq(0)
+      .trigger("dragend", { clientX: 820, clientY: 402 }, { force: true })
+    cy.get("section[slotno=6]").should("contain", "dragging item")
+    cy.get("section[slotno=6] button[title='Delete']").click()
+  })
+
+  it("should move item within a slot when dragging", () => {
+    switchPodCast("dev sandbox")
+    cy.get("section[slotno=7] textarea").type("dragging item{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7] textarea").type("dragging item in slot{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7] ul li")
+      .eq(0)
+      .children("div[draggable='true']")
+      .trigger("dragend", { clientX: 564, clientY: 289 }, { force: true })
+  })
+
   it.skip(
     "should add item to slot and remove from inbox when dragging from inbox",
   )
