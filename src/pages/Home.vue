@@ -24,6 +24,7 @@
       <inbox
       :podcastId = "podcastId"
       :docname = "docname"
+      @draggedInbox = "draggedInbox"
       />
     </div>
     <div class="px-4 column-h overflow-y-auto" id="draft-column" :class="{'col-span-3':hideShowColumn.draft}">
@@ -230,6 +231,31 @@ const copySlotText = (slot: number) => {
   }
 }
 
+const draggedInbox = (x: number, y: number, itemIndex: number, podcastId: string) => {
+  const id =
+    <string>// @ts-ignore
+    document.elementFromPoint(x, y)?.attributes["inbox-id"]?.value
+  const podcast =
+    <string>// @ts-ignore
+    document.elementFromPoint(x, y)?.attributes["inbox-podcastId"]?.value
+    if(id && podcast) {
+      const currentArray = shareStore.getInboxByKey(podcastId) as []
+      const reOrderArray = shareStore.getInboxByKey(podcast) as []
+      if (podcastId === podcast) {
+        const data= moveArrayItemToNewIndex(currentArray, itemIndex,parseInt(id));
+        shareStore.reOrderTOInbox(data, props.podcastId, podcast)
+      } else {
+        const vlaueExist = reOrderArray.includes(currentArray[itemIndex])
+        if(!vlaueExist){
+          reOrderArray.splice( parseInt(id)+1, 0, currentArray[itemIndex] );
+          currentArray.splice(itemIndex, 1)
+          shareStore.reOrderTOInbox(reOrderArray, props.podcastId, podcast)
+          shareStore.reOrderTOInbox(currentArray, props.podcastId, podcastId)
+        }
+      }
+    }
+}
+
 const events = {
   onClickSave(text: string, slot: Item["slot"]) {
     itemStore.addItem({ text, slot }, props.podcastId, docname)
@@ -246,6 +272,8 @@ const events = {
     itemStore.updateItem(item, props.podcastId, docname)
   },
   onClickShare(item: Item, destination: any) {
+    console.log('<<-- destination -->> ', destination);
+    console.log('<<-- props.podcastId -->> ', props.podcastId);
     shareStore.sendItem(item, destination, props.podcastId)
   },
 }

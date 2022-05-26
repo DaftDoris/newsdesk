@@ -156,6 +156,26 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] button[title='Delete']").click()
     cy.get("section[slotno=7]").should("not.contain", textToCopy)
   })
+
+  it("should dragging item in inbox", () => {
+    switchPodCast("dev sandbox")
+    cy.get("section[slotno=7] textarea").type("dragging item in inbox{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7] button[title='Share to dev']").click()
+    cy.get("#inbox-column").should("contain", "dragging item in inbox")
+    cy.get("section[slotno=7] textarea").type("dragging item{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7] button[title='Share to dev']").click(
+      { multiple: true },
+      { force: true },
+    )
+    cy.get("#inbox-column").should("contain", "dragging item")
+    cy.get("#inbox-column ul li span div")
+      .eq(0)
+      .trigger("dragend", { clientX: 97, clientY: 112 }, { force: true })
+  })
 })
 
 import firebaseConfig from "../../firebase.json"
