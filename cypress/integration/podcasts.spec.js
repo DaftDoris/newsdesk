@@ -151,6 +151,29 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] button[title='Delete']").click()
     cy.get("section[slotno=7]").should("not.contain", textToCopy)
   })
+
+  it("should add links in items", () => {
+    cy.contains("dev sandbox").click()
+    const link =
+      "https://twitter.com/PoliticusSarah/status/1520759587128979458?s=20&t=-ZSrWH2DIXO97dJgtoy46Q"
+    cy.get("section[slotno=7] textarea").type(`${link}{enter}`, {
+      force: true,
+    })
+    cy.get("section[slotno=7]").should(
+      "contain",
+      link.length > 50 ? link.slice(0, 50) + "..." : link,
+    )
+    cy.get("section[slotno=7] ul li div a").click()
+    cy.get("section[slotno=7]").should(
+      "contain",
+      link.length > 50 ? link.slice(0, 50) + "..." : link,
+    )
+    cy.get("section[slotno=7] button[title='Delete']").click()
+    cy.get("section[slotno=7]").should(
+      "not.contain",
+      link.length > 50 ? link.slice(0, 50) + "..." : link,
+    )
+  })
 })
 
 import firebaseConfig from "../../firebase.json"
