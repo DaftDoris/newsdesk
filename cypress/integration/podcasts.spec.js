@@ -161,17 +161,17 @@ describe("newsdesk logged in", () => {
     })
     cy.get("section[slotno=7]").should(
       "contain",
-      link.length > 50 ? link.slice(0, 50) + "..." : link,
+      "https://twitter.com/PoliticusSarah/status/15207595...",
     )
     cy.get("section[slotno=7] ul li div a").click()
     cy.get("section[slotno=7]").should(
       "contain",
-      link.length > 50 ? link.slice(0, 50) + "..." : link,
+      "https://twitter.com/PoliticusSarah/status/15207595...",
     )
     cy.get("section[slotno=7] button[title='Delete']").click()
     cy.get("section[slotno=7]").should(
       "not.contain",
-      link.length > 50 ? link.slice(0, 50) + "..." : link,
+      "https://twitter.com/PoliticusSarah/status/15207595...",
     )
   })
 })
