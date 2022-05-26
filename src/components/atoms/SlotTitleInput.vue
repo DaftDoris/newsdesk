@@ -1,5 +1,5 @@
 <template>
-  <label>
+  <label class="w-11/12">
     {{ slotno }}:
     <input
       class="input break-all max-w-full"
