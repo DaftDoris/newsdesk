@@ -247,9 +247,6 @@ const events = {
   },
   onClickShare(item: Item, destination: any) {
     shareStore.sendItem(item, destination, props.podcastId)
-    if(destination.includes(props.podcastId)){
-      shareStore.connect(props.podcastId)
-    }
   },
 }
 </script>
