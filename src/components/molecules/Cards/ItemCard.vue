@@ -26,8 +26,7 @@
         <Popover as="div" class="relative pt-1 text-sm">
           <div>
             <PopoverButton>
-              <BookmarkIconSolid v-if="item.shared" />
-              <BookmarkIcon v-else />
+              <BookmarkIcon />
             </PopoverButton>
           </div>
 
@@ -60,7 +59,6 @@
                     v-model="podcastNameToShare"
                     :value="podcast.id"
                     @change="getPodcastToShare(item)"
-                    @click="getCurrentPodcast()"
                   />
                   <span v-else>
                     <CheckIcon class="text-green-700" />
@@ -81,8 +79,8 @@ import { PropType, computed, ref } from "vue"
 import { Item } from "@/types/item"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue"
-import { BackspaceIcon, BookmarkIcon, HandIcon, CheckIcon } from "@heroicons/vue/outline"
-import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/solid"
+import { BackspaceIcon, HandIcon, CheckIcon } from "@heroicons/vue/outline"
+import { BookmarkIcon } from "@heroicons/vue/solid"
 import { usePodcastStore } from "@/store/podcasts"
 import { useRoute } from "vue-router"
 
@@ -121,22 +119,10 @@ const props = defineProps({
     default: null,
   },
 })
-const podcastNameToShare = ref(
-  props.item?.sharePodcast ? props.item?.sharePodcast : [],
-)
-const addSharePodcastItem = ref([])
-
-const getCurrentPodcast = () => {
-  addSharePodcastItem.value = podcastNameToShare.value
-}
+const podcastNameToShare = ref([])
 
 const getPodcastToShare = (item: Item) => {
-  if (podcastNameToShare.value.length > addSharePodcastItem.value.length) {
-    const getAddPodcastId = podcastNameToShare.value.filter(function (obj) {
-      return addSharePodcastItem.value.indexOf(obj) == -1
-    })
-    emits("share", item, getAddPodcastId[0], podcastNameToShare.value)
-  }
+  emits("share", item, podcastNameToShare.value)
 }
 
 const emits = defineEmits(["delete", "update", "save", "dragged", "share"])

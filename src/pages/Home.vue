@@ -232,7 +232,7 @@ const copySlotText = (slot: number) => {
 
 const events = {
   onClickSave(text: string, slot: Item["slot"]) {
-    itemStore.addItem({ text, slot, sharePodcast: [] }, props.podcastId, docname)
+    itemStore.addItem({ text, slot }, props.podcastId, docname)
   },
   onUpdateSaveDoc() {
     itemStore.saveData(props.podcastId, docname)
@@ -245,15 +245,11 @@ const events = {
   onClickUpdate(item: Item) {
     itemStore.updateItem(item, props.podcastId, docname)
   },
-  onClickShare(item: Item, destination: string = "", podcastNameToShare: []) {
-    if(destination !== ""){
-      shareStore.sendItem(item, destination, props.podcastId)
-    }
-    if(destination == props.podcastId){
+  onClickShare(item: Item, destination: any) {
+    shareStore.sendItem(item, destination, props.podcastId)
+    if(destination.includes(props.podcastId)){
       shareStore.connect(props.podcastId)
     }
-    item.sharePodcast = podcastNameToShare
-    itemStore.updateItem(item, props.podcastId, docname)
   },
 }
 </script>
