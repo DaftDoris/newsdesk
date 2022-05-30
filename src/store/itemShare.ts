@@ -48,7 +48,6 @@ export const useShareStore = defineStore("share", {
           else throw e
         }
       })
-      this.connect(from)
     },
   },
   getters: {
