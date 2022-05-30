@@ -16,11 +16,11 @@ describe("newsdesk logged in", () => {
     cy.visit(homeurl)
     cy.get("#login").click()
     cy.contains("Peach Otter").click()
-    cy.get("h2").should("have.text", "⬆️ select a podcast ⬆️")
-    switchPodCast("dev sandbox")
+    cy.get("#select-podcast").eq(0).click()
   })
 
   it("should be able to logout", () => {
+    cy.go("back")
     cy.get("#logout").click()
     cy.contains("Login")
   })
@@ -28,6 +28,7 @@ describe("newsdesk logged in", () => {
   it("should be toggle between dark/light", () => {
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(2000)
+    cy.go("back")
     cy.get("html").then(($btn) => {
       cy.get("#darklight").click()
       if ($btn.hasClass("dark")) cy.get("html").should("have.not.class", "dark")
@@ -54,11 +55,11 @@ describe("newsdesk logged in", () => {
   })
 
   it("should select podcast", () => {
-    cy.url().should("include", "/#/dev")
+    switchPodCast("dev sandbox")
   })
 
   it("should be able to create and delete a new item", () => {
-    cy.contains("dev sandbox").click()
+    switchPodCast("dev sandbox")
 
     cy.get("section[slotno=7] textarea").type("new item{enter}", {
       force: true,
@@ -69,6 +70,7 @@ describe("newsdesk logged in", () => {
   })
 
   it("should be able to create and share a new item", () => {
+    switchPodCast("dev sandbox")
     cy.get("section[slotno=7] textarea").type("new share item{enter}")
     cy.get("section[slotno=7]").should("contain", "new share item")
     cy.get("section[slotno=7] button[title='Share to dev2']").click()
@@ -137,7 +139,7 @@ describe("newsdesk logged in", () => {
   )
 
   it("should copy slot text", () => {
-    cy.contains("dev sandbox").click()
+    switchPodCast("dev sandbox")
     const textToCopy = "copy slot items"
     cy.get("section[slotno=7] textarea").type(`${textToCopy}{enter}`, {
       force: true,
