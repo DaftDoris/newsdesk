@@ -2,7 +2,14 @@ import { nanoid } from "nanoid"
 import { defineStore } from "pinia"
 import { Item } from "@/types/item"
 
-import { collection, doc, setDoc, onSnapshot } from "firebase/firestore"
+import {
+  collection,
+  doc,
+  setDoc,
+  onSnapshot,
+  updateDoc,
+  arrayRemove,
+} from "firebase/firestore"
 
 import { db } from "@/plugins/firebase"
 
@@ -31,13 +38,10 @@ export const useItemStore = defineStore("item", {
     },
 
     async removeItem(item: Item, podcastname: string, docname: string) {
-      const index = this.itemList.findIndex((x) => x.id === item.id)
-
-      if (index < 0) throw new Error(`Can't find item [${item.id}]`)
-
-      this.itemList.splice(index, 1)
-      //TODO: remove only the individual item
-      return this.saveData(podcastname, docname)
+      const docRef = doc(collection(db, podcastname), docname)
+      await updateDoc(docRef, {
+        items: arrayRemove(item),
+      })
     },
 
     async updateItem(item: Item, podcastname: string, docname: string) {

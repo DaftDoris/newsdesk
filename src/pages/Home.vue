@@ -245,7 +245,7 @@ const events = {
   onClickUpdate(item: Item) {
     itemStore.updateItem(item, props.podcastId, docname)
   },
-  onClickShare(item: Item, destination: string) {
+  onClickShare(item: Item, destination: any) {
     shareStore.sendItem(item, destination, props.podcastId)
   },
 }
