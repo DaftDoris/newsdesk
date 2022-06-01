@@ -3,10 +3,12 @@
   <div
     :data-id="item.id"
     class="handle flex justify-between items-center"
-    draggable="true"
+    :draggable="dropzone"
     @dragend="dropped"
+    @mousemove="selectedText"
   >
     <component
+      id="droptext"
       :is="'p'"
       :data-id="item.id"
       @focusout="update"
@@ -14,9 +16,11 @@
       class="prose prose-a:text-blue-600 break-all"
       v-html="htmlstring"
       ref="element"
+      draggable="false"
+      @mouseleave="selectedText"
     ></component>
     <div class="flex justify-end">
-      <HandIcon />
+      <HandIcon @click="dropzone = true" />
       <ListActionButton title="Delete" @click="emits('delete', item)">
         <BackspaceIcon
           class="dark:text-white bg-transparent transition-colors"
@@ -87,6 +91,7 @@ const podcastStore = usePodcastStore()
 const route = useRoute()
 
 const linkify = LinkifyIt()
+const dropzone = ref(true)
 const update = (text: any) => {
   // eslint-disable-next-line vue/no-mutating-props
   props.item.text = text.target?.innerHTML || ""
@@ -95,7 +100,9 @@ const update = (text: any) => {
 const element = ref<HTMLElement | null>(null)
 
 const dropped = (e: DragEvent) => {
-  emits("dragged", e.clientX, e.clientY, props.item)
+  if (dropzone.value) {
+    emits("dragged", e.clientX, e.clientY, props.item)
+  }
 }
 
 const htmlstring = computed(() => {
@@ -111,6 +118,11 @@ const htmlstring = computed(() => {
     ) || props.item.text
   ).replace(/\n/g, "<br/>")
 })
+
+const selectedText = () => {
+  const selection = window.getSelection()
+  dropzone.value = selection && selection?.isCollapsed ? true : false
+}
 
 const props = defineProps({
   item: {
