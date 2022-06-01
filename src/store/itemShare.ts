@@ -21,6 +21,7 @@ export const useShareStore = defineStore("share", {
   }),
   actions: {
     async connect(podcastname: string) {
+      this.inbox = {}
       // TODO: swap this out with a collectionGroup query
       usePodcastStore().getPodcasts.forEach((podcast: podcasts) => {
         onSnapshot(
@@ -32,24 +33,21 @@ export const useShareStore = defineStore("share", {
       })
     },
 
-    // TODO:
-    // async deleteItem(item: Item, podcastname: string, from: string) {
-    // })
-
-    async sendItem(item: Item, destination: string, from: string) {
-      // const db = getFirestore()
-      const docRef = doc(db, destination, "inbox", from, "shares")
-      try {
-        await updateDoc(docRef, {
-          items: arrayUnion(item.text),
-        })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (e: any) {
-        // create doc if it doesn't exist
-        if (e.code === "not-found" && e.name === "FirebaseError")
-          await setDoc(docRef, { items: arrayUnion(item.text) })
-        else throw e
-      }
+    async sendItem(item: Item, destination: [], from: string) {
+      destination.forEach(async (podcast) => {
+        const docRef = doc(db, podcast, "inbox", from, "shares")
+        try {
+          await updateDoc(docRef, {
+            items: arrayUnion(item.text),
+          })
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (e: any) {
+          // create doc if it doesn't exist
+          if (e.code === "not-found" && e.name === "FirebaseError")
+            await setDoc(docRef, { items: arrayUnion(item.text) })
+          else throw e
+        }
+      })
     },
   },
   getters: {

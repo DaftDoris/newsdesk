@@ -26,12 +26,52 @@
           class="dark:text-white bg-transparent transition-colors"
         />
       </ListActionButton>
-      <!-- TODO: "dev" below needs to be dynamic based on each  -->
-      <ListActionButton @click="emits('share', item, 'dev')" title="Share to dev">
-        <BookmarkIcon />
-      </ListActionButton>
-      <ListActionButton @click="emits('share', item, 'dev2')" title="Share to dev2">
-        <BookmarkIcon />
+      <ListActionButton title="Share to podcast">
+        <Popover as="div" class="relative pt-1 text-sm">
+          <div>
+            <PopoverButton>
+              <BookmarkIcon />
+            </PopoverButton>
+          </div>
+
+          <transition
+            enter-active-class="transition ease-out duration-100"
+            enter-from-class="transform opacity-0 scale-95"
+            enter-to-class="transform opacity-100 scale-100"
+            leave-active-class="transition ease-in duration-75"
+            leave-from-class="transform opacity-100 scale-100"
+            leave-to-class="transform opacity-0 scale-95"
+          >
+            <PopoverPanel
+              class="drop-shadow-lg origin-top-right absolute right-6 top-1 sm:w-60 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-2 border border-black"
+            >
+              <div
+                v-for="podcast in podcastStore.getPodcasts"
+                :key="podcast.id"
+              >
+                <div
+                  class="flex justify-between items-center pb-2 font-normal podcast-list text-gray-700"
+                >
+                  <sapn :for="podcast.id">{{ podcast.name }}</sapn>
+                  <input
+                    v-if="
+                      !podcastNameToShare.some((item) => item === podcast.id)
+                    "
+                    type="checkbox"
+                    :id="podcast.id"
+                    class="cursor-pointer checked:bg-black w-5 h-5 accent-black border-black"
+                    v-model="podcastNameToShare"
+                    :value="podcast.id"
+                    @change="getPodcastToShare(item)"
+                  />
+                  <span v-else>
+                    <CheckIcon class="text-green-700" />
+                  </span>
+                </div>
+              </div>
+            </PopoverPanel>
+          </transition>
+        </Popover>
       </ListActionButton>
     </div>
   </div>
@@ -42,9 +82,13 @@ import LinkifyIt from "linkify-it"
 import { PropType, computed, ref } from "vue"
 import { Item } from "@/types/item"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue"
+import { BackspaceIcon, HandIcon, CheckIcon, BookmarkIcon } from "@heroicons/vue/outline"
+import { usePodcastStore } from "@/store/podcasts"
+import { useRoute } from "vue-router"
 
-import { BackspaceIcon, BookmarkIcon, HandIcon } from "@heroicons/vue/outline"
-import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/vue/solid"
+const podcastStore = usePodcastStore()
+const route = useRoute()
 
 const linkify = LinkifyIt()
 const dropzone = ref(true)
@@ -86,6 +130,11 @@ const props = defineProps({
     default: null,
   },
 })
+const podcastNameToShare = ref([])
+
+const getPodcastToShare = (item: Item) => {
+  emits("share", item, podcastNameToShare.value)
+}
 
 const emits = defineEmits(["delete", "update", "save", "dragged", "share"])
 </script>
@@ -105,5 +154,8 @@ const emits = defineEmits(["delete", "update", "save", "dragged", "share"])
 }
 .prose:focus {
   outline: 0;
+}
+.podcast-list {
+  @apply ss-furniture;
 }
 </style>
