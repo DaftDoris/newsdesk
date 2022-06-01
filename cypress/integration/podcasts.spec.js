@@ -16,11 +16,11 @@ describe("newsdesk logged in", () => {
     cy.visit(homeurl)
     cy.get("#login").click()
     cy.contains("Peach Otter").click()
-    cy.get("h2").should("have.text", "⬆️ select a podcast ⬆️")
-    switchPodCast("dev sandbox")
+    cy.get("#select-podcast").eq(0).click()
   })
 
   it("should be able to logout", () => {
+    cy.go("back")
     cy.get("#logout").click()
     cy.contains("Login")
   })
@@ -28,6 +28,7 @@ describe("newsdesk logged in", () => {
   it("should be toggle between dark/light", () => {
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(2000)
+    cy.go("back")
     cy.get("html").then(($btn) => {
       cy.get("#darklight").click()
       if ($btn.hasClass("dark")) cy.get("html").should("have.not.class", "dark")
@@ -54,11 +55,11 @@ describe("newsdesk logged in", () => {
   })
 
   it("should select podcast", () => {
-    cy.url().should("include", "/#/dev")
+    switchPodCast("dev sandbox")
   })
 
   it("should be able to create and delete a new item", () => {
-    cy.contains("dev sandbox").click()
+    switchPodCast("dev sandbox")
 
     cy.get("section[slotno=7] textarea").type("new item{enter}", {
       force: true,
@@ -69,11 +70,13 @@ describe("newsdesk logged in", () => {
   })
 
   it("should be able to create and share a new item", () => {
-    cy.get("section[slotno=7] textarea").type("new share item{enter}")
+    switchPodCast("dev sandbox")
+    cy.get("section[slotno=7] textarea").type("new share item{enter}", {
+      force: true,
+    })
     cy.get("section[slotno=7]").should("contain", "new share item")
-    cy.get("section[slotno=7] button[title='Share to dev2']").click()
-    cy.get("section[slotno=7] button[title='Delete']").click()
-    cy.get("section[slotno=7]").should("not.contain", "new share item")
+    cy.get("section[slotno=7] button[title='Share to podcast']").click()
+    cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
     switchPodCast("dev 2 sandbox")
     cy.get("#inbox-column").should("contain", "new share item")
   })
@@ -116,9 +119,11 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] textarea").type("dragging item{enter}", {
       force: true,
     })
+    cy.get("section[slotno=7]").should("contain", "dragging item")
     cy.get("section[slotno=7] textarea").type("dragging item in slot{enter}", {
       force: true,
     })
+    cy.get("section[slotno=7]").should("contain", "dragging item in slot")
     cy.get("section[slotno=7] ul li")
       .eq(0)
       .children("div[draggable='true']")
@@ -137,7 +142,7 @@ describe("newsdesk logged in", () => {
   )
 
   it("should copy slot text", () => {
-    cy.contains("dev sandbox").click()
+    switchPodCast("dev sandbox")
     const textToCopy = "copy slot items"
     cy.get("section[slotno=7] textarea").type(`${textToCopy}{enter}`, {
       force: true,
@@ -153,7 +158,7 @@ describe("newsdesk logged in", () => {
   })
 
   it("should add links in items", () => {
-    cy.contains("dev sandbox").click()
+    switchPodCast("dev sandbox")
     const link =
       "https://twitter.com/PoliticusSarah/status/1520759587128979458?s=20&t=-ZSrWH2DIXO97dJgtoy46Q"
     cy.get("section[slotno=7] textarea").type(`${link}{enter}`, {
