@@ -26,14 +26,14 @@ export const useShareStore = defineStore("share", {
       usePodcastStore().getPodcasts.forEach((podcast: podcasts) => {
         onSnapshot(
           doc(db, podcastname, "inbox", podcast.id, "shares"),
-          (doc) => {            
+          (doc) => {
             this.inbox[podcast.id] = doc.data()?.items ?? []
           },
         )
       })
     },
 
-    async sendItem(item: Item, destination: [], from: string) {      
+    async sendItem(item: Item, destination: [], from: string) {
       destination.forEach(async (podcast) => {
         const docRef = doc(db, podcast, "inbox", from, "shares")
         try {

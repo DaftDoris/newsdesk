@@ -162,19 +162,18 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] textarea").type("dragging item in inbox{enter}", {
       force: true,
     })
-    cy.get("section[slotno=7] button[title='Share to dev']").click()
-    cy.get("#inbox-column").should("contain", "dragging item in inbox")
+    cy.get("section[slotno=7] button[title='Share to podcast']").click()
+    cy.get("section[slotno=7] input[id='dev'][type='checkbox']").click()
     cy.get("section[slotno=7] textarea").type("dragging item{enter}", {
       force: true,
     })
-    cy.get("section[slotno=7] button[title='Share to dev']").click(
-      { multiple: true },
-      { force: true },
-    )
+    cy.get("section[slotno=7]").should("contain", "dragging item")
+    cy.get("section[slotno=7] button[title='Share to podcast']").eq(0).click()
+    cy.get("section[slotno=7] input[id='dev'][type='checkbox']").click()
     cy.get("#inbox-column").should("contain", "dragging item")
     cy.get("#inbox-column ul li span div")
       .eq(0)
-      .trigger("dragend", { clientX: 97, clientY: 112 }, { force: true })
+      .trigger("dragend", { clientX: 83, clientY: 153 }, { force: true })
   })
 })
 
