@@ -1,7 +1,7 @@
 <template>
   <div class="relative w-full h-screen overflow-y-hidden">
     <AppBar />
-    <main class="mx-auto w-full h-full">
+    <main class="mx-auto w-full h-max mb-1">
       <router-view />
     </main>
   </div>
