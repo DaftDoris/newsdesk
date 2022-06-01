@@ -16,11 +16,11 @@ describe("newsdesk logged in", () => {
     cy.visit(homeurl)
     cy.get("#login").click()
     cy.contains("Peach Otter").click()
-    cy.get("h2").should("have.text", "⬆️ select a podcast ⬆️")
-    switchPodCast("dev sandbox")
+    cy.get("#select-podcast").eq(0).click()
   })
 
   it("should be able to logout", () => {
+    cy.go("back")
     cy.get("#logout").click()
     cy.contains("Login")
   })
@@ -28,6 +28,7 @@ describe("newsdesk logged in", () => {
   it("should be toggle between dark/light", () => {
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(2000)
+    cy.go("back")
     cy.get("html").then(($btn) => {
       cy.get("#darklight").click()
       if ($btn.hasClass("dark")) cy.get("html").should("have.not.class", "dark")
@@ -54,16 +55,11 @@ describe("newsdesk logged in", () => {
   })
 
   it("should select podcast", () => {
-    cy.url().should("include", "/#/dev")
-  })
-
-  it("should be able to create and delete a slot title", () => {
-    cy.get("#headlessui-menu-button-1").click()
-    cy.contains("dev sandbox").click()
+    switchPodCast("dev sandbox")
   })
 
   it("should be able to create and delete a new item", () => {
-    cy.contains("dev sandbox").click()
+    switchPodCast("dev sandbox")
 
     cy.get("section[slotno=7] textarea").type("new item{enter}", {
       force: true,
@@ -74,6 +70,7 @@ describe("newsdesk logged in", () => {
   })
 
   it("should be able to create and share a new item", () => {
+    switchPodCast("dev sandbox")
     cy.get("section[slotno=7] textarea").type("new share item{enter}")
     cy.get("section[slotno=7]").should("contain", "new share item")
     cy.get("section[slotno=7] button[title='Share to podcast']").click()
@@ -142,6 +139,7 @@ describe("newsdesk logged in", () => {
   })
 
   it("should add item to slot and remove from inbox when dragging from inbox", () => {
+    switchPodCast("dev sandbox")
     cy.get("section[slotno=7] textarea").type("Remove item in inbox{enter}")
     cy.get("section[slotno=7]").should("contain", "Remove item in inbox")
     cy.get("section[slotno=7] button[title='Share to podcast']").click()
@@ -153,8 +151,26 @@ describe("newsdesk logged in", () => {
       .trigger("dragend", { clientX: 564, clientY: 289 }, { force: true })
     cy.get("section[slotno=6]").should("contain", "Remove item in inbox")
     cy.get("#inbox-column ul").should("not.contain", "Remove item in inbox")
-    cy.get("section[slotno=6] button[title='Delete']").click()
-    cy.get("section[slotno=6]").should("not.contain", "Remove item in inbox")
+  })
+
+  it.skip(
+    "should add item to slot and remove from inbox when dragging from inbox",
+  )
+
+  it("should copy slot text", () => {
+    switchPodCast("dev sandbox")
+    const textToCopy = "copy slot items"
+    cy.get("section[slotno=7] textarea").type(`${textToCopy}{enter}`, {
+      force: true,
+    })
+    cy.get("section[slotno=7]").should("contain", textToCopy)
+    cy.get("section[slotno=7] button[title='Copy Slot item']").click()
+    cy.window()
+      .its("navigator.clipboard")
+      .invoke("readText")
+      .should("equal", textToCopy + "\r\n\n")
+    cy.get("section[slotno=7] button[title='Delete']").click()
+    cy.get("section[slotno=7]").should("not.contain", textToCopy)
   })
 })
 

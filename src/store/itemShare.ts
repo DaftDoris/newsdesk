@@ -34,20 +34,21 @@ export const useShareStore = defineStore("share", {
       })
     },
 
-    async sendItem(item: Item, destination: string, from: string) {
-      const docRef = doc(db, destination, "inbox", from, "shares")
-      try {
-        await updateDoc(docRef, {
-          items: arrayUnion(item.text),
-        })
-        this.connect(from)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (e: any) {
-        // create doc if it doesn't exist
-        if (e.code === "not-found" && e.name === "FirebaseError")
-          await setDoc(docRef, { items: arrayUnion(item.text) })
-        else throw e
-      }
+    async sendItem(item: Item, destination: [], from: string) {
+      destination.forEach(async (podcast) => {
+        const docRef = doc(db, podcast, "inbox", from, "shares")
+        try {
+          await updateDoc(docRef, {
+            items: arrayUnion(item.text),
+          })
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (e: any) {
+          // create doc if it doesn't exist
+          if (e.code === "not-found" && e.name === "FirebaseError")
+            await setDoc(docRef, { items: arrayUnion(item.text) })
+          else throw e
+        }
+      })
     },
 
     async removeDraggedItem(item: string, destination: string, from: string) {
