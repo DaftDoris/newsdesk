@@ -149,7 +149,7 @@ const draggedInbox = (x: number, y: number, text: string, key: string) => {
   )
 
   if(slot) {
-    itemStore.addItem({ text, slot, sharePodcast: [] }, props.podcastId, docname)
+    itemStore.addItem({ text, slot }, props.podcastId, docname)
     shareStore.removeDraggedItem(text, props.podcastId, key)
     shareStore.connect(props.podcastId)
   }
@@ -246,7 +246,7 @@ const copySlotText = (slot: number) => {
 
 const events = {
   onClickSave(text: string, slot: Item["slot"]) {
-    itemStore.addItem({ text, slot, sharePodcast: [] }, props.podcastId, docname)
+    itemStore.addItem({ text, slot }, props.podcastId, docname)
   },
   onUpdateSaveDoc() {
     itemStore.saveData(props.podcastId, docname)
