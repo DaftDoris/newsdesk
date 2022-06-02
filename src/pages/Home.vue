@@ -240,19 +240,19 @@ const draggedInbox = (x: number, y: number, itemIndex: number, podcastId: string
     document.elementFromPoint(x, y)?.attributes["inbox-podcastId"]?.value
     if(id && podcast) {
       const currentArray = shareStore.getInboxByKey(podcastId) as []
-      const reOrderArray = shareStore.getInboxByKey(podcast) as []
+      let data
       if (podcastId === podcast) {
-        const data= moveArrayItemToNewIndex(currentArray, itemIndex,parseInt(id));
-        shareStore.reOrderTOInbox(data, props.podcastId, podcast)
+        data= moveArrayItemToNewIndex(currentArray, itemIndex,parseInt(id));
       } else {
-        const vlaueExist = reOrderArray.includes(currentArray[itemIndex])
+        data = shareStore.getInboxByKey(podcast) as []
+        const vlaueExist = data.includes(currentArray[itemIndex])
         if(!vlaueExist){
-          reOrderArray.splice( parseInt(id)+1, 0, currentArray[itemIndex] );
+          data.splice( parseInt(id)+1, 0, currentArray[itemIndex] );
           currentArray.splice(itemIndex, 1)
-          shareStore.reOrderTOInbox(reOrderArray, props.podcastId, podcast)
           shareStore.reOrderTOInbox(currentArray, props.podcastId, podcastId)
         }
       }
+      shareStore.reOrderTOInbox(data, props.podcastId, podcast)
     }
 }
 
