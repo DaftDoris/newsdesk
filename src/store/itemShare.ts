@@ -45,7 +45,7 @@ export const useShareStore = defineStore("share", {
         } catch (e: any) {
           // create doc if it doesn't exist
           if (e.code === "not-found" && e.name === "FirebaseError")
-            await setDoc(docRef, { items: arrayUnion(item.text) })
+            setDoc(docRef, { items: arrayUnion(item.text) })
           else throw e
         }
       })
@@ -53,9 +53,14 @@ export const useShareStore = defineStore("share", {
 
     async removeDraggedItem(item: string, destination: string, from: string) {
       const docRef = doc(db, destination, "inbox", from, "shares")
-      await updateDoc(docRef, {
-        items: arrayRemove(item),
-      })
+      try {
+        await updateDoc(docRef, {
+          items: arrayRemove(item),
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        console.log(e)
+      }
     },
   },
   getters: {

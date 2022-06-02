@@ -27,14 +27,13 @@ export const useItemStore = defineStore("item", {
     async addItem(params: Item, podcastname: string, docname: string) {
       const id = nanoid()
       const item: Item = { ...params, id }
-
       this.itemList.push(item)
-      return this.saveData(podcastname, docname)
+      this.saveData(podcastname, docname)
     },
 
     async updateSlotItem(item: [], podcastname: string, docname: string) {
       this.itemList = item
-      return this.saveData(podcastname, docname)
+      this.saveData(podcastname, docname)
     },
 
     async removeItem(item: Item, podcastname: string, docname: string) {
@@ -51,18 +50,22 @@ export const useItemStore = defineStore("item", {
 
     async saveData(podcastname: string, docname: string) {
       const docRef = doc(collection(db, podcastname), docname)
-      return setDoc(docRef, {
-        items: this.itemList,
-        slotTitles: this.slotTitleList,
-      })
+      // eslint-disable-next-line no-useless-catch
+      try {
+        await setDoc(docRef, {
+          items: this.itemList,
+          slotTitles: this.slotTitleList,
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        console.log(e)
+      }
     },
 
     connect(podcastname: string, docname: string) {
-      this.slotTitleList = []
-      this.itemList = []
       onSnapshot(doc(db, podcastname, docname), (doc) => {
         this.slotTitleList = (
-          doc.data()?.slotTitles.length > 0
+          doc.data()?.slotTitles && doc.data()?.slotTitles.length > 0
             ? doc.data()?.slotTitles
             : Array.from({ length: 7 }, () => "") ??
               Array.from({ length: 7 }, () => "")

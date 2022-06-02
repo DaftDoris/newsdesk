@@ -71,7 +71,9 @@ describe("newsdesk logged in", () => {
 
   it("should be able to create and share a new item", () => {
     switchPodCast("dev sandbox")
-    cy.get("section[slotno=7] textarea").type("new share item{enter}")
+    cy.get("section[slotno=7] textarea").type("new share item{enter}", {
+      force: true,
+    })
     cy.get("section[slotno=7]").should("contain", "new share item")
     cy.get("section[slotno=7] button[title='Share to podcast']").click()
     cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
@@ -142,14 +144,14 @@ describe("newsdesk logged in", () => {
     switchPodCast("dev sandbox")
     cy.get("section[slotno=7] textarea").type("Remove item in inbox{enter}")
     cy.get("section[slotno=7]").should("contain", "Remove item in inbox")
-    cy.get("section[slotno=7] button[title='Share to podcast']").click()
+    cy.get("section[slotno=7] button[title='Share to podcast']").eq(0).click()
     cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
     switchPodCast("dev 2 sandbox")
     cy.get("#inbox-column").should("contain", "Remove item in inbox")
     cy.get("#inbox-column ul li p")
       .eq(0)
-      .trigger("dragend", { clientX: 564, clientY: 289 }, { force: true })
-    cy.get("section[slotno=6]").should("contain", "Remove item in inbox")
+      .trigger("dragend", { clientX: 409, clientY: 176 }, { force: true })
+    cy.get("section[slotno=7]").should("contain", "Remove item in inbox")
     cy.get("#inbox-column ul").should("not.contain", "Remove item in inbox")
   })
 
