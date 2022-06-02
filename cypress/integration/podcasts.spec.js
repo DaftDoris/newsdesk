@@ -129,7 +129,7 @@ describe("newsdesk logged in", () => {
       .children("div[draggable='true']")
       .trigger("dragend", { clientX: 564, clientY: 289 }, { force: true })
     cy.get("section[slotno=7] button[title='Delete']").click({
-      multiple: true,
+      multiple:true,
       force: true,
     })
     cy.get("section[slotno=7]")

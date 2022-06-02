@@ -42,9 +42,11 @@ export const useShareStore = defineStore("share", {
           })
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (e: any) {
-          // create doc if it doesn't exist
           if (e.code === "not-found" && e.name === "FirebaseError")
-            await setDoc(docRef, { items: arrayUnion(item.text) })
+            try {
+              setDoc(docRef, { items: arrayUnion(item.text) })
+              // eslint-disable-next-line no-empty
+            } catch (err: unknown) {}
           else throw e
         }
       })

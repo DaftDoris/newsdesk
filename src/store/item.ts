@@ -9,7 +9,6 @@ import {
   onSnapshot,
   updateDoc,
   arrayRemove,
-  arrayUnion,
 } from "firebase/firestore"
 
 import { db } from "@/plugins/firebase"
@@ -28,17 +27,9 @@ export const useItemStore = defineStore("item", {
     async addItem(params: Item, podcastname: string, docname: string) {
       const id = nanoid()
       const item: Item = { ...params, id }
-      const docRef = doc(collection(db, podcastname), docname)
-      try {
-        await updateDoc(docRef, {
-          items: arrayUnion(item),
-        })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (e: any) {
-        if (e.code === "not-found" && e.name === "FirebaseError")
-          await setDoc(docRef, { items: arrayUnion(item) })
-        console.log(e)
-      }
+
+      this.itemList.push(item)
+      this.saveData(podcastname, docname)
     },
 
     async updateSlotItem(item: [], podcastname: string, docname: string) {
@@ -60,6 +51,7 @@ export const useItemStore = defineStore("item", {
 
     async saveData(podcastname: string, docname: string) {
       const docRef = doc(collection(db, podcastname), docname)
+      // eslint-disable-next-line no-useless-catch
       try {
         setDoc(docRef, {
           items: this.itemList,
@@ -67,7 +59,7 @@ export const useItemStore = defineStore("item", {
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
-        console.log(e)
+        throw e
       }
     },
 
