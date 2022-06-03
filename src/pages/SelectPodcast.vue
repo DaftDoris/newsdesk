@@ -1,6 +1,8 @@
 <template>
   <main class="overflow-y-auto h-full">
-    <div class="select-podcast sm:mx-32 sm:mt-10 md:mx-44 xl:mx-96 sm:mb-5">
+    <div
+      class="select-podcast mb-14 pb-14 sm:mx-32 sm:mt-10 md:mx-44 xl:mx-96 sm:mb-5"
+    >
       <h2 class="sm:my-12">Select Podcast</h2>
       <div class="mx-auto px-4 xl:px-0">
         <div
@@ -32,6 +34,6 @@ h2 {
   @apply ss-furniture dark:text-white text-center text-4xl;
 }
 .select-podcast {
-  height: calc(100vh - 72px);
+  height: calc(100vh - 161px);
 }
 </style>
