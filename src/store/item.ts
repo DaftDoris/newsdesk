@@ -29,7 +29,7 @@ export const useItemStore = defineStore("item", {
       const item: Item = { ...params, id }
 
       this.itemList.push(item)
-      return this.saveData(podcastname, docname)
+      this.saveData(podcastname, docname)
     },
 
     async updateSlotItem(item: [], podcastname: string, docname: string) {
@@ -51,10 +51,20 @@ export const useItemStore = defineStore("item", {
 
     async saveData(podcastname: string, docname: string) {
       const docRef = doc(collection(db, podcastname), docname)
-      return setDoc(docRef, {
-        items: this.itemList,
-        slotTitles: this.slotTitleList,
-      })
+      try {
+        await updateDoc(docRef, {
+          items: this.itemList,
+          slotTitles: this.slotTitleList,
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+          await setDoc(docRef, {
+            items: this.itemList,
+            slotTitles: this.slotTitleList,
+          })
+        } else throw e
+      }
     },
 
     connect(podcastname: string, docname: string) {
