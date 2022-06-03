@@ -29,7 +29,7 @@ export const useItemStore = defineStore("item", {
       const item: Item = { ...params, id }
 
       this.itemList.push(item)
-      this.saveData(podcastname, docname)
+      return this.saveData(podcastname, docname)
     },
 
     async updateSlotItem(item: [], podcastname: string, docname: string) {
