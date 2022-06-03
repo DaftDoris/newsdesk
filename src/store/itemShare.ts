@@ -43,10 +43,7 @@ export const useShareStore = defineStore("share", {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (e: any) {
           if (e.code === "not-found" && e.name === "FirebaseError")
-            try {
-              setDoc(docRef, { items: arrayUnion(item.text) })
-              // eslint-disable-next-line no-empty
-            } catch (err: unknown) {}
+            await setDoc(docRef, { items: arrayUnion(item.text) })
           else throw e
         }
       })

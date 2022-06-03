@@ -29,12 +29,12 @@ export const useItemStore = defineStore("item", {
       const item: Item = { ...params, id }
 
       this.itemList.push(item)
-      this.saveData(podcastname, docname)
+      return this.saveData(podcastname, docname)
     },
 
     async updateSlotItem(item: [], podcastname: string, docname: string) {
       this.itemList = item
-      this.saveData(podcastname, docname)
+      return this.saveData(podcastname, docname)
     },
 
     async removeItem(item: Item, podcastname: string, docname: string) {
@@ -51,16 +51,10 @@ export const useItemStore = defineStore("item", {
 
     async saveData(podcastname: string, docname: string) {
       const docRef = doc(collection(db, podcastname), docname)
-      // eslint-disable-next-line no-useless-catch
-      try {
-        setDoc(docRef, {
-          items: this.itemList,
-          slotTitles: this.slotTitleList,
-        })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (e: any) {
-        throw e
-      }
+      return await setDoc(docRef, {
+        items: this.itemList,
+        slotTitles: this.slotTitleList,
+      })
     },
 
     connect(podcastname: string, docname: string) {
