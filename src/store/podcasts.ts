@@ -10,12 +10,7 @@ interface State {
 export const usePodcastStore = defineStore("podcasts", {
   state: (): State => ({
     podcasts: [
-      {
-        id: "smartseven",
-        name: "old smartseven",
-        image: "/the-smart-7.jpg",
-      },
-      { id: "smart7", name: "The Smart 7: UK", image: "" },
+      { id: "smart7", name: "The Smart 7: UK", image: "/the-smart-7.jpg" },
       {
         id: "smart7ireland",
         name: "The Smart 7: Ireland",
