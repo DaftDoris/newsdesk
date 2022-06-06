@@ -2,14 +2,7 @@ import { nanoid } from "nanoid"
 import { defineStore } from "pinia"
 import { Item } from "@/types/item"
 
-import {
-  collection,
-  doc,
-  setDoc,
-  onSnapshot,
-  updateDoc,
-  arrayRemove,
-} from "firebase/firestore"
+import { collection, doc, setDoc, onSnapshot } from "firebase/firestore"
 
 import { db } from "@/plugins/firebase"
 
@@ -29,19 +22,22 @@ export const useItemStore = defineStore("item", {
       const item: Item = { ...params, id }
 
       this.itemList.push(item)
-      this.saveData(podcastname, docname)
+      return this.saveData(podcastname, docname)
     },
 
     async updateSlotItem(item: [], podcastname: string, docname: string) {
       this.itemList = item
-      this.saveData(podcastname, docname)
+      return this.saveData(podcastname, docname)
     },
 
     async removeItem(item: Item, podcastname: string, docname: string) {
-      const docRef = doc(collection(db, podcastname), docname)
-      await updateDoc(docRef, {
-        items: arrayRemove(item),
-      })
+      const index = this.itemList.findIndex((x) => x.id === item.id)
+
+      if (index < 0) throw new Error(`Can't find item [${item.id}]`)
+
+      this.itemList.splice(index, 1)
+      //TODO: remove only the individual item
+      return this.saveData(podcastname, docname)
     },
 
     async updateItem(item: Item, podcastname: string, docname: string) {
@@ -53,12 +49,19 @@ export const useItemStore = defineStore("item", {
       const docRef = doc(collection(db, podcastname), docname)
       // eslint-disable-next-line no-useless-catch
       try {
-        await setDoc(docRef, {
+        return await setDoc(docRef, {
           items: this.itemList,
           slotTitles: this.slotTitleList,
         })
-        // eslint-disable-next-line no-empty
-      } catch (e: unknown) {}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+          return await setDoc(docRef, {
+            items: this.itemList,
+            slotTitles: this.slotTitleList,
+          })
+        } else throw e
+      }
     },
 
     connect(podcastname: string, docname: string) {
