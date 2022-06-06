@@ -86,6 +86,7 @@ import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue"
 import { BackspaceIcon, HandIcon, CheckIcon, BookmarkIcon } from "@heroicons/vue/outline"
 import { usePodcastStore } from "@/store/podcasts"
 import { useRoute } from "vue-router"
+import { documentId } from "@firebase/firestore"
 
 const podcastStore = usePodcastStore()
 const route = useRoute()
@@ -100,6 +101,10 @@ const update = (text: any) => {
 const element = ref<HTMLElement | null>(null)
 
 const dropped = (e: DragEvent) => {
+  // const data = document
+  //   .querySelector("section div[data-id=7C8fI5zDWbCiY43IwkLau]")
+  //   ?.getBoundingClientRect().top
+  // console.log(data, e.x, e.y, "dataaaa")
   if (dropzone.value) {
     emits("dragged", e.clientX, e.clientY, props.item)
   }
