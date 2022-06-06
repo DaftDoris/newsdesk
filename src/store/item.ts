@@ -2,14 +2,7 @@ import { nanoid } from "nanoid"
 import { defineStore } from "pinia"
 import { Item } from "@/types/item"
 
-import {
-  collection,
-  doc,
-  setDoc,
-  onSnapshot,
-  updateDoc,
-  arrayRemove,
-} from "firebase/firestore"
+import { collection, doc, setDoc, onSnapshot } from "firebase/firestore"
 
 import { db } from "@/plugins/firebase"
 
@@ -38,10 +31,13 @@ export const useItemStore = defineStore("item", {
     },
 
     async removeItem(item: Item, podcastname: string, docname: string) {
-      const docRef = doc(collection(db, podcastname), docname)
-      await updateDoc(docRef, {
-        items: arrayRemove(item),
-      })
+      const index = this.itemList.findIndex((x) => x.id === item.id)
+
+      if (index < 0) throw new Error(`Can't find item [${item.id}]`)
+
+      this.itemList.splice(index, 1)
+      //TODO: remove only the individual item
+      return this.saveData(podcastname, docname)
     },
 
     async updateItem(item: Item, podcastname: string, docname: string) {
@@ -51,7 +47,7 @@ export const useItemStore = defineStore("item", {
 
     async saveData(podcastname: string, docname: string) {
       const docRef = doc(collection(db, podcastname), docname)
-      return setDoc(docRef, {
+      return await setDoc(docRef, {
         items: this.itemList,
         slotTitles: this.slotTitleList,
       })
@@ -60,7 +56,7 @@ export const useItemStore = defineStore("item", {
     connect(podcastname: string, docname: string) {
       onSnapshot(doc(db, podcastname, docname), (doc) => {
         this.slotTitleList = (
-          doc.data()?.slotTitles.length > 0
+          doc.data()?.slotTitles && doc.data()?.slotTitles.length > 0
             ? doc.data()?.slotTitles
             : Array.from({ length: 7 }, () => "") ??
               Array.from({ length: 7 }, () => "")
