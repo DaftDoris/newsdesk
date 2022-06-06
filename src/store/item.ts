@@ -47,7 +47,7 @@ export const useItemStore = defineStore("item", {
 
     async saveData(podcastname: string, docname: string) {
       const docRef = doc(collection(db, podcastname), docname)
-      return setDoc(docRef, {
+      return await setDoc(docRef, {
         items: this.itemList,
         slotTitles: this.slotTitleList,
       })
@@ -56,7 +56,7 @@ export const useItemStore = defineStore("item", {
     connect(podcastname: string, docname: string) {
       onSnapshot(doc(db, podcastname, docname), (doc) => {
         this.slotTitleList = (
-          doc.data()?.slotTitles.length > 0
+          doc.data()?.slotTitles && doc.data()?.slotTitles.length > 0
             ? doc.data()?.slotTitles
             : Array.from({ length: 7 }, () => "") ??
               Array.from({ length: 7 }, () => "")

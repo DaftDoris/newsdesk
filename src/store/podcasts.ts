@@ -1,4 +1,5 @@
 import { defineStore } from "pinia"
+import { collection, doc, getFirestore, getDoc } from "firebase/firestore"
 export interface podcasts {
   id: string
   name: string
@@ -6,6 +7,7 @@ export interface podcasts {
 }
 interface State {
   podcasts: podcasts[]
+  readAccessPodcasts: podcasts[]
 }
 export const usePodcastStore = defineStore("podcasts", {
   state: (): State => ({
@@ -38,8 +40,26 @@ export const usePodcastStore = defineStore("podcasts", {
         image: "/default-podcast-image.jpg",
       },
     ],
+    readAccessPodcasts: [],
   }),
   getters: {
     getPodcasts: (state: State) => state.podcasts,
+    getReadAccessPodcasts: (state: State) => state.readAccessPodcasts,
+  },
+  actions: {
+    getReadAccessPodcast() {
+      this.readAccessPodcasts = []
+      const db = getFirestore()
+      this.podcasts.filter(async (podcast) => {
+        try {
+          await getDoc(doc(collection(db, podcast.id)))
+          this.readAccessPodcasts.push(podcast)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (e: any) {
+          if (e.code === "permission-denied") return false
+          else throw e
+        }
+      })
+    },
   },
 })
