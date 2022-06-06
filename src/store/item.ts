@@ -47,21 +47,10 @@ export const useItemStore = defineStore("item", {
 
     async saveData(podcastname: string, docname: string) {
       const docRef = doc(collection(db, podcastname), docname)
-      // eslint-disable-next-line no-useless-catch
-      try {
-        return await setDoc(docRef, {
-          items: this.itemList,
-          slotTitles: this.slotTitleList,
-        })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (e: any) {
-        if (e.code === "not-found" && e.name === "FirebaseError") {
-          return await setDoc(docRef, {
-            items: this.itemList,
-            slotTitles: this.slotTitleList,
-          })
-        } else throw e
-      }
+      return await setDoc(docRef, {
+        items: this.itemList,
+        slotTitles: this.slotTitleList,
+      })
     },
 
     connect(podcastname: string, docname: string) {

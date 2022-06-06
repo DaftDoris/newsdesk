@@ -26,7 +26,7 @@
               class="inline-flex whitespace-nowrap justify-between w-full items-center rounded-lg border border-black shadow-sm px-2 py-1 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
             >
               {{
-                store.getPodcasts.filter(
+                podcastData.filter(
                   (podcast) => podcast.id === route.params.podcastId,
                 )[0]?.name || "select a podcast"
               }}
@@ -57,7 +57,7 @@
               <div class="py-1">
                 <MenuItem
                   v-slot="{ active }"
-                  v-for="podcast in store.getPodcasts"
+                  v-for="podcast in podcastData"
                   :key="podcast.id"
                 >
                   <a
@@ -120,7 +120,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue"
+import { computed, onMounted, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useAuthStore } from "@/store/auth"
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
@@ -136,10 +136,28 @@ const date = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(
 const title = computed(() => route.meta.title || "Home")
 const routeName = computed(() => route.name)
 const user = computed(() => authStore.user)
+const podcastData = computed(() => store.getReadAccessPodcasts)
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 
 const isDarkMode = useDark()
 const toggleDarkMode = useToggle(isDarkMode)
+
+const connect = () => {
+  store.getReadAccessPodcast()
+}
+
+watch(
+  isAuthenticated,
+  async (authenticated) => {
+    if (authenticated) {
+      connect()
+    }
+  },
+  {
+    immediate: true,
+  },
+)
+
 const events = {
   async onClickProfile() {
     await authStore.logout()

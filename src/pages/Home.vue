@@ -103,7 +103,7 @@
 </template>
 
 <script lang="ts" setup>
-import { watch, ref, reactive } from "vue"
+import { watch, ref, reactive, onMounted } from "vue"
 import { storeToRefs } from "pinia"
 import { useAuthStore } from "@/store/auth"
 import { useItemStore } from "@/store/item"
@@ -141,6 +141,7 @@ const hideShowColumn = reactive({
   draft: true,
   script:false
 })
+
 
 const dragged = (x: number, y: number, item: Item) => {
   const slot = <Item["slot"]>parseInt(
