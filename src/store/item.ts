@@ -46,16 +46,10 @@ export const useItemStore = defineStore("item", {
 
     async saveData(podcastname: string, docname: string) {
       const docRef = doc(collection(db, podcastname), docname)
-      // eslint-disable-next-line no-useless-catch
-      try {
-        await setDoc(docRef, {
-          items: this.itemList,
-          slotTitles: this.slotTitleList,
-        })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (e: any) {
-        console.log(e)
-      }
+      return await setDoc(docRef, {
+        items: this.itemList,
+        slotTitles: this.slotTitleList,
+      })
     },
 
     connect(podcastname: string, docname: string) {
