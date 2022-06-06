@@ -17,7 +17,7 @@ import { useShareStore } from "@/store/itemShare"
 const props = defineProps({
   podcastId: {
     type: String,
-    default: "smartseven",
+    default: "smart7",
   },
   docname: {
     type: String,

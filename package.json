@@ -17,10 +17,10 @@
     "firebase:emulator-nohost": "firebase emulators:start --only=firestore,auth --import cypress/dump"
   },
   "dependencies": {
-    "@headlessui/vue": "1.6.3",
+    "@headlessui/vue": "1.6.4",
     "@heroicons/vue": "1.0.6",
     "@types/linkify-it": "^3.0.2",
-    "@vueuse/core": "8.5.0",
+    "@vueuse/core": "8.6.0",
     "firebase": "9.8.2",
     "moment": "2.29.3",
     "nanoid": "3.3.4",
@@ -42,7 +42,7 @@
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^10.0.0",
     "autoprefixer": "10.4.7",
-    "cypress": "9.7.0",
+    "cypress": "10.0.2",
     "eslint": "^8.16.0",
     "eslint-plugin-cypress": "^2.12.1",
     "firebase-tools": "11.0.1",
