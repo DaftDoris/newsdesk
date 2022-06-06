@@ -37,7 +37,7 @@ import { HandIcon } from "@heroicons/vue/outline"
 const props = defineProps({
   podcastId: {
     type: String,
-    default: "smartseven",
+    default: "smart7",
   },
   docname: {
     type: String,

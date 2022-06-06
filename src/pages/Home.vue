@@ -129,7 +129,7 @@ const { user, isAuthenticated } = storeToRefs(authStore)
 const props = defineProps({
   podcastId: {
     type: String,
-    default: "smartseven",
+    default: "smart7",
   },
 })
 
