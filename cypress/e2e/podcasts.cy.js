@@ -74,7 +74,7 @@ describe("newsdesk logged in", () => {
     switchPodCast("dev sandbox")
     cy.get("section[slotno=7] textarea").type("new share item{enter}")
     cy.get("section[slotno=7]").should("contain", "new share item")
-    cy.get("section[slotno=7] button[title='Share to podcast']").eq(0).click()
+    cy.get("section[slotno=7] button[title='Share to podcast']").click()
     cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
     switchPodCast("dev 2 sandbox")
     cy.get("#inbox-column").should("contain", "new share item")
