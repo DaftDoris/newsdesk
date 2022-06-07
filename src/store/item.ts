@@ -8,6 +8,8 @@ import {
   setDoc,
   onSnapshot,
   updateDoc,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore"
 
 import { db } from "@/plugins/firebase"
@@ -26,9 +28,18 @@ export const useItemStore = defineStore("item", {
     async addItem(params: Item, podcastname: string, docname: string) {
       const id = nanoid()
       const item: Item = { ...params, id }
-
-      this.itemList.push(item)
-      return this.saveData(podcastname, docname)
+      const docRef = doc(collection(db, podcastname), docname)
+      try {
+        return await updateDoc(docRef, {
+          items: arrayUnion(item),
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+          this.itemList.push(item)
+          return this.saveData(podcastname, docname)
+        } else throw e
+      }
     },
 
     async updateSlotItem(item: [], podcastname: string, docname: string) {
@@ -37,13 +48,23 @@ export const useItemStore = defineStore("item", {
     },
 
     async removeItem(item: Item, podcastname: string, docname: string) {
-      const index = this.itemList.findIndex((x) => x.id === item.id)
+      const docRef = doc(collection(db, podcastname), docname)
+      try {
+        return await updateDoc(docRef, {
+          items: arrayRemove(item),
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+          const index = this.itemList.findIndex((x) => x.id === item.id)
 
-      if (index < 0) throw new Error(`Can't find item [${item.id}]`)
+          if (index < 0) throw new Error(`Can't find item [${item.id}]`)
 
-      this.itemList.splice(index, 1)
-      //TODO: remove only the individual item
-      return this.saveData(podcastname, docname)
+          this.itemList.splice(index, 1)
+          //TODO: remove only the individual item
+          return this.saveData(podcastname, docname)
+        } else throw e
+      }
     },
 
     async updateItem(item: Item, podcastname: string, docname: string) {
