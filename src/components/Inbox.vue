@@ -33,7 +33,6 @@
 
 <script lang="ts" setup>
 import { watch } from "vue"
-import LinkifyIt from "linkify-it"
 import { useShareStore } from "@/store/itemShare"
 import { HandIcon } from "@heroicons/vue/outline"
 
@@ -56,19 +55,18 @@ watch(() => props.podcastId, connect, {
   immediate: true,
 })
 
-
-
-const linkifyit = LinkifyIt()
-
 const linkify = (text: string) => {
-  const matches = linkifyit.match(text)
-  return (
-    matches?.reduce(
-      (acc: string, match) =>
-        acc.replace(match.raw, `<a href="${match.url}">${match.raw}</a>`),
-      text,
-    ) || text
-  ).replace(/\n/g, "<br/>")
+  const itemText = text
+    .replace(/(">.*?)<\/a>/g, "")
+    .replace(/<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)/g, "")
+
+  const replacePattern =
+    /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim
+  const replacedText = itemText.replace(replacePattern, function (link, m1) {
+    return `<a class="cursor-pointer" style="color:rgb(37 99 235 / 1)" onclick="window.open('${link}').focus()" target="_blank" href="${link}">${link.length > 50 ? link.slice(0, 50) + "..." : link}</a>`
+  })
+
+  return replacedText.replace(/\n/g, "<br/>")
 }
 
 const dropped = (e: DragEvent, item: any, name: any) => {
