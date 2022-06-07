@@ -72,16 +72,14 @@ describe("newsdesk logged in", () => {
 
   it("should be able to create and share a new item", () => {
     switchPodCast("dev sandbox")
-    cy.get("section[slotno=7] textarea").type("new share item{enter}")
+    cy.get("section[slotno=7] textarea").type("new share item{enter}", {
+      force: true,
+    })
     cy.get("section[slotno=7]").should("contain", "new share item")
     cy.get("section[slotno=7] button[title='Share to podcast']").click()
     cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
     switchPodCast("dev 2 sandbox")
     cy.get("#inbox-column").should("contain", "new share item")
-    switchPodCast("dev sandbox")
-    cy.get("section[slotno=7]").should("contain", "new share item")
-    cy.get("section[slotno=7] button[title='Delete']").click()
-    cy.get("section[slotno=7]").should("not.contain", "new share item")
   })
 
   it("should create and delete items", () => {
@@ -129,6 +127,7 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] textarea").type("dragging item{enter}", {
       force: true,
     })
+    cy.get("section[slotno=7]").should("contain", "dragging item")
     cy.get("section[slotno=7] textarea").type("dragging item in slot{enter}", {
       force: true,
     })
@@ -172,6 +171,24 @@ describe("newsdesk logged in", () => {
       .should("equal", textToCopy + "\r\n\n")
     cy.get("section[slotno=7] button[title='Delete']").click()
     cy.get("section[slotno=7]").should("not.contain", textToCopy)
+  })
+
+  it("should add links in items", () => {
+    switchPodCast("dev sandbox")
+    const link =
+      "https://twitter.com/PoliticusSarah/status/1520759587128979458?s=20&t=-ZSrWH2DIXO97dJgtoy46Q"
+    cy.get("section[slotno=7] textarea").type(`${link}{enter}`, {
+      force: true,
+    })
+    cy.get("section[slotno=7] ul li div a")
+      .invoke("attr", "href")
+      .should("eq", link)
+    cy.get("section[slotno=7] ul li div a").click()
+    cy.get("section[slotno=7] button[title='Delete']").click()
+    cy.get("section[slotno=7]").should(
+      "not.contain",
+      "https://twitter.com/PoliticusSarah/status/15207595...",
+    )
   })
 })
 
