@@ -132,21 +132,19 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] textarea").type("dragging item in slot{enter}", {
       force: true,
     })
-    cy.get("section[slotno=7] ul li div p")
-      .eq(1)
-      .then((el) => {
-        cy.get("section[slotno=7] ul li")
-          .eq(0)
-          .children("div[draggable='true']")
-          .trigger(
-            "dragend",
-            {
-              clientX: el[0].getBoundingClientRect().left,
-              clientY: el[0].getBoundingClientRect().top,
-            },
-            { force: true },
-          )
-      })
+    cy.get("section[slotno=7] ul li div p").then((el) => {
+      cy.get("section[slotno=7] ul li")
+        .eq(1)
+        .children("div[draggable='true']")
+        .trigger(
+          "dragend",
+          {
+            clientX: el[0].getBoundingClientRect().left,
+            clientY: el[0].getBoundingClientRect().top,
+          },
+          { force: true },
+        )
+    })
     cy.get("section[slotno=7] button[title='Delete']").click({
       multiple: true,
       force: true,
