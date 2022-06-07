@@ -183,10 +183,11 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] ul li div a")
       .invoke("attr", "href")
       .should("eq", link)
+    cy.get("section[slotno=7]").should(
+      "contain",
+      "https://twitter.com/PoliticusSarah/status/15207595...",
+    )
     cy.get("section[slotno=7] ul li div a").click()
-    cy.get("section[slotno=7] ul li div a")
-      .invoke("attr", "href")
-      .should("eq", link)
     cy.get("section[slotno=7] button[title='Delete']").click()
     cy.get("section[slotno=7]").should(
       "not.contain",
