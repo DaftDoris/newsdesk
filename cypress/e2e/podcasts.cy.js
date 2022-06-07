@@ -80,10 +80,6 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
     switchPodCast("dev 2 sandbox")
     cy.get("#inbox-column").should("contain", "new share item")
-    switchPodCast("dev sandbox")
-    cy.get("section[slotno=7]").should("contain", "new share item")
-    cy.get("section[slotno=7] button[title='Delete']").click()
-    cy.get("section[slotno=7]").should("not.contain", "new share item")
   })
 
   it("should create and delete items", () => {
@@ -112,9 +108,16 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] textarea").type("dragging item{enter}", {
       force: true,
     })
-    cy.get("section[slotno=7] ul div")
-      .eq(0)
-      .trigger("dragend", { clientX: 820, clientY: 402 }, { force: true })
+    cy.get("section[slotno=6] textarea").then((el) => {
+      cy.get("section[slotno=7] ul div").eq(0).trigger(
+        "dragend",
+        {
+          clientX: el[0].getBoundingClientRect().left,
+          clientY: el[0].getBoundingClientRect().top,
+        },
+        { force: true },
+      )
+    })
     cy.get("section[slotno=6]").should("contain", "dragging item")
     cy.get("section[slotno=6] button[title='Delete']").click()
     cy.get("section[slotno=6]").should("not.contain", "dragging item")
@@ -125,13 +128,22 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] textarea").type("dragging item{enter}", {
       force: true,
     })
+    cy.get("section[slotno=7]").should("contain", "dragging item")
     cy.get("section[slotno=7] textarea").type("dragging item in slot{enter}", {
       force: true,
     })
-    cy.get("section[slotno=7] ul li")
-      .eq(0)
-      .children("div[draggable='true']")
-      .trigger("dragend", { clientX: 564, clientY: 289 }, { force: true })
+    cy.get("section[slotno=7] ul li div p").then((el) => {
+      cy.get("section[slotno=7] ul li:eq(1)")
+        .children("div[draggable='true']")
+        .trigger(
+          "dragend",
+          {
+            clientX: el[0].getBoundingClientRect().left,
+            clientY: el[0].getBoundingClientRect().top,
+          },
+          { force: true },
+        )
+    })
     cy.get("section[slotno=7] button[title='Delete']").click({
       multiple: true,
       force: true,
@@ -149,9 +161,16 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
     switchPodCast("dev 2 sandbox")
     cy.get("#inbox-column").should("contain", "Remove item in inbox")
-    cy.get("#inbox-column ul li p")
-      .eq(0)
-      .trigger("dragend", { clientX: 409, clientY: 176 }, { force: true })
+    cy.get("section[slotno=7] textarea").then((el) => {
+      cy.get("#inbox-column ul li p:eq(0)").trigger(
+        "dragend",
+        {
+          clientX: el[0].getBoundingClientRect().left,
+          clientY: el[0].getBoundingClientRect().top,
+        },
+        { force: true },
+      )
+    })
     cy.get("section[slotno=7]").should("contain", "Remove item in inbox")
     cy.get("#inbox-column ul").should("not.contain", "Remove item in inbox")
   })
@@ -174,6 +193,24 @@ describe("newsdesk logged in", () => {
       .should("equal", textToCopy + "\r\n\n")
     cy.get("section[slotno=7] button[title='Delete']").click()
     cy.get("section[slotno=7]").should("not.contain", textToCopy)
+  })
+
+  it("should add links in items", () => {
+    switchPodCast("dev sandbox")
+    const link =
+      "https://twitter.com/PoliticusSarah/status/1520759587128979458?s=20&t=-ZSrWH2DIXO97dJgtoy46Q"
+    cy.get("section[slotno=7] textarea").type(`${link}{enter}`, {
+      force: true,
+    })
+    cy.get("section[slotno=7] ul li div a")
+      .invoke("attr", "href")
+      .should("eq", link)
+    cy.get("section[slotno=7] ul li div a").click()
+    cy.get("section[slotno=7] button[title='Delete']").click()
+    cy.get("section[slotno=7]").should(
+      "not.contain",
+      "https://twitter.com/PoliticusSarah/status/15207595...",
+    )
   })
 })
 

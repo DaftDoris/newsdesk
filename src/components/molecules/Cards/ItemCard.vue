@@ -12,6 +12,7 @@
       :is="'p'"
       :data-id="item.id"
       @focusout="update"
+      @keydown.tab.prevent="false"
       contenteditable="true"
       class="prose prose-a:text-blue-600 break-all"
       v-html="htmlstring"
@@ -78,7 +79,6 @@
 </template>
 
 <script lang="ts" setup>
-import LinkifyIt from "linkify-it"
 import { PropType, computed, ref } from "vue"
 import { Item } from "@/types/item"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
@@ -90,11 +90,14 @@ import { useRoute } from "vue-router"
 const podcastStore = usePodcastStore()
 const route = useRoute()
 
-const linkify = LinkifyIt()
 const dropzone = ref(true)
 const update = (text: any) => {
+  const itemText = text.target?.innerHTML || ""
+  const filterItemText = itemText
+    .replace(/(">.*?)<\/a>/g, "")
+    .replace(/<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)/g, "")
   // eslint-disable-next-line vue/no-mutating-props
-  props.item.text = text.target?.innerHTML || ""
+  props.item.text = getItemText(filterItemText)
   emits("update", props.item)
 }
 const element = ref<HTMLElement | null>(null)
@@ -105,18 +108,24 @@ const dropped = (e: DragEvent) => {
   }
 }
 
+const getItemText = (itemText: string) => {
+  let replacedText
+
+  //URLs starting with http://, https://, https://.www or ftp://
+  const replacePattern =
+    /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim
+  replacedText = itemText.replace(replacePattern, function (link, m1) {
+    return `<a class="cursor-pointer" style="color:rgb(37 99 235 / 1)" onclick="window.open('${link}').focus()" target="_blank" href="${link}">${link.length > 50 ? link.slice(0, 50) + "..." : link}</a>`
+  })
+
+  return replacedText.replace(/\n/g, "<br/>")
+}
+
 const htmlstring = computed(() => {
-  const matches = linkify.match(props.item.text)
-  return (
-    matches?.reduce(
-      (acc: string, match) =>
-        acc.replace(
-          match.raw,
-          `<a onclick="window.open('${match.url}', '_blank').focus()" href="${match.url}">${match.raw}</a>`,
-        ),
-      props.item.text,
-    ) || props.item.text
-  ).replace(/\n/g, "<br/>")
+  const itemText = props.item.text
+    .replace(/(">.*?)<\/a>/g, "")
+    .replace(/<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)/g, "")
+  return getItemText(itemText)
 })
 
 const selectedText = () => {
