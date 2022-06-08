@@ -97,16 +97,14 @@
           />
       </ListActionButton>
       </div>
-      <div class="Script-data mt-20">
+      <div class="mt-20" id="script-data">
         <div
         v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
         :key="slot"
         >
           <Scripts
             class="my-5"
-            :items="itemStore.getSlotList(slot).reverse()"
             :slotno="slot"
-            :title="itemStore.getSlotTitleList[slot]"
           />
         </div>
       </div>
