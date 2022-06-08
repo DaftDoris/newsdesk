@@ -97,6 +97,11 @@
           />
       </ListActionButton>
       </div>
+      <div class="block py-2 script-data">
+        <input id="script-title" type="text" @focusout="updateScript" placeholder="title" class="block placeholder:text-black p-1 border rounded w-full" v-model="scriptData.title">
+        <input id="script-specialday" type="text" @focusout="updateScript" placeholder="Special Day"  class="block placeholder:text-black p-1 border rounded my-2 w-full" v-model="scriptData.specialDay">
+        <input id="script-birthdays" type="text" @focusout="updateScript" placeholder="Birthdays" class="placeholder:text-black p-1 border rounded w-full" v-model="scriptData.birthdays">
+      </div>
       <div class="mt-20" id="script-data">
         <div
         v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
@@ -113,11 +118,12 @@
 </template>
 
 <script lang="ts" setup>
-import { watch, ref, reactive, onMounted } from "vue"
+import { watch, ref, reactive, computed } from "vue"
 import { storeToRefs } from "pinia"
 import { useAuthStore } from "@/store/auth"
 import { useItemStore } from "@/store/item"
 import { useShareStore } from "@/store/itemShare"
+import { usescriptStore } from "@/store/script"
 import { Item } from "@/types/item"
 
 import List from "@/components/atoms/List.vue"
@@ -133,7 +139,9 @@ import Scripts from "@/components/Script.vue"
 const authStore = useAuthStore()
 const itemStore = useItemStore()
 const shareStore = useShareStore()
+const scriptStore = usescriptStore()
 const initiated = ref(false)
+const scriptData = ref(computed(()=> scriptStore.getScriptData ))
 
 const { user, isAuthenticated } = storeToRefs(authStore)
 
@@ -147,12 +155,16 @@ const props = defineProps({
 const showTooltip = ref(Array.from({ length: 7 }, (_, i) => false))
 // @TODO: work with todays date
 const docname = "todaysdate"
+const scriptDocname = new Date().toISOString().split("T")[0]
 const hideShowColumn = reactive({
   inbox: false,
   draft: true,
   script:false
 })
 
+const updateScript = () => {
+  scriptStore.saveData( props.podcastId, scriptDocname,scriptData.value)
+}
 
 const dragged = (x: number, y: number, item: Item) => {
   const slot = <Item["slot"]>parseInt(
@@ -206,6 +218,7 @@ const moveArrayItemToNewIndex= (arr: any, old_index: number, new_index: number) 
 
 const connect = () => {
   if (initiated.value) itemStore.connect(props.podcastId, docname)
+  if (initiated.value) scriptStore.connect(props.podcastId, scriptDocname)
 }
 
 watch(
@@ -279,4 +292,7 @@ h2 {
     top: 0px
   }
 }
+// input::placeholder{
+//   color: black !important
+// }
 </style>

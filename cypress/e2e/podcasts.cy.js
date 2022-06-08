@@ -196,6 +196,16 @@ describe("newsdesk logged in", () => {
       cy.get("#script-data span").should("contain", `${section} title`)
     }
   })
+
+  it("should add script input", () => {
+    switchPodCast("dev sandbox")
+    cy.get("#script-title").type("script title").blur()
+    cy.get("#script-specialday").type("1").blur()
+    cy.get("#script-birthdays").type("10").blur()
+    cy.get("#script-title").should("have.value", "script title")
+    cy.get("#script-specialday").should("have.value", "1")
+    cy.get("#script-birthdays").should("have.value", "10")
+  })
 })
 
 import firebaseConfig from "../../firebase.json"
