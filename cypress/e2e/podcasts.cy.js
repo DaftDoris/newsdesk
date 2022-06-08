@@ -187,17 +187,15 @@ describe("newsdesk logged in", () => {
       "contain",
       "https://twitter.com/PoliticusSarah/status/15207595...",
     )
-    cy.get("section[slotno=7] ul li div a").click()
-    if (cy.get("section[slotno=7] button[title='Delete']")) {
-      cy.get("section[slotno=7] button[title='Delete']").click({
-        multiple: true,
-        force: true,
-      })
-      cy.get("section[slotno=7]").should(
-        "not.contain",
-        "https://twitter.com/PoliticusSarah/status/15207595...",
-      )
-    }
+    window.open(link)
+    cy.get("section[slotno=7] button[title='Delete']").click({
+      multiple: true,
+      force: true,
+    })
+    cy.get("section[slotno=7]").should(
+      "not.contain",
+      "https://twitter.com/PoliticusSarah/status/15207595...",
+    )
   })
 })
 
