@@ -212,6 +212,12 @@ describe("newsdesk logged in", () => {
       "https://twitter.com/PoliticusSarah/status/15207595...",
     )
   })
+  it("should script section", () => {
+    switchPodCast("dev sandbox")
+    for (let section = 1; section <= 7; section++) {
+      cy.get("#script-data span").should("contain", `${section} title`)
+    }
+  })
 })
 
 import firebaseConfig from "../../firebase.json"
