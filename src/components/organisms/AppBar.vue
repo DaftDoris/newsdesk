@@ -181,7 +181,7 @@ header {
   background: url("/arrow-down-circle.svg") center/110% no-repeat;
   opacity: 1;
 }
-@media (max-width: 639px) {
+@media (max-width: 640px) {
   .menu-show {
     transform: translateX(-50%);
   }
