@@ -160,13 +160,9 @@ const dragged = (x: number, y: number, item: Item) => {
     document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
   )
 
-  const inboxColumn = document.elementFromPoint(x, y)?.closest("div #inbox-column")
   const scriptColumn = document.elementFromPoint(x, y)?.closest("div #script-column")
 
-  if (inboxColumn) {
-    hideShowColumn.inbox = true
-    hideShowColumn.script = hideShowColumn.draft = false
-  } else if (scriptColumn) {
+  if (scriptColumn) {
     hideShowColumn.script = true
     hideShowColumn.inbox = hideShowColumn.draft = false
   } else {
