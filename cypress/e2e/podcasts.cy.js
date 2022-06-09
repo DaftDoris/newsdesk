@@ -187,7 +187,6 @@ describe("newsdesk logged in", () => {
       "contain",
       "https://twitter.com/PoliticusSarah/status/15207595...",
     )
-    window.open(link)
     cy.get("section[slotno=7] button[title='Delete']").click({
       multiple: true,
       force: true,
@@ -196,6 +195,12 @@ describe("newsdesk logged in", () => {
       "not.contain",
       "https://twitter.com/PoliticusSarah/status/15207595...",
     )
+  })
+  it("should script section", () => {
+    switchPodCast("dev sandbox")
+    for (let section = 1; section <= 7; section++) {
+      cy.get("#script-data span").should("contain", `${section} title`)
+    }
   })
 })
 
