@@ -98,9 +98,9 @@
       </ListActionButton>
       </div>
       <div class="block py-2 script-data">
-        <input id="script-title" type="text" @focusout="updateScript" placeholder="title" class="block placeholder:text-black p-1 border rounded w-full" v-model="scriptData.title">
-        <input id="script-specialday" type="text" @focusout="updateScript" placeholder="Special Day"  class="block placeholder:text-black p-1 border rounded my-2 w-full" v-model="scriptData.specialDay">
-        <input id="script-birthdays" type="text" @focusout="updateScript" placeholder="Birthdays" class="placeholder:text-black p-1 border rounded w-full" v-model="scriptData.birthdays">
+        <input id="script-title" type="text" @focusout="updateScript" placeholder="Title" class="block placeholder:text-gray-600 text-xl" v-model="scriptData.title">
+        <input id="script-specialday" type="text" @focusout="updateScript" placeholder="Special Day"  class="block placeholder:text-gray-600 text-xl" v-model="scriptData.specialDay">
+        <input id="script-birthdays" type="text" @focusout="updateScript" placeholder="Birthdays" class="placeholder:text-gray-600 text-xl" v-model="scriptData.birthdays">
       </div>
       <div class="mt-20" id="script-data">
         <div
@@ -278,7 +278,7 @@ const events = {
 </script>
 
 <style scoped lang="scss">
-h2 {
+h2, input {
   @apply ss-furniture;
 }
 .column-h {
@@ -292,7 +292,4 @@ h2 {
     top: 0px
   }
 }
-// input::placeholder{
-//   color: black !important
-// }
 </style>
