@@ -1,8 +1,9 @@
 <template>
   <main
     v-show="initiated && isAuthenticated"
-    class="h-full grid grid-cols-5 gap-4 divide-x"
+    class="h-full grid grid-cols-5 gap-4 divide-x relative"
   >
+    <div class="absolute block left-0 bg-zinc-900/[.7] h-screen w-2/5 overlay-background" :class="{'hidden':!hideShowColumn.script}"></div>
     <div class="px-4 column-h overflow-y-auto" id="inbox-column" :class="{'col-span-3':hideShowColumn.inbox}" >
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Inbox</h2>
@@ -97,7 +98,17 @@
           />
       </ListActionButton>
       </div>
-      <p>coming soon...</p>
+      <div class="mt-20" id="script-data">
+        <div
+        v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
+        :key="slot"
+        >
+          <Scripts
+            class="my-5"
+            :slotno="slot"
+          />
+        </div>
+      </div>
     </div>
   </main>
 </template>
@@ -118,6 +129,7 @@ import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
 import { PlusIcon, MinusIcon, ClipboardCopyIcon } from "@heroicons/vue/outline"
+import Scripts from "@/components/Script.vue"
 
 const authStore = useAuthStore()
 const itemStore = useItemStore()
@@ -149,13 +161,9 @@ const dragged = (x: number, y: number, item: Item) => {
     document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
   )
 
-  const inboxColumn = document.elementFromPoint(x, y)?.closest("div #inbox-column")
   const scriptColumn = document.elementFromPoint(x, y)?.closest("div #script-column")
 
-  if (inboxColumn) {
-    hideShowColumn.inbox = true
-    hideShowColumn.script = hideShowColumn.draft = false
-  } else if (scriptColumn) {
+  if (scriptColumn) {
     hideShowColumn.script = true
     hideShowColumn.inbox = hideShowColumn.draft = false
   } else {
@@ -284,5 +292,13 @@ h2 {
 }
 .column-h {
   height: calc(100vh - 72px);
+}
+.overlay-background{
+  top: -65px;
+}
+@media (max-width: 639px) {
+  .overlay-background {
+    top: 0px
+  }
 }
 </style>
