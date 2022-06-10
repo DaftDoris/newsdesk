@@ -192,7 +192,7 @@ describe("newsdesk logged in", () => {
   it("should script section", () => {
     switchPodCast("dev sandbox")
     for (let section = 1; section <= 7; section++) {
-      cy.get("#script-data span").should("contain", `${section} title`)
+      cy.get("#script-data label").should("contain", `${section} : `)
     }
   })
 })

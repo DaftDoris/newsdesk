@@ -97,14 +97,19 @@
           />
       </ListActionButton>
       </div>
-      <div class="mt-20" id="script-data">
+      <div class="mt-20">
         <div
         v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
         :key="slot"
+        :slotno="slot"
+         id="script-data"
         >
           <Scripts
             class="my-5"
             :slotno="slot"
+            :title="scriptStore.getScriptSlotTitleList[slot]"
+            :items="scriptStore.getScriptSlotList(slot).reverse()"
+            @updateEvent="events.onUpdateScriptSaveDoc"
           />
         </div>
       </div>
@@ -118,6 +123,7 @@ import { storeToRefs } from "pinia"
 import { useAuthStore } from "@/store/auth"
 import { useItemStore } from "@/store/item"
 import { useShareStore } from "@/store/itemShare"
+import { usescriptStore } from "@/store/script"
 import { Item } from "@/types/item"
 
 import List from "@/components/atoms/List.vue"
@@ -134,7 +140,7 @@ const authStore = useAuthStore()
 const itemStore = useItemStore()
 const shareStore = useShareStore()
 const initiated = ref(false)
-
+const scriptStore = usescriptStore()
 const { user, isAuthenticated } = storeToRefs(authStore)
 
 const props = defineProps({
@@ -152,13 +158,22 @@ const hideShowColumn = reactive({
   draft: true,
   script:false
 })
-
+const scriptDocname = new Date().toISOString().split("T")[0]
 
 const dragged = (x: number, y: number, item: Item) => {
   const slot = <Item["slot"]>parseInt(
     <string>// @ts-ignore
     document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
   )
+
+  const sloForScript = <Item["slot"]>parseInt(
+    <string>// @ts-ignore
+    document.elementFromPoint(x, y)?.closest("div #script-data")?.attributes["slotno"]?.value,
+  )
+
+  if(sloForScript) {
+    scriptStore.saveData(props.podcastId, scriptDocname, item, sloForScript)
+  }
 
   const scriptColumn = document.elementFromPoint(x, y)?.closest("div #script-column")
 
@@ -202,6 +217,7 @@ const moveArrayItemToNewIndex= (arr: any, old_index: number, new_index: number) 
 
 const connect = () => {
   if (initiated.value) itemStore.connect(props.podcastId, docname)
+  if (initiated.value) scriptStore.connect(props.podcastId, scriptDocname)
 }
 
 watch(
@@ -245,6 +261,9 @@ const events = {
   },
   onUpdateSaveDoc() {
     itemStore.saveData(props.podcastId, docname)
+  },
+  onUpdateScriptSaveDoc(title: []){
+    scriptStore.updateScript(props.podcastId, scriptDocname,title)
   },
   onClickDelete(item: Item) {
     if (window.confirm('Are you sure?')) {
