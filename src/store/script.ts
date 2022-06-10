@@ -27,16 +27,20 @@ export const usescriptStore = defineStore("script", {
       params: Item,
       slot: 1 | 2 | 3 | 4 | 5 | 6 | 7,
     ) {
-      params.slot = slot
+      const item: Item = {
+        id: params.id,
+        text: params.text,
+        slot: slot,
+      }
       const docRef = doc(collection(db, podcastname), docname)
       try {
         await updateDoc(docRef, {
-          scriptItem: arrayUnion(params),
+          scriptItem: arrayUnion(item),
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         if (e.code === "not-found" && e.name === "FirebaseError") {
-          this.scriptItem.push(params)
+          this.scriptItem.push(item)
           return await setDoc(docRef, {
             scriptSlotTitle: this.scriptSlotTitle,
             scriptItem: this.scriptItem,

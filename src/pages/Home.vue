@@ -1,9 +1,8 @@
 <template>
   <main
     v-show="initiated && isAuthenticated"
-    class="h-full grid grid-cols-5 gap-4 divide-x relative"
+    class="h-full grid grid-cols-5 gap-4 divide-x"
   >
-    <div class="absolute block left-0 bg-zinc-900/[.7] h-screen w-2/5 overlay-background" :class="{'hidden':!hideShowColumn.script}"></div>
     <div class="px-4 column-h overflow-y-auto" id="inbox-column" :class="{'col-span-3':hideShowColumn.inbox}" >
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Inbox</h2>

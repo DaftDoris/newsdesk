@@ -144,8 +144,10 @@ describe("newsdesk logged in", () => {
           { force: true },
         )
     })
-    cy.get("section[slotno=7] button[title='Delete']").click({
-      multiple: true,
+    cy.get("section[slotno=7] button[title='Delete']").eq(1).click({
+      force: true,
+    })
+    cy.get("section[slotno=7] button[title='Delete']").eq(0).click({
       force: true,
     })
     cy.get("section[slotno=7]")
@@ -189,11 +191,39 @@ describe("newsdesk logged in", () => {
       "https://twitter.com/PoliticusSarah/status/15207595...",
     )
   })
+
   it("should script section", () => {
     switchPodCast("dev sandbox")
     for (let section = 1; section <= 7; section++) {
       cy.get("#script-data label").should("contain", `${section} : `)
     }
+  })
+
+  it("should add item in script section", () => {
+    switchPodCast("dev sandbox")
+    cy.get("section[slotno=7] textarea").type("Script item{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7]").should("contain", "Script item")
+    cy.get("#script-data[slotno=6] input").then((el) => {
+      cy.get("section[slotno=7] ul div").eq(0).trigger(
+        "dragend",
+        {
+          clientX: el[0].getBoundingClientRect().left,
+          clientY: el[0].getBoundingClientRect().top,
+        },
+        { force: true },
+      )
+    })
+    cy.get("#script-data[slotno=6] div").should("contain", "Script item")
+  })
+
+  it("should be able to set script titles", () => {
+    switchPodCast("dev sandbox")
+    for (let section = 1; section <= 7; section++)
+      cy.get(`#script-data[slotno=${section}] input`).type(
+        `Script ${section} title {enter}`,
+      )
   })
 })
 
