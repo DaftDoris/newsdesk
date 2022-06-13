@@ -28,7 +28,7 @@ export const useShareStore = defineStore("share", {
         onSnapshot(
           doc(db, podcastname, "inbox", podcast.id, "shares"),
           (doc) => {
-            this.inbox[podcast.id] = doc.data()?.items ?? []
+            this.inbox[podcast.id] = doc.data()?.items.reverse() ?? []
           },
         )
       })
