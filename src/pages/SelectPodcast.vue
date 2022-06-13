@@ -13,7 +13,7 @@
             v-for="podcast in podcastStore.getPodcasts"
           >
             <div class="mx-auto" v-if="podcast.image">
-              <a id="select-podcast" :href="`#${podcast.id}`">
+              <a id="select-podcast" :href="`#${podcast.id}/${date}`">
                 <img :src="podcast.image" />
               </a>
             </div>
@@ -27,6 +27,9 @@
 <script lang="ts" setup>
 import { usePodcastStore } from "@/store/podcasts"
 const podcastStore = usePodcastStore()
+const date = new Date(new Date().setDate(new Date().getDate() + 1))
+  .toISOString()
+  .split("T")[0]
 </script>
 
 <style scoped lang="scss">
