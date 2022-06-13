@@ -1,9 +1,8 @@
 <template>
   <main
     v-show="initiated && isAuthenticated"
-    class="h-full grid grid-cols-5 gap-4 divide-x relative"
+    class="h-full grid grid-cols-5 gap-4 divide-x"
   >
-    <div class="absolute block left-0 bg-zinc-900/[.7] h-screen w-2/5 overlay-background" :class="{'hidden':!hideShowColumn.script}"></div>
     <div class="px-4 column-h overflow-y-auto" id="inbox-column" :class="{'col-span-3':hideShowColumn.inbox}" >
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Inbox</h2>
@@ -130,11 +129,13 @@ import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
 import { PlusIcon, MinusIcon, ClipboardCopyIcon } from "@heroicons/vue/outline"
 import Scripts from "@/components/Script.vue"
+import { useRoute } from "vue-router"
 
 const authStore = useAuthStore()
 const itemStore = useItemStore()
 const shareStore = useShareStore()
 const initiated = ref(false)
+const route = useRoute()
 
 const { user, isAuthenticated } = storeToRefs(authStore)
 
@@ -143,11 +144,17 @@ const props = defineProps({
     type: String,
     default: "smart7",
   },
+  date:{
+    type: String,
+    default: new Date(new Date().setDate(new Date().getDate() + 1))
+    .toISOString()
+    .split("T")[0],
+  }
 })
 
 const showTooltip = ref(Array.from({ length: 7 }, (_, i) => false))
 // @TODO: work with todays date
-const docname = "todaysdate"
+const docname:any = ref(props.date)
 const hideShowColumn = reactive({
   inbox: false,
   draft: true,
@@ -181,12 +188,12 @@ const dragged = (x: number, y: number, item: Item) => {
       const index1 = slotItem.findIndex(ele => ele.id === item.id);
       const index2 = slotItem.findIndex(ele => ele.id === id);
       const data= moveArrayItemToNewIndex(slotItem, index1, index2);
-      itemStore.updateSlotItem(data,props.podcastId, docname);
+      itemStore.updateSlotItem(data,props.podcastId, docname.value);
     }
   }
   if (slot) {
     item.slot = slot
-    itemStore.saveData(props.podcastId, docname)
+    itemStore.saveData(props.podcastId, docname.value)
   }
 }
 
@@ -202,8 +209,15 @@ const moveArrayItemToNewIndex= (arr: any, old_index: number, new_index: number) 
 };
 
 const connect = () => {
-  if (initiated.value) itemStore.connect(props.podcastId, docname)
+  if (initiated.value) itemStore.connect(props.podcastId, docname.value)
 }
+watch(
+  () => route.params,
+  (toParams, previousParams) => {
+    docname.value = toParams.date
+   if (toParams.date) connect(); 
+  },
+)
 
 watch(
   isAuthenticated,
@@ -267,18 +281,18 @@ const draggedInbox = (x: number, y: number, itemIndex: number, podcastId: string
 
 const events = {
   onClickSave(text: string, slot: Item["slot"]) {
-    itemStore.addItem({ text, slot }, props.podcastId, docname)
+    itemStore.addItem({ text, slot }, props.podcastId, docname.value)
   },
   onUpdateSaveDoc() {
-    itemStore.saveData(props.podcastId, docname)
+    itemStore.saveData(props.podcastId, docname.value)
   },
   onClickDelete(item: Item) {
     if (window.confirm('Are you sure?')) {
-      itemStore.removeItem(item, props.podcastId, docname)
+      itemStore.removeItem(item, props.podcastId, docname.value)
     }
   },
   onClickUpdate(item: Item) {
-    itemStore.updateItem(item, props.podcastId, docname)
+    itemStore.updateItem(item, props.podcastId, docname.value)
   },
   onClickShare(item: Item, destination: any) {
     shareStore.sendItem(item, destination, props.podcastId)
@@ -292,13 +306,5 @@ h2 {
 }
 .column-h {
   height: calc(100vh - 72px);
-}
-.overlay-background{
-  top: -65px;
-}
-@media (max-width: 639px) {
-  .overlay-background {
-    top: 0px
-  }
 }
 </style>
