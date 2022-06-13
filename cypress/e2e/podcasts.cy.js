@@ -144,8 +144,10 @@ describe("newsdesk logged in", () => {
           { force: true },
         )
     })
-    cy.get("section[slotno=7] button[title='Delete']").click({
-      multiple: true,
+    cy.get("section[slotno=7] button[title='Delete']").eq(1).click({
+      force: true,
+    })
+    cy.get("section[slotno=7] button[title='Delete']").eq(0).click({
       force: true,
     })
     cy.get("section[slotno=7]")
