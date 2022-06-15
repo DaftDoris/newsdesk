@@ -114,15 +114,6 @@ import { useShareStore } from "@/store/itemShare"
 import { usescriptStore } from "@/store/script"
 import { Item } from "@/types/item"
 
-import List from "@/components/atoms/List.vue"
-import ListItem from "@/components/atoms/ListItem.vue"
-import Inbox from "@/components/Inbox.vue"
-import ItemCard from "@/components/molecules/Cards/ItemCard.vue"
-import InputCard from "@/components/molecules/Cards/InputCard.vue"
-import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
-import ListActionButton from "@/components/atoms/ListActionButton.vue"
-import { PlusIcon, MinusIcon, ClipboardCopyIcon } from "@heroicons/vue/outline"
-import Scripts from "@/components/Script.vue"
 import { useRoute } from "vue-router"
 
 const authStore = useAuthStore()
@@ -148,9 +139,10 @@ const props = defineProps({
   }
 })
 
+
 const showTooltip = ref(Array.from({ length: 7 }, (_, i) => false))
 // @TODO: work with todays date
-const docname = "todaysdate"
+const docname = ref(props.date);
 const scriptDocname = new Date().toISOString().split("T")[0]
 const hideShowColumn = reactive({
   inbox: false,
@@ -209,13 +201,13 @@ const moveArrayItemToNewIndex= (arr: any, old_index: number, new_index: number) 
 };
 
 const connect = () => {
-  if (initiated.value) itemStore.connect(props.podcastId, docname)
+  if (initiated.value) itemStore.connect(props.podcastId, docname.value)
   if (initiated.value) scriptStore.connect(props.podcastId, scriptDocname)
 }
 watch(
   () => route.params,
   (toParams, previousParams) => {
-    docname.value = toParams.date
+    docname.value = String(toParams.date)
    if (toParams.date) connect(); 
   },
 )
