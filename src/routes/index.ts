@@ -17,13 +17,13 @@ const routes: RouteRecordRaw[] = [
     component: authenticatedLayout,
     children: [
       {
-        path: "",
+        path: "/",
         component: SelectPodcast,
         name: "SelectPodcast",
         meta: { title: "Daft Doris", requiresAuth: true },
       },
       {
-        path: ":podcastId",
+        path: ":podcastId/:date",
         component: Home,
         name: "Podcast",
         meta: { title: "Daft Doris", requiresAuth: true },
