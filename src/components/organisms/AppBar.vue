@@ -61,7 +61,7 @@
                   :key="podcast.id"
                 >
                   <a
-                    :href="`#${podcast.id}`"
+                    :href="`#${podcast.id}/${date}`"
                     :class="[
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                       'block px-4 py-2 text-sm',
@@ -80,6 +80,7 @@
             class="inline-flex justify-between w-full items-center rounded-lg border border-black shadow-sm px-2 py-1 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
             type="date"
             v-model="date"
+            @input="changeDate"
           />
         </div>
       </div>
@@ -120,7 +121,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, watch } from "vue"
+import { computed, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useAuthStore } from "@/store/auth"
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue"
@@ -132,7 +133,20 @@ const authStore = useAuthStore()
 const route = useRoute()
 const router = useRouter()
 const store = usePodcastStore()
-const date = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split("T")[0]
+
+const date = ref(
+  new Date(new Date().setDate(new Date().getDate() + 1))
+    .toISOString()
+    .split("T")[0],
+)
+
+const changeDate = () => {
+  router.push({
+    name: "Podcast",
+    params: { podcastId: route.params.podcastId, date: date.value },
+  })
+}
+
 const title = computed(() => route.meta.title || "Home")
 const routeName = computed(() => route.name)
 const user = computed(() => authStore.user)

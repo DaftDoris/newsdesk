@@ -1,6 +1,6 @@
 <template>
   <ul>
-    <li class="list-none" v-for="item in store.getInbox.reverse()" :key="item">
+    <li class="list-none" v-for="item in store.getInbox" :key="item">
       <component
         class="border-b border-slate-400 pb-1 w-100 break-all"
         :is="'p'"
