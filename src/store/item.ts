@@ -36,7 +36,6 @@ export const useItemStore = defineStore("item", {
       this.itemList = item
       this.saveData(podcastname, docname)
     },
-    
 
     async removeItem(item: Item, podcastname: string, docname: string) {
       const docRef = doc(collection(db, podcastname), docname)
