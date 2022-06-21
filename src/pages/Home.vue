@@ -3,6 +3,7 @@
     v-show="initiated && isAuthenticated"
     class="h-full grid grid-cols-5 gap-4 divide-x"
   >
+    
     <div class="px-4 column-h overflow-y-auto" id="inbox-column" :class="{'col-span-3':hideShowColumn.inbox}" >
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Inbox</h2>
@@ -182,7 +183,7 @@ const dragged = (x: number, y: number, item: Item) => {
 
   const scriptColumn = document.elementFromPoint(x, y)?.closest("div #script-column")
 
-  if (scriptColumn) {
+ if (scriptColumn) {
     hideShowColumn.script = true
     hideShowColumn.inbox = hideShowColumn.draft = false
   } else {
