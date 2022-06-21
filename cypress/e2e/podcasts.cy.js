@@ -133,7 +133,7 @@ describe("newsdesk logged in", () => {
     })
     cy.get("section[slotno=7] ul li div p").then((el) => {
       cy.get("section[slotno=7] ul li:eq(1)")
-        .should("contain", "dragging item")
+        // .should("contain", "dragging item")
         .children("div[draggable='true']")
         .trigger(
           "dragend",
