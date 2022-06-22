@@ -3,6 +3,7 @@
     v-show="initiated && isAuthenticated"
     class="h-full grid grid-cols-5 gap-4 divide-x"
   >
+    
     <div class="px-4 column-h overflow-y-auto" id="inbox-column" :class="{'col-span-3':hideShowColumn.inbox}" >
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Inbox</h2>
@@ -24,6 +25,7 @@
       <inbox
       :podcastId = "podcastId"
       :docname = "docname"
+      @draggedInbox = "draggedInbox"
       />
     </div>
     <div class="px-4 column-h overflow-y-auto" id="draft-column" :class="{'col-span-3':hideShowColumn.draft}">
@@ -160,6 +162,18 @@ const hideShowColumn = reactive({
   script:false
 })
 
+const draggedInbox = (x: number, y: number, text: string, key: string) => {
+  const slot = <Item["slot"]>parseInt(
+    <string>// @ts-ignore
+    document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
+  )
+
+  if(slot) {
+    itemStore.addItem({ text, slot }, props.podcastId, docname)
+    shareStore.removeDraggedItem(text, props.podcastId, key)
+    shareStore.connect(props.podcastId)
+  }
+}
 
 const dragged = (x: number, y: number, item: Item) => {
   const slot = <Item["slot"]>parseInt(
@@ -169,7 +183,7 @@ const dragged = (x: number, y: number, item: Item) => {
 
   const scriptColumn = document.elementFromPoint(x, y)?.closest("div #script-column")
 
-  if (scriptColumn) {
+ if (scriptColumn) {
     hideShowColumn.script = true
     hideShowColumn.inbox = hideShowColumn.draft = false
   } else {
@@ -197,14 +211,14 @@ const dragged = (x: number, y: number, item: Item) => {
 }
 
 const moveArrayItemToNewIndex= (arr: any, old_index: number, new_index: number) =>{
-    if (new_index >= arr.length) {
-        var k = new_index - arr.length + 1;
-        while (k--) {
-            arr.push(undefined);
-        }
+  if (new_index >= arr.length) {
+    var k = new_index - arr.length + 1;
+    while (k--) {
+      arr.push(undefined);
     }
-    arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
-    return arr; 
+  }
+  arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+  return arr; 
 };
 
 const connect = () => {
