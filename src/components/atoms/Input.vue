@@ -35,5 +35,6 @@ const value = useVModel(props, 'modelValue', emit)
 }
 .input::placeholder {
   
+
 }
 </style>
