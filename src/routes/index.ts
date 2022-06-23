@@ -4,6 +4,7 @@ import { createWebHashHistory, createRouter, RouteRecordRaw } from "vue-router"
 import defaultLayout from "@/layouts/default.vue"
 import authenticatedLayout from "@/layouts/authenticated.vue"
 
+
 //  Pages
 import Home from "@/pages/Home.vue"
 import SelectPodcast from "@/pages/SelectPodcast.vue"
