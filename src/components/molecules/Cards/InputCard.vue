@@ -17,6 +17,7 @@ const emits = defineEmits(['save'])
 const text = ref<string>('')
 
 const save = () => {
+  console.log(text.value, 'text.value')
   emits('save', text.value, props.slot)
   text.value = ''
 }

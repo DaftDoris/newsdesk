@@ -24,8 +24,12 @@
       <inbox
       :podcastId = "podcastId"
       :docname = "docname"
+      @draggedInbox = "draggedInbox"
       />
     </div>
+
+
+
     <div class="px-4 column-h overflow-y-auto" id="draft-column" :class="{'col-span-3':hideShowColumn.draft}">
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Draft</h2>
@@ -161,6 +165,20 @@ const hideShowColumn = reactive({
 })
 
 
+const draggedInbox = (x: number, y: number, text: string, key: string) => {
+  console.log(x, y, text, key, 'x y text key')
+  const slot = <Item["slot"]>parseInt(
+    <string>// @ts-ignore
+    document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
+  )
+
+  if(slot) {
+    itemStore.addItem({ text, slot }, props.podcastId, docname)
+    shareStore.removeDraggedItem(text, props.podcastId, key)
+    shareStore.connect(props.podcastId)
+  }
+}
+
 const dragged = (x: number, y: number, item: Item) => {
   const slot = <Item["slot"]>parseInt(
     <string>// @ts-ignore
@@ -255,6 +273,7 @@ const copySlotText = (slot: number) => {
 
 const events = {
   onClickSave(text: string, slot: Item["slot"]) {
+    console.log(text,slot , '++++++')
     itemStore.addItem({ text, slot }, props.podcastId, docname.value)
   },
   onUpdateSaveDoc() {

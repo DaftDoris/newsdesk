@@ -25,21 +25,29 @@ export const useItemStore = defineStore("item", {
     slotTitleList: [],
   }),
   actions: {
+    // async addItem(params: Item, podcastname: string, docname: string) {
+    //   console.log(params, podcastname, docname, "params, podcastname, docname")
+    //   const id = nanoid()
+    //   const item: Item = { ...params, id }
+    //   const docRef = doc(collection(db, podcastname), docname)
+    //   try {
+    //     return await updateDoc(docRef, {
+    //       items: arrayUnion(item),
+    //     })
+    //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    //   } catch (e: any) {
+    //     if (e.code === "not-found" && e.name === "FirebaseError") {
+    //       this.itemList.push(item)
+    //       return this.saveData(podcastname, docname)
+    //     } else throw e
+    //   }
+    // },
+
     async addItem(params: Item, podcastname: string, docname: string) {
       const id = nanoid()
       const item: Item = { ...params, id }
-      const docRef = doc(collection(db, podcastname), docname)
-      try {
-        return await updateDoc(docRef, {
-          items: arrayUnion(item),
-        })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (e: any) {
-        if (e.code === "not-found" && e.name === "FirebaseError") {
-          this.itemList.push(item)
-          return this.saveData(podcastname, docname)
-        } else throw e
-      }
+      this.itemList.push(item)
+      this.saveData(podcastname, docname)
     },
 
     async updateSlotItem(item: [], podcastname: string, docname: string) {
