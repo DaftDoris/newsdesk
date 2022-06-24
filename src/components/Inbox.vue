@@ -5,11 +5,6 @@
       v-for="(item, podcastId) in store.getInbox"
       :key="podcastId"
     >
-      <!-- <component
-        class="border-b border-slate-400 pb-1 w-100 break-all"
-        :is="'p'"
-        v-html="linkify(item)"
-      /> -->
 
       <template v-if="item">
         <span v-for="(text, index) in item" :key="index">
