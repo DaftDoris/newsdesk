@@ -9,7 +9,7 @@ import {
   arrayUnion,
   updateDoc,
   onSnapshot,
-  arrayRemove
+  arrayRemove,
 } from "firebase/firestore"
 
 interface State {
@@ -61,7 +61,6 @@ export const useShareStore = defineStore("share", {
       }
     },
   },
-  
   getters: {
     // getInbox: (state: State) => Object.values(state.inbox).flat(),
     getInbox: (state: State) => state.inbox,
