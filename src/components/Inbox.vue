@@ -9,13 +9,7 @@
       <template v-if="item">
         <span v-for="(text, index) in item" :key="index">
           <div
-            class="
-              flex
-              justify-between
-              items-center
-              border-b border-slate-400
-              pb-1
-            "
+            class="flex justify-between items-center border-b border-slate-400 pb-1"
             @dragend="dropped($event, text, podcastId)"
             draggable="true"
           >
