@@ -32,7 +32,7 @@ jobs:
       - uses: actions/setup-node@eeb10cff27034e7acf239c5d29f62154018672fd # tag=v3.3.0
         with:
           node-version-file: '.nvmrc'
-      - uses: cypress-io/github-action@be2de7b1fe1cdafb4a3c8da0a3746476ef636b65 # tag=v4.1.0
+      - uses: cypress-io/github-action@53cc3178f59cc99b5519c29c14a182fb98ea4f31 # tag=v4.1.1
         id: cypress
         with:
           record: true
