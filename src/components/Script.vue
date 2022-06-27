@@ -1,60 +1,26 @@
 <template>
-  <div class="border-2 rounded-lg border-gray-400" @click="printMousePos()">
-    <label class="w-11/12 p-4">
+  <div class="border-2 script-section rounded-lg border-gray-400">
+    <label class="w-full p-4 flex">
       {{ slotno }} :
-      <span class="text-gray-400">{{ slotno }} title</span>
+      <span @click="updateClipField()" class="text-gray-400 flex justify-between  items-center w-11/12">{{ slotno }} title <VolumeUpIcon class="h-8"  /></span>
     </label>
+    <span v-for="(item, index) in items" :key="index">
      <Input
       v-model="text"
       :placeholder="`Enter things into ${slotno}...`"
       @keydown.enter.exact.prevent="save"
     />
-    <div class="clip-field">
-      <div class="clip-section">
-        <label for="">CLIP URL:</label>
-        <input
-          class="input break-all bg-transparent text-blue-600"
-          placeholder="URL"
-          v-model="clip_url"
-        />
-      </div>
-      <div class="clip-section border-l-2 border-gray-400">
-        <label for="">In:</label>
-        <input
-          class="input break-all bg-transparent w-8/12 text-gray-600"
-          placeholder="In"
-          v-model="in_time"
-        />
-      </div>
-      <div class="clip-section border-l-2 border-gray-400">
-        <input
-          class="input break-all bg-transparent w-10/12 text-gray-600"
-          placeholder="message"
-          v-model="in_msg"
-        />
-      </div>
-      <div class="clip-section border-l-2 border-gray-400">
-        <label for="">Out:</label>
-        <input
-          class="input break-all bg-transparent w-8/12 text-gray-600"
-          placeholder="Out"
-          v-model="out_time"
-        />
-      </div>
-      <div class="clip-section border-l-2 border-gray-400">
-        <input
-          class="input break-all bg-transparent w-10/12 text-gray-600"
-          placeholder="message"
-          v-model="out_msg"
-        />
-      </div>
-    </div>
+    <ClipField></ClipField>
+    </span>
+   
   </div>
 </template>
 
 <script lang="ts" setup>
 
 import Input from '@/components/atoms/Input.vue'
+import ClipField from '@/components/atoms/ClipField.vue'
+import { VolumeUpIcon } from "@heroicons/vue/outline"
 import { ref } from 'vue'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -68,14 +34,13 @@ const in_time = "00:00"
 const in_msg = '"Hello...'
 const out_time = "00:30"
 const out_msg = '...Goodbye"'
-const printMousePos = (event: { clientX: string; clientY: string })  =>  {
-   console.log("clientX: " + event.clientX +
-    " - clientY: " + event.clientY)
-}
 const emits = defineEmits(['save'])
-
+const items = [1]
 const text = ref<string>('')
-
+const updateClipField = () => {
+  console.log(items, '=========>')
+  items.push(1)
+}
 const save = () => {
   emits('save', text.value, props.slotno)
   text.value = ''
@@ -103,5 +68,8 @@ label {
 }
 .clip-field .clip-section input {
   @apply font-semibold outline-none;
+}
+.script-section textarea.input{
+  font-size: 16px !important;
 }
 </style>
