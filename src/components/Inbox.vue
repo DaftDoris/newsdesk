@@ -56,6 +56,6 @@ const linkify = (text: string) => {
 }
 h3,
 h4 {
-  @apply ss-furniture dark:text-white;
+  @apply dark:text-white;
 }
 </style>

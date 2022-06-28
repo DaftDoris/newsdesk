@@ -1,13 +1,27 @@
 <template>
-  <div class="border-2 rounded-lg p-4">
-    <label class="w-11/12">
+  <div class="border-2 script-section rounded-lg border-gray-400">
+    <label class="w-full p-4 flex">
       {{ slotno }} :
-      <span class="text-gray-400">{{ slotno }} title</span>
+      <span @click="updateClipField" class="text-gray-400 flex justify-between  items-center w-11/12">{{ slotno }} title <VolumeUpIcon class="h-8"  /></span>
     </label>
+    <span v-for="(item, index) in items" :key="index">
+     <Input
+      v-model="text"
+      :placeholder="`Enter things into ${slotno}...`"
+      @keydown.enter.exact.prevent="save"
+    />
+    <ClipField></ClipField>
+    </span>
+   
   </div>
 </template>
 
 <script lang="ts" setup>
+import { watch, ref, reactive, onMounted } from "vue"
+
+import Input from '@/components/atoms/Input.vue'
+import ClipField from '@/components/atoms/ClipField.vue'
+import { VolumeUpIcon } from "@heroicons/vue/outline"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   slotno: {
@@ -15,6 +29,23 @@ const props = defineProps({
     default: 1,
   },
 })
+const clip_url = "bitly"
+const in_time = "00:00"
+const in_msg = '"Hello...'
+const out_time = "00:30"
+const out_msg = '...Goodbye"'
+const emits = defineEmits(['save'])
+const items = [1]
+const updateClipField = () => {
+  items.push(1)
+  console.log(items, '=========>')
+}
+
+const text = ref<string>('')
+const save = () => {
+  emits('save', text.value, props.slotno)
+  text.value = ''
+}
 </script>
 
 <style scoped lang="scss">
@@ -23,6 +54,23 @@ const props = defineProps({
   width: 47vw;
 }
 label {
-  @apply ss-furniture text-5xl dark:text-white;
+  @apply text-5xl dark:text-white;
+}
+.clip-field {
+  @apply border-2 rounded-b-lg flex border-gray-400;
+  background-color: #e3e4e4;
+  margin: 20px -2px -2px -2px;
+}
+.clip-field label {
+  @apply text-base whitespace-nowrap mr-2;
+}
+.clip-field .clip-section {
+  @apply p-2 flex;
+}
+.clip-field .clip-section input {
+  @apply font-semibold outline-none;
+}
+.script-section textarea.input{
+  font-size: 16px !important;
 }
 </style>

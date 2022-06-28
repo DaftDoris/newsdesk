@@ -164,7 +164,7 @@ const emits = defineEmits(["delete", "update", "save", "dragged", "share"])
 .prose:focus {
   outline: 0;
 }
-.podcast-list {
-  @apply ss-furniture;
-}
+// .podcast-list {
+//   @apply ss-furniture;
+// }
 </style>
