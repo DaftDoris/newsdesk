@@ -9,6 +9,7 @@ import {
   arrayUnion,
   updateDoc,
   onSnapshot,
+  arrayRemove,
 } from "firebase/firestore"
 
 interface State {
@@ -48,8 +49,20 @@ export const useShareStore = defineStore("share", {
         }
       })
     },
+    // add removeDraggedItem function for remove the item from inbox
+    async removeDraggedItem(item: string, destination: string, from: string) {
+      const docRef = doc(db, destination, "inbox", from, "shares")
+      try {
+        await updateDoc(docRef, {
+          items: arrayRemove(item),
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        console.log(e)
+      }
+    },
   },
   getters: {
-    getInbox: (state: State) => Object.values(state.inbox).flat(),
+    getInbox: (state: State) => state.inbox,
   },
 })
