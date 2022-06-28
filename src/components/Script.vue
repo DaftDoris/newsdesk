@@ -54,7 +54,7 @@ const save = () => {
   width: 47vw;
 }
 label {
-  @apply ss-furniture text-5xl dark:text-white;
+  @apply text-5xl dark:text-white;
 }
 .clip-field {
   @apply border-2 rounded-b-lg flex border-gray-400;
