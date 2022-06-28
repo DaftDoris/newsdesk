@@ -1,18 +1,38 @@
 <template>
   <ul>
-    <li class="list-none" v-for="item in store.getInbox" :key="item">
-      <component
-        class="border-b border-slate-400 pb-1 w-100 break-all"
-        :is="'p'"
-        v-html="linkify(item)"
-      />
+    <li
+      class="list-none"
+      v-for="(item, podcastId) in store.getInbox"
+      :key="podcastId"
+    >
+
+      <template v-if="item">
+        <span v-for="(text, index) in item" :key="index">
+          <div
+            class="flex justify-between items-center border-b border-slate-400 pb-1"
+            @dragend="dropped($event, text, podcastId)"
+            draggable="true"
+          >
+            <component
+              class="w-100 break-all w-full"
+              :is="'p'"
+              :data-item="item"
+              v-html="linkify(text)"
+            />
+            <div>
+              <HandIcon class="w-5 h-5"/>
+            </div>
+          </div>
+        </span>
+      </template>
     </li>
   </ul>
 </template>
 
 <script lang="ts" setup>
 import { watch } from "vue"
-import { useShareStore } from "@/store/itemShare"
+import { useShareStore } from "@/store/itemShare"	
+import { HandIcon } from "@heroicons/vue/outline"
 
 const props = defineProps({
   podcastId: {
@@ -33,6 +53,11 @@ watch(() => props.podcastId, connect, {
   immediate: true,
 })
 
+	
+const dropped = (event: DragEvent, text: string, podcastId: any) => {	
+  emits("draggedInbox", event.clientX, event.clientY, text, podcastId)	
+}
+
 const linkify = (text: string) => {
   const itemText = text
     .replace(/(">.*?)<\/a>/g, "")
@@ -46,6 +71,7 @@ const linkify = (text: string) => {
 
   return replacedText.replace(/\n/g, "<br/>")
 }
+const emits = defineEmits(["draggedInbox"])
 </script>
 
 <style scoped lang="scss">
