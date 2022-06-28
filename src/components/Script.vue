@@ -7,6 +7,7 @@
     <span v-for="(item, index) in items" :key="index">
      <Input
       v-model="text"
+      
       :placeholder="`Enter things into ${slotno}...`"
       @keydown.enter.exact.prevent="save"
     />
@@ -35,9 +36,9 @@ const in_msg = '"Hello...'
 const out_time = "00:30"
 const out_msg = '...Goodbye"'
 const emits = defineEmits(['save'])
-const items = [1]
+const items = ref(['1'])
 const updateClipField = () => {
-  items.push(1)
+  items.value.push('1')
   console.log(items, '=========>')
 }
 
