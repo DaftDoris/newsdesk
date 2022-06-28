@@ -170,7 +170,7 @@ const draggedInbox = (x: number, y: number, text: string, key: string) => {
 
   if(slot) {
     itemStore.addItem({ text, slot }, props.podcastId, docname)
-    // shareStore.removeDraggedItem(text, props.podcastId, key)
+    shareStore.removeDraggedItem(text, props.podcastId, key)
     shareStore.connect(props.podcastId)
   }
 }
