@@ -1,6 +1,10 @@
 <template>
   <ul>
-    <li class="list-none" v-for="item in store.getInbox" :key="item">
+     <li
+      class="list-none"
+      v-for="(item, podcastId) in store.getInbox"
+      :key="podcastId"
+    >
       
       <template v-if="item">
         <span v-for="(text, index) in item" :key="index">
@@ -9,11 +13,12 @@
             @dragend="dropped($event, text, podcastId)"
             draggable="true"
           >
-      <component
-        class=" pb-1 w-100 break-all"
-        :is="'p'"
-        v-html="linkify(item)"
-      />
+         <component	
+              class="w-100 break-all w-full"	
+              :is="'p'"	
+              :data-item="item"	
+              v-html="linkify(text)"	
+            />
         <div>
               <HandIcon class="w-5 h-5"/>
             </div>
@@ -47,9 +52,8 @@ const connect = () => {
 watch(() => props.podcastId, connect, {
   immediate: true,
 })
-	
-const dropped = (event: DragEvent, text: string, podcastId: any) => {	
-  emits("draggedInbox", event.clientX, event.clientY, text, podcastId)	
+	const dropped = (e: DragEvent, item: string, podcastId: any) => {	
+  emits("draggedInbox", e.clientX, e.clientY, item, podcastId)	
 }
 
 const linkify = (text: string) => {
