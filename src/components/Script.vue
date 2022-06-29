@@ -39,7 +39,6 @@ const emits = defineEmits(['save'])
 const items = ref([1])
 const updateClipField = () => {
   items.value.push(1)
-  console.log(items, '=========>')
 }
 
 const text = ref<string>('')
