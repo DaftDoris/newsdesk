@@ -44,7 +44,7 @@ export const useShareStore = defineStore("share", {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (e: any) {
           if (e.code === "not-found" && e.name === "FirebaseError")
-            await setDoc(docRef, { items: arrayUnion(item.text) })
+            setDoc(docRef, { items: arrayUnion(item.text) })
           else throw e
         }
       })
@@ -63,6 +63,6 @@ export const useShareStore = defineStore("share", {
     },
   },
   getters: {
-    getInbox: (state: State) => Object.values(state.inbox).flat(),
+    getInbox: (state: State) => state.inbox,
   },
 })
