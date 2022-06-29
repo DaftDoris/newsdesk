@@ -105,6 +105,7 @@
           <Scripts
             class="my-5"
             :slotno="slot"
+            @save="events.onClickSave"	
           />
         </div>
       </div>
@@ -197,7 +198,6 @@ const dragged = (x: number, y: number, item: Item) => {
   }
 }
 	const draggedInbox = (x: number, y: number, text: string, key: string) => {
-  console.log(x, y, text, key, 'x y text key')
   const slot = <Item["slot"]>parseInt(
     <string>// @ts-ignore
     document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
