@@ -105,7 +105,7 @@
           <Scripts
             class="my-5"
             :slotno="slot"
-            @save="events.onClickSave"	
+            @save="events.onClickSave"
           />
         </div>
       </div>
