@@ -8,7 +8,7 @@ import {
   setDoc,
   onSnapshot,
   updateDoc,
-  // arrayUnion,
+  arrayUnion,
   arrayRemove,
 } from "firebase/firestore"
 
@@ -27,9 +27,19 @@ export const useItemStore = defineStore("item", {
   actions: {
     async addItem(params: Item, podcastname: string, docname: string) {
       const id = nanoid()
-      const item: Item = { ...params, id }	
-      this.itemList.push(item)	
-      this.saveData(podcastname, docname)
+      const item: Item = { ...params, id }
+      const docRef = doc(collection(db, podcastname), docname)
+      try {
+        return await updateDoc(docRef, {
+          items: arrayUnion(item),
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+          this.itemList.push(item)
+          return this.saveData(podcastname, docname)
+        } else throw e
+      }
     },
 
     async updateSlotItem(item: [], podcastname: string, docname: string) {
