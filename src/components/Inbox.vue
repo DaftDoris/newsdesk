@@ -1,26 +1,36 @@
 <template>
   <ul>
-     <li
+    <li
       class="list-none"
       v-for="(item, podcastId) in store.getInbox"
       :key="podcastId"
     >
-      
       <template v-if="item">
         <span v-for="(text, index) in item" :key="index">
           <div
-            class="flex justify-between items-center border-b border-slate-400 pb-1"
+            class="
+              flex
+              justify-between
+              items-center
+              border-b border-slate-400
+              pb-1
+            "
             @dragend="dropped($event, text, podcastId)"
             draggable="true"
           >
-         <component	
-              class="w-100 break-all w-full"	
-              :is="'p'"	
-              :data-item="item"	
-              v-html="linkify(text)"	
+            <component
+              class="w-100 break-all w-full"
+              :is="'p'"
+              :data-item="item"
+              v-html="linkify(text)"
             />
-        <div>
-              <HandIcon class="w-5 h-5"/>
+            <div>
+              <HandIcon class="w-5 h-5" />
+              <ListActionButton title="Delete" @click="emits('delete', text, podcastId)">
+                <BackspaceIcon
+                  class="dark:text-white bg-transparent transition-colors"
+                />
+              </ListActionButton>
             </div>
           </div>
         </span>
@@ -31,8 +41,8 @@
 
 <script lang="ts" setup>
 import { watch } from "vue"
-import { useShareStore } from "@/store/itemShare"	
-import { HandIcon } from "@heroicons/vue/outline"
+import { useShareStore } from "@/store/itemShare"
+import { HandIcon, BackspaceIcon } from "@heroicons/vue/outline"
 
 const props = defineProps({
   podcastId: {
@@ -52,8 +62,8 @@ const connect = () => {
 watch(() => props.podcastId, connect, {
   immediate: true,
 })
-	const dropped = (e: DragEvent, item: string, podcastId: any) => {	
-  emits("draggedInbox", e.clientX, e.clientY, item, podcastId)	
+const dropped = (e: DragEvent, item: string, podcastId: any) => {
+  emits("draggedInbox", e.clientX, e.clientY, item, podcastId)
 }
 
 const linkify = (text: string) => {
@@ -69,7 +79,7 @@ const linkify = (text: string) => {
 
   return replacedText.replace(/\n/g, "<br/>")
 }
-const emits = defineEmits(["draggedInbox"])
+const emits = defineEmits(["draggedInbox", "delete"])
 </script>
 
 <style scoped lang="scss">
