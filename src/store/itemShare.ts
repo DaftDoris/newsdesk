@@ -8,6 +8,7 @@ import {
   setDoc,
   arrayUnion,
   updateDoc,
+  arrayRemove,
   onSnapshot,
   arrayRemove,
 } from "firebase/firestore"
@@ -28,6 +29,7 @@ export const useShareStore = defineStore("share", {
         onSnapshot(
           doc(db, podcastname, "inbox", podcast.id, "shares"),
           (doc) => {
+            // this.inbox[podcast.id] = doc.data()?.items ?? []
             this.inbox[podcast.id] = doc.data()?.items.reverse() ?? []
           },
         )
@@ -49,8 +51,8 @@ export const useShareStore = defineStore("share", {
         }
       })
     },
-     // add removeDraggedItem function for remove the item from inbox
-     async removeDraggedItem(item: string, destination: string, from: string) {
+
+    async removeDraggedItem(item: string, destination: string, from: string) {
       const docRef = doc(db, destination, "inbox", from, "shares")
       try {
         await updateDoc(docRef, {

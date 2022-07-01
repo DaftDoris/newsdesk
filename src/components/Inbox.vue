@@ -1,11 +1,10 @@
 <template>
   <ul>
-     <li
+    <li
       class="list-none"
       v-for="(item, podcastId) in store.getInbox"
       :key="podcastId"
     >
-      
       <template v-if="item">
         <span v-for="(text, index) in item" :key="index">
           <div
@@ -13,13 +12,13 @@
             @dragend="dropped($event, text, podcastId)"
             draggable="true"
           >
-         <component	
-              class="w-100 break-all w-full"	
-              :is="'p'"	
-              :data-item="item"	
-              v-html="linkify(text)"	
+            <component
+              class="w-100 break-all w-full"
+              :is="'p'"
+              :data-item="item"
+              v-html="linkify(text)"
             />
-        <div>
+            <div>
               <HandIcon class="w-5 h-5"/>
             </div>
           </div>
@@ -31,7 +30,7 @@
 
 <script lang="ts" setup>
 import { watch } from "vue"
-import { useShareStore } from "@/store/itemShare"	
+import { useShareStore } from "@/store/itemShare"
 import { HandIcon } from "@heroicons/vue/outline"
 
 const props = defineProps({
@@ -49,12 +48,14 @@ const store = useShareStore()
 const connect = () => {
   store.connect(props.podcastId)
 }
+
+const dropped = (e: DragEvent, item: string, podcastId: any) => {
+  emits("draggedInbox", e.clientX, e.clientY, item, podcastId)
+}
 watch(() => props.podcastId, connect, {
   immediate: true,
 })
-	const dropped = (e: DragEvent, item: string, podcastId: any) => {	
-  emits("draggedInbox", e.clientX, e.clientY, item, podcastId)	
-}
+
 
 const linkify = (text: string) => {
   const itemText = text
