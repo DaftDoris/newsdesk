@@ -8,6 +8,7 @@ import {
   setDoc,
   arrayUnion,
   updateDoc,
+  arrayRemove,
   onSnapshot,
 } from "firebase/firestore"
 
@@ -27,6 +28,7 @@ export const useShareStore = defineStore("share", {
         onSnapshot(
           doc(db, podcastname, "inbox", podcast.id, "shares"),
           (doc) => {
+            // this.inbox[podcast.id] = doc.data()?.items ?? []
             this.inbox[podcast.id] = doc.data()?.items.reverse() ?? []
           },
         )
@@ -43,13 +45,25 @@ export const useShareStore = defineStore("share", {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (e: any) {
           if (e.code === "not-found" && e.name === "FirebaseError")
-            await setDoc(docRef, { items: arrayUnion(item.text) })
+            setDoc(docRef, { items: arrayUnion(item.text) })
           else throw e
         }
       })
     },
+
+    async removeDraggedItem(item: string, destination: string, from: string) {
+      const docRef = doc(db, destination, "inbox", from, "shares")
+      try {
+        await updateDoc(docRef, {
+          items: arrayRemove(item),
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        console.log(e)
+      }
+    },
   },
   getters: {
-    getInbox: (state: State) => Object.values(state.inbox).flat(),
+    getInbox: (state: State) => state.inbox,
   },
 })
