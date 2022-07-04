@@ -66,16 +66,15 @@ export const useItemStore = defineStore("item", {
         } else throw e
       }
     },
-    async removeInboxItem(item: string, podcastId: string) {
-      console.log(item, podcastId)
-      const docRef = doc(db, item, podcastId)
+    async removeInboxItem(item: string, destination: string, from: string) {
+      const docRef = doc(db, destination, "inbox", from, "shares")
       try {
         await updateDoc(docRef, {
           items: arrayRemove(item),
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
-        console.log(e, 'anyeee')
+        console.log(e)
       }
     },
     async updateItem(item: Item, podcastname: string, docname: string) {

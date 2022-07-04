@@ -280,8 +280,7 @@ const events = {
   },
   onClickInboxDelete(text :string , podcastId: string) {
     if (window.confirm('Are you sure?')) {
-      
-      itemStore.removeInboxItem(text, podcastId, index)
+      itemStore.removeInboxItem(text, podcastId, podcastId)
     }
   },
   onClickUpdate(item: Item) {
