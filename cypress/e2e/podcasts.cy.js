@@ -123,37 +123,7 @@ describe("newsdesk logged in", () => {
     // cy.get("section[slotno=6]").should("not.contain", "dragging item")
   })
 
-  it("should move item within a slot when dragging", () => {
-    switchPodCast("dev sandbox")
-    cy.get("section[slotno=7] textarea").type("dragging item{enter}", {
-      force: true,
-    })
-    cy.get("section[slotno=7]").should("contain", "dragging item")
-    cy.get("section[slotno=7] textarea").type("dragging item in slot{enter}", {
-      force: true,
-    })
-    cy.get("section[slotno=7] ul li div p").then((el) => {
-      cy.get("section[slotno=7] ul li:eq(1)")
-        .children("div[draggable='true']")
-        .trigger(
-          "dragend",
-          {
-            clientX: el[0].getBoundingClientRect().left,
-            clientY: el[0].getBoundingClientRect().top,
-          },
-          { force: true },
-        )
-    })
-    cy.get("section[slotno=7] button[title='Delete']").eq(1).click({
-      force: true,
-    })
-    cy.get("section[slotno=7] button[title='Delete']").eq(0).click({
-      force: true,
-    })
-    cy.get("section[slotno=7]")
-      .should("not.contain", "dragging item")
-      .and("not.contain", "dragging item in slot")
-  })
+ 
 
   it("should add item to slot and remove from inbox when dragging from inbox", () => {
     switchPodCast("dev sandbox")
