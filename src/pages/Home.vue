@@ -211,17 +211,7 @@ const dragged = (x: number, y: number, item: Item) => {
     itemStore.saveData(props.podcastId, docname.value)
   }
 }
-	const draggedInbox = (x: number, y: number, text: string, key: string) => {
-  const slot = <Item["slot"]>parseInt(
-    <string>// @ts-ignore
-    document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
-  )
-  if(slot) {
-    itemStore.addItem({ text, slot }, props.podcastId, docname)
-    shareStore.removeDraggedItem(text, props.podcastId, key)
-    shareStore.connect(props.podcastId)
-  }
-}
+
 const moveArrayItemToNewIndex= (arr: any, old_index: number, new_index: number) =>{
   if (new_index >= arr.length) {
     var k = new_index - arr.length + 1;

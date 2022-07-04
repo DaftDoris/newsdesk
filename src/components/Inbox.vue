@@ -66,9 +66,7 @@ const dropped = (e: DragEvent, item: string, podcastId: any) => {
 watch(() => props.podcastId, connect, {
   immediate: true,
 })
-const dropped = (e: DragEvent, item: string, podcastId: any) => {
-  emits("draggedInbox", e.clientX, e.clientY, item, podcastId)
-}
+
 
 const linkify = (text: string) => {
   const itemText = text
