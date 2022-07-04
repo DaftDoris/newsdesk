@@ -204,7 +204,7 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] textarea").type(`${link}{enter}`, {
       force: true,
     })
-    cy.get("section[slotno=7] ul li div a")
+    cy.get("section[slotno=7] ul li div p a")
       .invoke("attr", "href")
       .should("eq", link)
     cy.get("section[slotno=7]").should(
