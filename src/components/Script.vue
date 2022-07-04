@@ -7,7 +7,6 @@
     <span v-for="(item, index) in items" :key="index">
      <Input
       v-model="text"
-      
       :placeholder="`Enter things into ${slotno}...`"
       @keydown.enter.exact.prevent="save"
     />

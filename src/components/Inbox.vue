@@ -59,6 +59,10 @@ const store = useShareStore()
 const connect = () => {
   store.connect(props.podcastId)
 }
+
+const dropped = (e: DragEvent, item: string, podcastId: any) => {
+  emits("draggedInbox", e.clientX, e.clientY, item, podcastId)
+}
 watch(() => props.podcastId, connect, {
   immediate: true,
 })
