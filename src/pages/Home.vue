@@ -106,8 +106,9 @@
           <Scripts
             class="my-5"
             :slotno="slot"
-            @save="events.onClickSave"
+            @save="events.onClickScriptsSave"
           />
+           
         </div>
       </div>
     </div>
@@ -270,6 +271,9 @@ const copySlotText = (slot: number) => {
 
 const events = {
   onClickSave(text: string, slot: Item["slot"]) {
+    itemStore.addItem({ text, slot }, props.podcastId, docname.value)
+  },
+  onClickScriptsSave(text: string, slot: Item["slot"]) {
     itemStore.addItem({ text, slot }, props.podcastId, docname.value)
   },
   onUpdateSaveDoc() {
