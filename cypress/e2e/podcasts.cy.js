@@ -163,6 +163,23 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
     switchPodCast("dev 2 sandbox")
     cy.get("#inbox-column").should("contain", "Remove item in inbox")
+    cy.get("#inbox-column button[title='Delete']").eq(1).click({
+      force: true,
+    })
+    cy.get("#inbox-column ul").should("not.contain", "Remove item in inbox")
+  })
+
+  it.skip(
+    "should add item to slot and remove from inbox when dragging from inbox",
+  )
+  it("should add item to slot and remove from inbox", () => {
+    switchPodCast("dev sandbox")
+    cy.get("section[slotno=7] textarea").type("Remove item in inbox{enter}")
+    cy.get("section[slotno=7]").should("contain", "Remove item in inbox")
+    cy.get("section[slotno=7] button[title='Share to podcast']").eq(0).click()
+    cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
+    switchPodCast("dev 2 sandbox")
+    cy.get("#inbox-column").should("contain", "Remove item in inbox")
     cy.get("section[slotno=7] textarea").then((el) => {
       cy.get("#inbox-column ul li p:eq(0)").trigger(
         "dragend",
@@ -176,11 +193,6 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7]").should("contain", "Remove item in inbox")
     cy.get("#inbox-column ul").should("not.contain", "Remove item in inbox")
   })
-
-  it.skip(
-    "should add item to slot and remove from inbox when dragging from inbox",
-  )
-
   it("should copy slot text", () => {
     switchPodCast("dev sandbox")
     const textToCopy = "copy slot items"
