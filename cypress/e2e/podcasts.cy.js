@@ -163,10 +163,19 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
     switchPodCast("dev 2 sandbox")
     cy.get("#inbox-column").should("contain", "Remove item in inbox")
-    cy.get("#inbox-column button[title='Delete']").eq(1).click({
-      force: true,
+    cy.get("section[slotno=7] textarea").then((el) => {
+      cy.get("#inbox-column ul li p:eq(0)").trigger(
+        "dragend",
+        {
+          clientX: el[0].getBoundingClientRect().left,
+          clientY: el[0].getBoundingClientRect().top,
+        },
+        { force: true },
+      )
     })
+    cy.get("section[slotno=7]").should("contain", "Remove item in inbox")
     cy.get("#inbox-column ul").should("not.contain", "Remove item in inbox")
+   
   })
 
   it.skip(
@@ -180,17 +189,9 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
     switchPodCast("dev 2 sandbox")
     cy.get("#inbox-column").should("contain", "Remove item in inbox")
-    cy.get("section[slotno=7] textarea").then((el) => {
-      cy.get("#inbox-column ul li p:eq(0)").trigger(
-        "dragend",
-        {
-          clientX: el[0].getBoundingClientRect().left,
-          clientY: el[0].getBoundingClientRect().top,
-        },
-        { force: true },
-      )
+    cy.get("#inbox-column ul li listactionbutton[title='Delete']").eq(1).click({
+      force: true,
     })
-    cy.get("section[slotno=7]").should("contain", "Remove item in inbox")
     cy.get("#inbox-column ul").should("not.contain", "Remove item in inbox")
   })
   it("should copy slot text", () => {
