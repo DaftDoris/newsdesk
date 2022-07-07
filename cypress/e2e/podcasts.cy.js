@@ -187,7 +187,8 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] button[title='Share to podcast']").eq(0).click()
     cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
     switchPodCast("dev 2 sandbox")
-    cy.get("#inbox-column ul li span div div listactionbutton[title='Delete']").click({
+    cy.get("#inbox-column").should("contain", "Remove item in inbox")
+    cy.get("#delete-inbox").eq(0).click({
       force: true,
     })
     cy.get("#inbox-column ul").should("not.contain", "Remove item in inbox")

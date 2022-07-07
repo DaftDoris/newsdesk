@@ -26,7 +26,7 @@
             />
             <div>
               <HandIcon class="w-5 h-5" />
-              <ListActionButton title="Delete" @click="emits('delete', text, podcastId)">
+              <ListActionButton title="Delete" id="delete-inbox" @click="emits('delete', text, podcastId)">
                 <BackspaceIcon
                   class="dark:text-white bg-transparent transition-colors"
                 />
