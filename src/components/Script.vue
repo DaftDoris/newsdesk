@@ -10,7 +10,7 @@
       :placeholder="`Enter things into ${slotno}...`"
       @keydown.enter.exact.prevent="save"
     />
-    <ClipField></ClipField>
+    <ClipField :index=index @delete="deleteClip"></ClipField>
     </span>
    
   </div>
@@ -38,6 +38,10 @@ const emits = defineEmits(['save'])
 const items = ref([1])
 const updateClipField = () => {
   items.value.push(1)
+}
+const deleteClip = (index:any) => {
+  console.log('dssdsddsd', index)
+  items.value.splice(index, 1)
 }
 
 const text = ref<string>('')
