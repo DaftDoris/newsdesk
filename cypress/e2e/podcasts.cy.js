@@ -182,12 +182,14 @@ describe("newsdesk logged in", () => {
   )
   it("should add item to slot and remove from inbox", () => {
     switchPodCast("dev sandbox")
-    cy.get("section[slotno=7] textarea").type("Remove item in inbox{enter}")
-    cy.get("section[slotno=7]").should("contain", "Remove item in inbox")
-    cy.get("section[slotno=7] button[title='Share to podcast']").eq(0).click()
+    cy.get("section[slotno=7] textarea").type("new share item{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7]").should("contain", "new share item")
+    cy.get("section[slotno=7] button[title='Share to podcast']").click()
     cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
     switchPodCast("dev 2 sandbox")
-    cy.get("#inbox-column").should("contain", "Remove item in inbox")
+    cy.get("#inbox-column").should("contain", "new share item") 
     cy.get("#delete-inbox").eq(0).click({
       force: true,
     })
