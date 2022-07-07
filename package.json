@@ -22,7 +22,7 @@
     "@types/linkify-it": "^3.0.2",
     "@vueuse/core": "8.7.5",
     "firebase": "9.8.4",
-    "moment": "2.29.3",
+    "moment": "2.29.4",
     "nanoid": "4.0.0",
     "pinia": "2.0.14",
     "vue": "3.2.37",
