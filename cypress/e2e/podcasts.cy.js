@@ -180,7 +180,21 @@ describe("newsdesk logged in", () => {
   it.skip(
     "should add item to slot and remove from inbox when dragging from inbox",
   )
-
+  it("should add item to slot and remove from inbox", () => {
+    switchPodCast("dev sandbox")
+    cy.get("section[slotno=7] textarea").type("new share item{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7]").should("contain", "new share item")
+    cy.get("section[slotno=7] button[title='Share to podcast']").click()
+    cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
+    switchPodCast("dev 2 sandbox")
+    cy.get("#inbox-column").should("contain", "new share item") 
+    cy.get("#delete-inbox").eq(0).click({
+      force: true,
+    })
+    cy.get("#inbox-column ul").should("not.contain", "Remove item in inbox")
+  })
   it("should copy slot text", () => {
     switchPodCast("dev sandbox")
     const textToCopy = "copy slot items"
@@ -204,7 +218,7 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] textarea").type(`${link}{enter}`, {
       force: true,
     })
-    cy.get("section[slotno=7] ul li div a")
+    cy.get("section[slotno=7] ul li div p a")
       .invoke("attr", "href")
       .should("eq", link)
     cy.get("section[slotno=7]").should(

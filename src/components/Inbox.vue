@@ -8,7 +8,13 @@
       <template v-if="item">
         <span v-for="(text, index) in item" :key="index">
           <div
-            class="flex justify-between items-center border-b border-slate-400 pb-1"
+            class="
+              flex
+              justify-between
+              items-center
+              border-b border-slate-400
+              pb-1
+            "
             @dragend="dropped($event, text, podcastId)"
             draggable="true"
           >
@@ -19,7 +25,12 @@
               v-html="linkify(text)"
             />
             <div>
-              <HandIcon class="w-5 h-5"/>
+              <HandIcon class="w-5 h-5" />
+              <ListActionButton title="Delete" id="delete-inbox" @click="emits('delete', text, podcastId)">
+                <BackspaceIcon
+                  class="dark:text-white bg-transparent transition-colors"
+                />
+              </ListActionButton>
             </div>
           </div>
         </span>
@@ -31,7 +42,7 @@
 <script lang="ts" setup>
 import { watch } from "vue"
 import { useShareStore } from "@/store/itemShare"
-import { HandIcon } from "@heroicons/vue/outline"
+import { HandIcon, BackspaceIcon } from "@heroicons/vue/outline"
 
 const props = defineProps({
   podcastId: {
@@ -56,6 +67,7 @@ watch(() => props.podcastId, connect, {
   immediate: true,
 })
 
+
 const linkify = (text: string) => {
   const itemText = text
     .replace(/(">.*?)<\/a>/g, "")
@@ -69,8 +81,7 @@ const linkify = (text: string) => {
 
   return replacedText.replace(/\n/g, "<br/>")
 }
-
-const emits = defineEmits(["draggedInbox"])
+const emits = defineEmits(["draggedInbox", "delete"])
 </script>
 
 <style scoped lang="scss">
