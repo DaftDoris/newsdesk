@@ -26,6 +26,7 @@
       :podcastId = "podcastId"
       :docname = "docname"
       @draggedInbox = "draggedInbox"
+      @delete="events.onClickInboxDelete"
       />
     </div>
     <div class="px-4 column-h overflow-y-auto" id="draft-column" :class="{'col-span-3':hideShowColumn.draft}">
@@ -282,6 +283,11 @@ const events = {
   onClickDelete(item: Item) {
     if (window.confirm('Are you sure?')) {
       itemStore.removeItem(item, props.podcastId, docname.value)
+    }
+  },
+  onClickInboxDelete(text :string , podcastId: string) {
+    if (window.confirm('Are you sure?')) {
+      itemStore.removeInboxItem(text, podcastId, podcastId)
     }
   },
   onClickUpdate(item: Item) {

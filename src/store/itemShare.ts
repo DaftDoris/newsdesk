@@ -8,8 +8,8 @@ import {
   setDoc,
   arrayUnion,
   updateDoc,
-  arrayRemove,
   onSnapshot,
+  arrayRemove,
 } from "firebase/firestore"
 
 interface State {
