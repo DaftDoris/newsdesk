@@ -9,16 +9,16 @@
 </template>
 
 <script lang="ts" setup>
-import Input from '@/components/atoms/Input.vue'
-import { ref } from 'vue'
+import Input from "@/components/atoms/Input.vue"
+import { ref } from "vue"
 
-const emits = defineEmits(['save'])
+const emits = defineEmits(["save"])
 
-const text = ref<string>('')
+const text = ref<string>("")
 
 const save = () => {
-  emits('save', text.value, props.slot)
-  text.value = ''
+  emits("save", text.value, props.slot)
+  text.value = ""
 }
 
 const props = defineProps({
@@ -27,5 +27,4 @@ const props = defineProps({
     default: null,
   },
 })
-
 </script>

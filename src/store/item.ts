@@ -56,7 +56,17 @@ export const useItemStore = defineStore("item", {
         } else throw e
       }
     },
-
+    async removeInboxItem(item: string, destination: string, from: string) {
+      const docRef = doc(db, destination, "inbox", from, "shares")
+      try {
+        await updateDoc(docRef, {
+          items: arrayRemove(item),
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        console.log(e)
+      }
+    },
     async updateItem(item: Item, podcastname: string, docname: string) {
       //TODO: update only the individual item
       return this.saveData(podcastname, docname)
