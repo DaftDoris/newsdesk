@@ -16,6 +16,7 @@ import { db } from "@/plugins/firebase"
 
 interface State {
   itemList: Item[]
+  scriptItemList: Item[]
   slotTitleList: string[]
 }
 
@@ -23,6 +24,7 @@ export const useItemStore = defineStore("item", {
   state: (): State => ({
     itemList: [],
     slotTitleList: [],
+    scriptItemList: [],
   }),
   actions: {
     async addItem(params: Item, podcastname: string, docname: string) {
@@ -30,6 +32,12 @@ export const useItemStore = defineStore("item", {
       const item: Item = { ...params, id }
       this.itemList.push(item)
       this.saveData(podcastname, docname)
+    },
+    async addScriptItem(params: Item, podcastname: string, docname: string) {
+      const id = nanoid()
+      const item: Item = { ...params, id }
+      this.scriptItemList.push(item)
+      this.saveScriptData(podcastname, docname)
     },
 
     async updateSlotItem(item: [], podcastname: string, docname: string) {
@@ -89,6 +97,21 @@ export const useItemStore = defineStore("item", {
         } else throw e
       }
     },
+    async saveScriptData(podcastname: string, docname: string) {
+      const docRef = doc(collection(db, podcastname), docname)
+      try {
+        return await updateDoc(docRef, {
+          items: this.scriptItemList
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+          return await setDoc(docRef, {
+            items: this.scriptItemList,
+          })
+        } else throw e
+      }
+    },
 
     connect(podcastname: string, docname: string) {
       onSnapshot(doc(db, podcastname, docname), (doc) => {
@@ -104,6 +127,7 @@ export const useItemStore = defineStore("item", {
   },
   getters: {
     getList: (state: State) => state.itemList,
+    getScriptList: (state: State) => state.scriptItemList,
     getSlotTitleList: (state: State) => state.slotTitleList,
     getSlotList: (state) => {
       return (slot: number) =>

@@ -275,7 +275,7 @@ const events = {
     itemStore.addItem({ text, slot }, props.podcastId, docname.value)
   },
   onClickScriptsSave(text: string, slot: Item["slot"]) {
-    itemStore.addItem({ text, slot }, props.podcastId, docname.value)
+    itemStore.addScriptItem({ text, slot }, props.podcastId, docname.value)
   },
   onUpdateSaveDoc() {
     itemStore.saveData(props.podcastId, docname.value)
