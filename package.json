@@ -24,7 +24,7 @@
     "firebase": "9.9.0",
     "moment": "2.29.4",
     "nanoid": "4.0.0",
-    "pinia": "2.0.15",
+    "pinia": "2.0.16",
     "vue": "3.2.37",
     "vue-create-ripple": "0.3.1",
     "vue-router": "4.1.2"
