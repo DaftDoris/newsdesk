@@ -46,7 +46,6 @@
   
   <script lang="ts" setup>
   
-import { Item } from "@/types/item"
 import { BackspaceIcon } from "@heroicons/vue/outline"
 import { PropType } from "vue"
 const props = defineProps({
@@ -55,7 +54,7 @@ const props = defineProps({
     default: null,
   },
   clipField: {
-    type: Object as PropType<Item>,
+    type: Object,
     default: null,
   },
 })

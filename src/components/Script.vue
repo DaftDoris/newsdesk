@@ -10,7 +10,7 @@
       :placeholder="`Enter things into ${slotno}...`"
       @keydown.enter.exact.prevent="save"
     />
-    <ClipField :index="index" :clipField="item.clipField" @delete="deleteClip"></ClipField>
+    <ClipField :index="index" :clipField="item?.clipField" @delete="deleteClip"></ClipField>
     </span>
    
   </div>
