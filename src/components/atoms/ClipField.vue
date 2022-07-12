@@ -56,13 +56,7 @@ const props = defineProps({
   },
   clipField: {
     type: Object as PropType<Item>,
-    default: {
-   clip_url : "",
-   in_time : "",
-   in_msg : "",
-   out_time : "",
-   out_msg : ""
-}
+    default: null,
   },
 })
 
