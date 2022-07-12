@@ -5,7 +5,7 @@
       <input
         class="input break-all bg-transparent text-blue-600"
         placeholder="URL"
-        v-model="clip_url"
+        v-model="clipField.clip_url"
       />
     </div>
     <div class="clip-section border-l-2 border-gray-400">
@@ -13,14 +13,14 @@
       <input
         class="input break-all bg-transparent w-8/12 text-gray-600"
         placeholder="In"
-        v-model="in_time"
+        v-model="clipField.in_time"
       />
     </div>
     <div class="clip-section border-l-2 border-gray-400">
       <input
         class="input break-all bg-transparent w-10/12 text-gray-600"
         placeholder="message"
-        v-model="in_msg"
+        v-model="clipField.in_msg"
       />
     </div>
     <div class="clip-section border-l-2 border-gray-400">
@@ -28,14 +28,14 @@
       <input
         class="input break-all bg-transparent w-8/12 text-gray-600"
         placeholder="Out"
-        v-model="out_time"
+        v-model="clipField.out_time"
       />
     </div>
     <div class="clip-section border-l-2 border-gray-400">
       <input
         class="input break-all bg-transparent w-10/12 text-gray-600"
         placeholder="message"
-        v-model="out_msg"
+        v-model="clipField.out_msg"
       />
     </div>
     <div class="clip-section border-l-2 border-gray-400">
@@ -45,6 +45,7 @@
 </template>
   
   <script lang="ts" setup>
+  
 import { Item } from "@/types/item"
 import { BackspaceIcon } from "@heroicons/vue/outline"
 import { PropType } from "vue"
@@ -53,14 +54,20 @@ const props = defineProps({
     type: Number,
     default: null,
   },
+  clipField: {
+    type: Object as PropType<Item>,
+    default: {
+   clip_url : "",
+   in_time : "",
+   in_msg : "",
+   out_time : "",
+   out_msg : ""
+}
+  },
 })
 
 const emits = defineEmits(["delete"])
-const clip_url = "bitly"
-const in_time = "00:00"
-const in_msg = '"Hello...'
-const out_time = "00:30"
-const out_msg = '...Goodbye"'
+
 </script>
   
   <style scoped lang="scss">
