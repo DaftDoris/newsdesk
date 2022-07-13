@@ -6,11 +6,11 @@
     </label>
     <span v-for="(item, index) in items" :key="index">
      <Input
-      v-model="text"
+      v-model="item.label"
       :placeholder="`Enter things into ${slotno}...`"
       @keydown.enter.exact.prevent="save"
     />
-    <ClipField></ClipField>
+    <ClipField :index="index" :clipField="item?.clipField" @delete="deleteClip"></ClipField>
     </span>
    
   </div>
@@ -18,7 +18,6 @@
 
 <script lang="ts" setup>
 import { watch, ref, reactive, onMounted } from "vue"
-
 import Input from '@/components/atoms/Input.vue'
 import ClipField from '@/components/atoms/ClipField.vue'
 import { VolumeUpIcon } from "@heroicons/vue/outline"
@@ -29,15 +28,26 @@ const props = defineProps({
     default: 1,
   },
 })
-const clip_url = "bitly"
-const in_time = "00:00"
-const in_msg = '"Hello...'
-const out_time = "00:30"
-const out_msg = '...Goodbye"'
 const emits = defineEmits(['save'])
-const items = ref([1])
+const items = ref([{label:'', clipField :{
+   clip_url : "",
+   in_time : "",
+   in_msg : "",
+   out_time : "",
+   out_msg : ""
+}}])
 const updateClipField = () => {
-  items.value.push(1)
+  items.value.push({label:'', clipField :{
+   clip_url : "",
+   in_time : "",
+   in_msg : "",
+   out_time : "",
+   out_msg : ""
+}})
+}
+const deleteClip = (setIndex:any) => {
+  items.value.splice(setIndex, 1)
+
 }
 
 const text = ref<string>('')
