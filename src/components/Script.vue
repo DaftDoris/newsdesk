@@ -4,7 +4,7 @@
       {{ slotno }} :
       <span @click="updateClipField" class="text-gray-400 flex justify-between  items-center w-11/12">{{ slotno }} title <VolumeUpIcon class="h-8"  /></span>
     </label>
-    <span v-for="(item, index) in itemStore.getScriptList(slot).reverse()" :key="index">
+    <span v-for="(item, index) in itemStore.getScriptList(slotno).reverse()" :key="index">
      <Input
       v-model="item.label"
       :placeholder="`Enter things into ${slotno}...`"
@@ -19,12 +19,13 @@
 
 <script lang="ts" setup>
 import { watch, ref, reactive, onMounted } from "vue"
-// import itemStore from '../store/item'
+import { useItemStore } from "@/store/item"
 
 import Input from '@/components/atoms/Input.vue'
 import ClipField from '@/components/atoms/ClipField.vue'
 import { VolumeUpIcon } from "@heroicons/vue/outline"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+const itemStore = useItemStore()
 const props = defineProps({
   slotno: {
     type: Number,
