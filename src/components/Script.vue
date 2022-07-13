@@ -29,7 +29,7 @@ const props = defineProps({
   },
 })
 const emits = defineEmits(['save'])
-const items = ref([{label:'key0', clipField :{
+const items = ref([{label:'', clipField :{
    clip_url : "",
    in_time : "",
    in_msg : "",
@@ -37,7 +37,7 @@ const items = ref([{label:'key0', clipField :{
    out_msg : ""
 }}])
 const updateClipField = () => {
-  items.value.push({label:`key${items.value.length}`, clipField :{
+  items.value.push({label:'', clipField :{
    clip_url : "",
    in_time : "",
    in_msg : "",
