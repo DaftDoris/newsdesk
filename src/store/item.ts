@@ -33,11 +33,12 @@ export const useItemStore = defineStore("item", {
       this.itemList.push(item)
       this.saveData(podcastname, docname)
     },
-    async addScriptItem(params: Item, podcastname: string, docname: string) {
-      const id = nanoid()
-      const item: Item = { ...params, id }
-      this.scriptItemList.push(item)
-      this.saveScriptData(podcastname, docname)
+    async addScriptItem(params: Item) {
+      // const id = nanoid()
+      // const item: Item = { ...params, id }
+      console.log(params, 'this.scriptItemList')
+      this.scriptItemList.push(params)
+      // this.saveScriptData(podcastname, docname)
     },
 
     async updateSlotItem(item: [], podcastname: string, docname: string) {
@@ -119,7 +120,7 @@ export const useItemStore = defineStore("item", {
           doc.data()?.slotTitles && doc.data()?.slotTitles.length > 0
             ? doc.data()?.slotTitles
             : Array.from({ length: 7 }, () => "") ??
-              Array.from({ length: 7 }, () => "")
+            Array.from({ length: 7 }, () => "")
         ) as string[]
         this.itemList = (doc.data()?.items ?? []) as Item[]
       })
@@ -127,11 +128,11 @@ export const useItemStore = defineStore("item", {
   },
   getters: {
     getList: (state: State) => state.itemList,
-    getScriptList: (state: State) => state.scriptItemList,
     getSlotTitleList: (state: State) => state.slotTitleList,
     getSlotList: (state) => {
       return (slot: number) =>
         state.itemList.filter((item) => item.slot === slot)
     },
+    getScriptList: (state: State) => state.scriptItemList
   },
 })

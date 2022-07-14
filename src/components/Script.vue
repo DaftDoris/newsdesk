@@ -4,14 +4,16 @@
       {{ slotno }} :
       <span @click="updateClipField" class="text-gray-400 flex justify-between  items-center w-11/12">{{ slotno }} title <VolumeUpIcon class="h-8"  /></span>
     </label>
-    <span v-for="(item, index) in itemStore.getScriptList(slotno).reverse()" :key="index">
+    <div >
+    <span v-for="(itemIn, index) in items" :key="index">
      <Input
-      v-model="item.label"
+      v-model="itemIn.label"
       :placeholder="`Enter things into ${slotno}...`"
       @keydown.enter.exact.prevent="save"
     />
-    <ClipField :index="index" :clipField="item?.clipField" @delete="deleteClip"></ClipField>
+    <ClipField :index="index" :clipField="itemIn?.clipField" @delete="deleteClip"></ClipField>
     </span>
+    </div>
     
    
   </div>
@@ -56,8 +58,7 @@ const deleteClip = (setIndex:any) => {
 
 const text = ref<string>('')
 const save = () => {
-  emits('save', text.value, props.slotno)
-  text.value = ''
+  emits('save', items.value)
 }
 </script>
 

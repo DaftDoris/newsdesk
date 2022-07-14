@@ -99,7 +99,22 @@
           />
       </ListActionButton>
       </div>
-      <div class="mt-20" id="script-data">
+      <div class="mt-10" id="script-data">
+         <ScriptInput
+          v-model="title"
+          placeholder="Title"
+          :updateEvent="events.onUpdateSaveDoc"
+        />
+         <ScriptInput
+          v-model="special_day"
+          placeholder="Special Days"
+          :updateEvent="events.onUpdateSaveDoc"
+        />
+         <ScriptInput
+          v-model="birthdays"
+          placeholder="Birthdays"
+          :updateEvent="events.onUpdateSaveDoc"
+        />
         <div
         v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
         :key="slot"
@@ -130,6 +145,7 @@ import Inbox from "@/components/Inbox.vue"
 import ItemCard from "@/components/molecules/Cards/ItemCard.vue"
 import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
+import ScriptInput from "@/components/atoms/ScriptInput.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
 import { PlusIcon, MinusIcon, ClipboardCopyIcon } from "@heroicons/vue/outline"
 import Scripts from "@/components/Script.vue"
@@ -274,8 +290,8 @@ const events = {
   onClickSave(text: string, slot: Item["slot"]) {
     itemStore.addItem({ text, slot }, props.podcastId, docname.value)
   },
-  onClickScriptsSave(text: string, slot: Item["slot"]) {
-    itemStore.addScriptItem({ text, slot }, props.podcastId, docname.value)
+  onClickScriptsSave(params: any) {
+    itemStore.addScriptItem(params)
   },
   onUpdateSaveDoc() {
     itemStore.saveData(props.podcastId, docname.value)
