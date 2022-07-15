@@ -17,12 +17,18 @@ import { db } from "@/plugins/firebase"
 interface State {
   itemList: Item[]
   slotTitleList: string[]
+  title: string
+  special_day: string
+  birthdays: string
 }
 
 export const useItemStore = defineStore("item", {
   state: (): State => ({
     itemList: [],
     slotTitleList: [],
+    title: "",
+    special_day: "",
+    birthdays: "",
   }),
   actions: {
     async addItem(params: Item, podcastname: string, docname: string) {
@@ -74,6 +80,23 @@ export const useItemStore = defineStore("item", {
 
     async saveData(podcastname: string, docname: string) {
       const docRef = doc(collection(db, podcastname), docname)
+      try {
+        return await updateDoc(docRef, {
+          items: this.itemList,
+          slotTitles: this.slotTitleList,
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+          return await setDoc(docRef, {
+            items: this.itemList,
+            slotTitles: this.slotTitleList,
+          })
+        } else throw e
+      }
+    },
+    async saveInputData(podcastname: string) {
+      const docRef = doc(collection(db, podcastname), this.title)
       try {
         return await updateDoc(docRef, {
           items: this.itemList,

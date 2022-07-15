@@ -99,7 +99,22 @@
           />
       </ListActionButton>
       </div>
-      <div class="mt-20" id="script-data">
+      <div class="mt-10" id="script-data">
+         <ScriptInput
+          :value="itemStore.title"
+          placeholder="Title"
+          @save="events.saveInput"
+        />
+         <ScriptInput
+          :value="itemStore.special_day"
+          placeholder="Special Days"
+          @save="events.saveInput"
+        />
+         <ScriptInput
+          :value="itemStore.birthdays"
+          placeholder="Birthdays"
+          @save="events.saveInput"
+        />
         <div
         v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
         :key="slot"
@@ -129,6 +144,7 @@ import Inbox from "@/components/Inbox.vue"
 import ItemCard from "@/components/molecules/Cards/ItemCard.vue"
 import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
+import ScriptInput from "@/components/atoms/ScriptInput.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
 import { PlusIcon, MinusIcon, ClipboardCopyIcon } from "@heroicons/vue/outline"
 import Scripts from "@/components/Script.vue"
@@ -275,6 +291,9 @@ const events = {
   },
   onUpdateSaveDoc() {
     itemStore.saveData(props.podcastId, docname.value)
+  },
+  saveInput() {
+    itemStore.saveInputData(props.podcastId)
   },
   onClickDelete(item: Item) {
     if (window.confirm('Are you sure?')) {

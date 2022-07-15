@@ -4,24 +4,28 @@
       class="input break-all max-w-full"
       :placeholder="placeholder"
       v-model="value"
-      @keydown.enter.prevent="updateEvent"
-      @blur="updateEvent"
+@keydown.enter.exact.prevent="save"
     />
   </label>
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core"
 
 const props = defineProps({
   placeholder: {
     type: String,
     default: null,
   },
+  value: {
+    type: String,
+    default: null,
+  },
 })
 
-const emit = defineEmits(["update:modelValue"])
-const value = useVModel(props, "modelValue", emit)
+const emits = defineEmits(['save'])
+const save = () => {
+  emits("save")
+}
 </script>
 
 <style scoped lang="scss">
