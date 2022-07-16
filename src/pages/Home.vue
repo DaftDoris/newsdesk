@@ -238,7 +238,7 @@ const draggedDraft = (x: number, y: number, text: string, key: string) => {
         out_msg: "",
       },
     }
-    itemStore.addScriptItem(params, props.podcastId)
+    itemStore.addScriptItem(params, props.podcastId, slot)
     shareStore.connect(props.podcastId)
   }
 }
@@ -351,8 +351,8 @@ const events = {
   onClickSave(text: string, slot: Item["slot"]) {
     itemStore.addItem({ text, slot }, props.podcastId, docname.value)
   },
-  onClickScriptsSave(params: any) {
-    itemStore.addScriptItem(params, props.podcastId)
+  onClickScriptsSave(params: any, slotno: string) {
+    itemStore.addScriptItem(params, props.podcastId, slotno)
   },
   onUpdateSaveDoc() {
     itemStore.saveData(props.podcastId, docname.value)
