@@ -3,71 +3,106 @@
     v-show="initiated && isAuthenticated"
     class="h-full grid grid-cols-5 gap-4 divide-x"
   >
-    
-    <div class="px-4 column-h overflow-y-auto" id="inbox-column" :class="{'col-span-3':hideShowColumn.inbox}" >
+    <div
+      class="px-4 column-h overflow-y-auto"
+      id="inbox-column"
+      :class="{ 'col-span-3': hideShowColumn.inbox }"
+    >
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Inbox</h2>
-        <ListActionButton 
-          title="toggle inbox expansion"
-        >
+        <ListActionButton title="toggle inbox expansion">
           <PlusIcon
-            @click="hideShowColumn.inbox = true,hideShowColumn.script= hideShowColumn.draft = false"
+            @click="
+              ;(hideShowColumn.inbox = true),
+                (hideShowColumn.script = hideShowColumn.draft = false)
+            "
             v-if="!hideShowColumn.inbox"
             class="dark:text-white bg-transparent transition-colors w-6"
           />
           <MinusIcon
             class="dark:text-white bg-transparent transition-colors w-6"
-            @click="hideShowColumn.inbox = false, hideShowColumn.draft =true"
+            @click="
+              ;(hideShowColumn.inbox = false), (hideShowColumn.draft = true)
+            "
             v-else
           />
         </ListActionButton>
       </div>
       <inbox
-      :podcastId = "podcastId"
-      :docname = "docname"
-      @draggedInbox = "draggedInbox"
-      @delete="events.onClickInboxDelete"
+        :podcastId="podcastId"
+        :docname="docname"
+        @draggedInbox="draggedInbox"
+        @delete="events.onClickInboxDelete"
       />
     </div>
-    <div class="px-4 column-h overflow-y-auto" id="draft-column" :class="{'col-span-3':hideShowColumn.draft}">
+    <div
+      class="px-4 column-h overflow-y-auto"
+      id="draft-column"
+      :class="{ 'col-span-3': hideShowColumn.draft }"
+    >
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Draft</h2>
-        <ListActionButton 
-          title="toggle draft expansion"
-        >
+        <ListActionButton title="toggle draft expansion">
           <PlusIcon
-            @click="hideShowColumn.draft = true,hideShowColumn.script= hideShowColumn.inbox = false"
+            @click="
+              ;(hideShowColumn.draft = true),
+                (hideShowColumn.script = hideShowColumn.inbox = false)
+            "
             v-if="!hideShowColumn.draft"
             class="dark:text-white bg-transparent transition-colors w-6"
           />
           <MinusIcon
             class="dark:text-white bg-transparent transition-colors w-6"
-            @click="hideShowColumn.draft = false, hideShowColumn.inbox =true"
+            @click="
+              ;(hideShowColumn.draft = false), (hideShowColumn.inbox = true)
+            "
             v-else
           />
-      </ListActionButton>
+        </ListActionButton>
       </div>
       <section
         v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
         :key="slot"
         :slotno="slot"
       >
-      <div class="flex items-center justify-between">
-        <SlotTitleInput
-          v-model="itemStore.getSlotTitleList[slot]"
-          :slotno="slot"
-          :updateEvent="events.onUpdateSaveDoc"
-        />
-        <span class="relative flex">
-          <button title="Copy Slot item" @click="copySlotText(slot)" class=" text-white font-bold p-2 rounded transition-colors">
-            <ClipboardCopyIcon class="h-6 w-6 text-black" />
-            <div class="rounded-md absolute bottom-10 w-fit right-1 text-white bg-black p-1 border-radius" v-if="showTooltip[slot]">Copied</div>
-          </button>
-        </span>
-      </div>
+        <div class="flex items-center justify-between">
+          <SlotTitleInput
+            v-model="itemStore.getSlotTitleList[slot]"
+            :slotno="slot"
+            :updateEvent="events.onUpdateSaveDoc"
+          />
+          <span class="relative flex">
+            <button
+              title="Copy Slot item"
+              @click="copySlotText(slot)"
+              class="text-white font-bold p-2 rounded transition-colors"
+            >
+              <ClipboardCopyIcon class="h-6 w-6 text-black" />
+              <div
+                class="
+                  rounded-md
+                  absolute
+                  bottom-10
+                  w-fit
+                  right-1
+                  text-white
+                  bg-black
+                  p-1
+                  border-radius
+                "
+                v-if="showTooltip[slot]"
+              >
+                Copied
+              </div>
+            </button>
+          </span>
+        </div>
         <InputCard @save="events.onClickSave" :slot="slot" />
         <List>
-          <template v-for="item in itemStore.getSlotList(slot).reverse()" :key="item.id">
+          <template
+            v-for="item in itemStore.getSlotList(slot).reverse()"
+            :key="item.id"
+          >
             <ListItem>
               <ItemCard
                 :item="item"
@@ -75,56 +110,48 @@
                 @share="events.onClickShare"
                 @update="events.onClickUpdate"
                 @dragged="dragged"
+                @draggedDraft="draggedDraft"
               />
             </ListItem>
           </template>
         </List>
       </section>
     </div>
-    <div class="px-4 column-h overflow-y-auto" id="script-column" :class="{'col-span-3':hideShowColumn.script}">
+    <div
+      class="px-4 column-h overflow-y-auto"
+      id="script-column"
+      :class="{ 'col-span-3': hideShowColumn.script }"
+    >
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Script</h2>
-        <ListActionButton 
-          title="toggle script expansion"
-        >
+        <ListActionButton title="toggle script expansion">
           <PlusIcon
-            @click="hideShowColumn.script = true,hideShowColumn.draft= hideShowColumn.inbox = false"
+            @click="
+              ;(hideShowColumn.script = true),
+                (hideShowColumn.draft = hideShowColumn.inbox = false)
+            "
             v-if="!hideShowColumn.script"
             class="dark:text-white bg-transparent transition-colors w-6"
           />
           <MinusIcon
             class="dark:text-white bg-transparent transition-colors w-6"
-            @click="hideShowColumn.script = false, hideShowColumn.inbox =true"
+            @click="
+              ;(hideShowColumn.script = false), (hideShowColumn.inbox = true)
+            "
             v-else
           />
-      </ListActionButton>
+        </ListActionButton>
       </div>
       <div class="mt-10" id="script-data">
-         <ScriptInput
-          v-model="title"
-          placeholder="Title"
-          :updateEvent="events.onUpdateSaveDoc"
-        />
-         <ScriptInput
-          v-model="special_day"
-          placeholder="Special Days"
-          :updateEvent="events.onUpdateSaveDoc"
-        />
-         <ScriptInput
-          v-model="birthdays"
-          placeholder="Birthdays"
-          :updateEvent="events.onUpdateSaveDoc"
-        />
         <div
-        v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
-        :key="slot"
+          v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
+          :key="slot"
         >
           <Scripts
             class="my-5"
             :slotno="slot"
             @save="events.onClickScriptsSave"
           />
-           
         </div>
       </div>
     </div>
@@ -145,7 +172,6 @@ import Inbox from "@/components/Inbox.vue"
 import ItemCard from "@/components/molecules/Cards/ItemCard.vue"
 import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
-import ScriptInput from "@/components/atoms/ScriptInput.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
 import { PlusIcon, MinusIcon, ClipboardCopyIcon } from "@heroicons/vue/outline"
 import Scripts from "@/components/Script.vue"
@@ -164,45 +190,73 @@ const props = defineProps({
     type: String,
     default: "smart7",
   },
-  date:{
+  date: {
     type: String,
     default: new Date(new Date().setDate(new Date().getDate() + 1))
-    .toISOString()
-    .split("T")[0],
-  }
+      .toISOString()
+      .split("T")[0],
+  },
 })
 
 const showTooltip = ref(Array.from({ length: 7 }, (_, i) => false))
 // @TODO: work with todays date
-const docname:any = ref(props.date)
+const docname: any = ref(props.date)
 const hideShowColumn = reactive({
   inbox: false,
   draft: true,
-  script:false
+  script: false,
 })
 
 const draggedInbox = (x: number, y: number, text: string, key: string) => {
   const slot = <Item["slot"]>parseInt(
-    <string>// @ts-ignore
-    document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
+    <
+      string // @ts-ignore
+    >document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
   )
 
-  if(slot) {
+  if (slot) {
     itemStore.addItem({ text, slot }, props.podcastId, docname)
     shareStore.removeDraggedItem(text, props.podcastId, key)
     shareStore.connect(props.podcastId)
   }
 }
+const draggedDraft = (x: number, y: number, text: string, key: string) => {
+  const slot = <Item["slot"]>parseInt(
+    <
+      string // @ts-ignore
+    >document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
+  )
+  if (slot) {
+    let params: any = {
+      slot: slot,
+      label: text,
+      clipField: {
+        clip_url: "",
+        in_time: "",
+        in_msg: "",
+        out_time: "",
+        out_msg: "",
+      },
+    }
+    itemStore.addScriptItem(params, props.podcastId)
+    shareStore.connect(props.podcastId)
+  }
+}
 
 const dragged = (x: number, y: number, item: Item) => {
+  
   const slot = <Item["slot"]>parseInt(
-    <string>// @ts-ignore
-    document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
+    <
+      string // @ts-ignore
+    >document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
   )
 
-  const scriptColumn = document.elementFromPoint(x, y)?.closest("div #script-column")
+console.log(x, y, 'sloooooot')
+  const scriptColumn = document
+    .elementFromPoint(x, y)
+    ?.closest("div #script-column")
 
- if (scriptColumn) {
+  if (scriptColumn) {
     hideShowColumn.script = true
     hideShowColumn.inbox = hideShowColumn.draft = false
   } else {
@@ -210,17 +264,17 @@ const dragged = (x: number, y: number, item: Item) => {
     hideShowColumn.script = hideShowColumn.inbox = false
   }
 
-  if(slot && slot === item.slot){
-    const id =
-    <string>// @ts-ignore
-     document.elementFromPoint(x, y)?.attributes["data-id"]?.value
-    
-    if(id){
-      const slotItem =itemStore.getList
-      const index1 = slotItem.findIndex(ele => ele.id === item.id);
-      const index2 = slotItem.findIndex(ele => ele.id === id);
-      const data= moveArrayItemToNewIndex(slotItem, index1, index2);
-      itemStore.updateSlotItem(data,props.podcastId, docname.value);
+  if (slot && slot === item.slot) {
+    const id = <
+      string // @ts-ignore
+    >document.elementFromPoint(x, y)?.attributes["data-id"]?.value
+
+    if (id) {
+      const slotItem = itemStore.getList
+      const index1 = slotItem.findIndex((ele) => ele.id === item.id)
+      const index2 = slotItem.findIndex((ele) => ele.id === id)
+      const data = moveArrayItemToNewIndex(slotItem, index1, index2)
+      itemStore.updateSlotItem(data, props.podcastId, docname.value)
     }
   }
   if (slot) {
@@ -229,16 +283,20 @@ const dragged = (x: number, y: number, item: Item) => {
   }
 }
 
-const moveArrayItemToNewIndex= (arr: any, old_index: number, new_index: number) =>{
+const moveArrayItemToNewIndex = (
+  arr: any,
+  old_index: number,
+  new_index: number,
+) => {
   if (new_index >= arr.length) {
-    var k = new_index - arr.length + 1;
+    var k = new_index - arr.length + 1
     while (k--) {
-      arr.push(undefined);
+      arr.push(undefined)
     }
   }
-  arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
-  return arr; 
-};
+  arr.splice(new_index, 0, arr.splice(old_index, 1)[0])
+  return arr
+}
 
 const connect = () => {
   if (initiated.value) itemStore.connect(props.podcastId, docname.value)
@@ -247,7 +305,7 @@ watch(
   () => route.params,
   (toParams, previousParams) => {
     docname.value = toParams.date
-   if (toParams.date) connect(); 
+    if (toParams.date) connect()
   },
 )
 
@@ -270,19 +328,22 @@ watch(() => props.podcastId, connect, {
 
 const copySlotText = (slot: number) => {
   const itemData = itemStore.getSlotList(slot).reverse()
-  let textValue = ''
+  let textValue = ""
   itemData.map((el) => {
-    if(el.text) {
-      textValue += el.text.replace(/&nbsp;/g," ").replace(/<br\s*[\/]?>/g, "\r\n").replace(/(<([^>]+)>)/g, "")
+    if (el.text) {
+      textValue += el.text
+        .replace(/&nbsp;/g, " ")
+        .replace(/<br\s*[\/]?>/g, "\r\n")
+        .replace(/(<([^>]+)>)/g, "")
       textValue += "\r\n\n"
     }
   })
   navigator.clipboard.writeText(textValue)
-  if(textValue){
-    showTooltip.value[slot] =true
+  if (textValue) {
+    showTooltip.value[slot] = true
     setTimeout(() => {
       showTooltip.value[slot] = false
-    }, 500);
+    }, 500)
   }
 }
 
@@ -297,12 +358,12 @@ const events = {
     itemStore.saveData(props.podcastId, docname.value)
   },
   onClickDelete(item: Item) {
-    if (window.confirm('Are you sure?')) {
+    if (window.confirm("Are you sure?")) {
       itemStore.removeItem(item, props.podcastId, docname.value)
     }
   },
-  onClickInboxDelete(text :string , podcastId: string) {
-    if (window.confirm('Are you sure?')) {
+  onClickInboxDelete(text: string, podcastId: string) {
+    if (window.confirm("Are you sure?")) {
       itemStore.removeInboxItem(text, podcastId, podcastId)
     }
   },

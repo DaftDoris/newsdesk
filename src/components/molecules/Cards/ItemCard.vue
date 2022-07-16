@@ -5,6 +5,7 @@
     class="handle flex justify-between items-center"
     :draggable="dropzone"
     @dragend="dropped"
+    @draggedDraft="draggedDraft($event, text, podcastId)"
     @mousemove="selectedText"
   >
     <component
@@ -107,6 +108,11 @@ const dropped = (e: DragEvent) => {
     emits("dragged", e.clientX, e.clientY, props.item)
   }
 }
+const draggedDraft = (e: DragEvent) => {
+  if (dropzone.value) {
+    emits("draggedDraft", e.clientX, e.clientY, props.item)
+  }
+}
 
 const getItemText = (itemText: string) => {
   let replacedText
@@ -145,7 +151,7 @@ const getPodcastToShare = (item: Item) => {
   emits("share", item, podcastNameToShare.value)
 }
 
-const emits = defineEmits(["delete", "update", "save", "dragged", "share"])
+const emits = defineEmits(["delete", "update", "save", "dragged", "share", "draggedDraft"])
 </script>
 
 <style scoped lang="scss">
