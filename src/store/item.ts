@@ -16,7 +16,7 @@ import { db } from "@/plugins/firebase"
 
 interface State {
   itemList: Item[]
-  scriptItemList: Item[]
+  scriptItemList: any[]
   slotTitleList: string[]
 }
 
@@ -29,16 +29,16 @@ export const useItemStore = defineStore("item", {
   actions: {
     async addItem(params: Item, podcastname: string, docname: string) {
       const id = nanoid()
-      const item: Item = { ...params, id }
+      const item: Item = {...params, id }
       this.itemList.push(item)
       this.saveData(podcastname, docname)
     },
-    async addScriptItem(params: Item) {
-      // const id = nanoid()
-      // const item: Item = { ...params, id }
-      console.log(params, 'this.scriptItemList')
-      this.scriptItemList.push(params)
-      // this.saveScriptData(podcastname, docname)
+    async addScriptItem(params: Item, podCastName: string) {
+      const id = nanoid()
+      const item: Item = { ...params, id }
+      let newDocName = JSON.stringify(item)
+      this.scriptItemList.push(item)
+      this.saveScriptData(podCastName, newDocName)
     },
 
     async updateSlotItem(item: [], podcastname: string, docname: string) {
@@ -99,7 +99,7 @@ export const useItemStore = defineStore("item", {
       }
     },
     async saveScriptData(podcastname: string, docname: string) {
-      const docRef = doc(collection(db, podcastname), docname)
+      const docRef = doc(collection(db, podcastname), 'script')
       try {
         return await updateDoc(docRef, {
           items: this.scriptItemList
@@ -133,6 +133,6 @@ export const useItemStore = defineStore("item", {
       return (slot: number) =>
         state.itemList.filter((item) => item.slot === slot)
     },
-    getScriptList: (state: State) => state.scriptItemList
+    getScriptList: (state: State) => state.itemList
   },
 })
