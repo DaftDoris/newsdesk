@@ -12,18 +12,13 @@
         <h2 class="text-2xl dark:text-white">Inbox</h2>
         <ListActionButton title="toggle inbox expansion">
           <PlusIcon
-            @click="
-              ;(hideShowColumn.inbox = true),
-                (hideShowColumn.script = hideShowColumn.draft = false)
-            "
+            @click="hideShowColumn.inbox = true,hideShowColumn.script = hideShowColumn.draft = false"
             v-if="!hideShowColumn.inbox"
             class="dark:text-white bg-transparent transition-colors w-6"
           />
           <MinusIcon
             class="dark:text-white bg-transparent transition-colors w-6"
-            @click="
-              ;(hideShowColumn.inbox = false), (hideShowColumn.draft = true)
-            "
+            @click="hideShowColumn.inbox = false,hideShowColumn.draft = true"
             v-else
           />
         </ListActionButton>
@@ -44,18 +39,13 @@
         <h2 class="text-2xl dark:text-white">Draft</h2>
         <ListActionButton title="toggle draft expansion">
           <PlusIcon
-            @click="
-              ;(hideShowColumn.draft = true),
-                (hideShowColumn.script = hideShowColumn.inbox = false)
-            "
+            @click="hideShowColumn.draft = true,hideShowColumn.script = hideShowColumn.inbox = false"
             v-if="!hideShowColumn.draft"
             class="dark:text-white bg-transparent transition-colors w-6"
           />
           <MinusIcon
             class="dark:text-white bg-transparent transition-colors w-6"
-            @click="
-              ;(hideShowColumn.draft = false), (hideShowColumn.inbox = true)
-            "
+            @click="hideShowColumn.draft = false,hideShowColumn.inbox = true"
             v-else
           />
         </ListActionButton>
@@ -126,18 +116,13 @@
         <h2 class="text-2xl dark:text-white">Script</h2>
         <ListActionButton title="toggle script expansion">
           <PlusIcon
-            @click="
-              ;(hideShowColumn.script = true),
-                (hideShowColumn.draft = hideShowColumn.inbox = false)
-            "
+            @click="hideShowColumn.script = true,hideShowColumn.draft = hideShowColumn.inbox = false"
             v-if="!hideShowColumn.script"
             class="dark:text-white bg-transparent transition-colors w-6"
           />
           <MinusIcon
             class="dark:text-white bg-transparent transition-colors w-6"
-            @click="
-              ;(hideShowColumn.script = false), (hideShowColumn.inbox = true)
-            "
+            @click="hideShowColumn.script = false,hideShowColumn.inbox = true"
             v-else
           />
         </ListActionButton>
@@ -147,11 +132,15 @@
           v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
           :key="slot"
         >
+       
+        
           <Scripts
             class="my-5"
             :slotno="slot"
+            :clipFieldData="itemStore.getScriptList(slot)"
             @save="events.onClickScriptsSave"
           />
+        
         </div>
       </div>
     </div>
@@ -182,7 +171,7 @@ const itemStore = useItemStore()
 const shareStore = useShareStore()
 const initiated = ref(false)
 const route = useRoute()
-
+const scriptList = itemStore.getScriptListData()
 const { user, isAuthenticated } = storeToRefs(authStore)
 
 const props = defineProps({
@@ -206,7 +195,6 @@ const hideShowColumn = reactive({
   draft: true,
   script: false,
 })
-
 const draggedInbox = (x: number, y: number, text: string, key: string) => {
   const slot = <Item["slot"]>parseInt(
     <
@@ -251,7 +239,6 @@ const dragged = (x: number, y: number, item: Item) => {
     >document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
   )
 
-console.log(x, y, 'sloooooot')
   const scriptColumn = document
     .elementFromPoint(x, y)
     ?.closest("div #script-column")
@@ -352,7 +339,8 @@ const events = {
     itemStore.addItem({ text, slot }, props.podcastId, docname.value)
   },
   onClickScriptsSave(params: any, slotno: string) {
-    itemStore.addScriptItem(params, props.podcastId, slotno)
+    let data:any =  {clipField: params}
+    itemStore.addScriptItem(data, props.podcastId, slotno)
   },
   onUpdateSaveDoc() {
     itemStore.saveData(props.podcastId, docname.value)

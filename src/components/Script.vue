@@ -4,14 +4,14 @@
       {{ slotno }} :
       <span @click="updateClipField" class="text-gray-400 flex justify-between  items-center w-11/12">{{ slotno }} title <VolumeUpIcon class="h-8"  /></span>
     </label>
-    <div >
-    <span v-for="(itemIn, index) in items" :key="index">
+    <div v-for="(itemMain, index) in clipFieldData" :key="index">
+    <span v-for="(itemIn, indexNew) in itemMain.clipField" :key="indexNew">
      <Input
       v-model="itemIn.label"
       :placeholder="`Enter things into ${slotno}...`"
       @keydown.enter.exact.prevent="save"
     />
-    <ClipField :index="index" :clipField="itemIn?.clipField" @delete="deleteClip"></ClipField>
+    <ClipField :index="indexNew" :clipField="itemIn?.clipField" @delete="deleteClip"></ClipField>
     </span>
     </div>
     
@@ -33,17 +33,14 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
+  clipFieldData: {
+    type: Object,
+    default: null,
+  },
 })
 const emits = defineEmits(['save', 'dragged'])
-const items = ref([{label:'', clipField :{
-   clip_url : "",
-   in_time : "",
-   in_msg : "",
-   out_time : "",
-   out_msg : ""
-}}])
 const updateClipField = () => {
-  items.value.push({label:'', clipField :{
+  props.clipFieldData[0].clipField.push({label:'', clipField :{
    clip_url : "",
    in_time : "",
    in_msg : "",
@@ -52,7 +49,7 @@ const updateClipField = () => {
 }})
 }
 const deleteClip = (setIndex:any) => {
-  items.value.splice(setIndex, 1)
+  props.clipFieldData[0].clipField.splice(setIndex, 1)
 
 }
 

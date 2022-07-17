@@ -6,6 +6,7 @@ import {
   collection,
   doc,
   setDoc,
+  getDoc,
   onSnapshot,
   updateDoc,
   arrayUnion,
@@ -29,13 +30,13 @@ export const useItemStore = defineStore("item", {
   actions: {
     async addItem(params: Item, podcastname: string, docname: string) {
       const id = nanoid()
-      const item: Item = {...params, id }
+      const item: Item = { ...params, id }
       this.itemList.push(item)
       this.saveData(podcastname, docname)
     },
     async addScriptItem(params: Item, podCastName: string, slot: any) {
       const id = nanoid()
-      const item: Item = { ...params, slot, id}
+      const item: Item = { ...params, slot, id }
       let newDocName = JSON.stringify(item)
       this.scriptItemList.push(item)
       this.saveScriptData(podCastName, newDocName)
@@ -114,7 +115,18 @@ export const useItemStore = defineStore("item", {
       }
 
     },
-
+    async getScriptListData() {
+      const docRef = doc(db, "dev", "script");
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        this.scriptItemList = (docSnap.data()?.items ?? []) as Item[]
+        return docSnap.data()
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    },
     connect(podcastname: string, docname: string) {
       onSnapshot(doc(db, podcastname, docname), (doc) => {
         this.slotTitleList = (
@@ -134,6 +146,9 @@ export const useItemStore = defineStore("item", {
       return (slot: number) =>
         state.itemList.filter((item) => item.slot === slot)
     },
-    getScriptList: (state: State) => state.itemList
+    getScriptList: (state) => {
+      return (slot: number) =>
+        state.scriptItemList.filter((item) => item.slot === slot)
+    },
   },
 })
