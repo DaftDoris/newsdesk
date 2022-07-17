@@ -101,19 +101,16 @@
       </div>
       <div class="mt-10" id="script-data">
          <ScriptInput
-          :value="itemStore.title"
           placeholder="Title"
-          @save="events.saveInput"
+          @save="events.saveInputTitle"
         />
          <ScriptInput
-          :value="itemStore.special_day"
           placeholder="Special Days"
-          @save="events.saveInput"
+          @save="events.saveInputSpecialDay"
         />
          <ScriptInput
-          :value="itemStore.birthdays"
           placeholder="Birthdays"
-          @save="events.saveInput"
+          @save="events.saveInputBirthdays"
         />
         <div
         v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
@@ -155,6 +152,7 @@ const itemStore = useItemStore()
 const shareStore = useShareStore()
 const initiated = ref(false)
 const route = useRoute()
+
 
 const { user, isAuthenticated } = storeToRefs(authStore)
 
@@ -292,8 +290,14 @@ const events = {
   onUpdateSaveDoc() {
     itemStore.saveData(props.podcastId, docname.value)
   },
-  saveInput() {
-    itemStore.saveInputData(props.podcastId)
+  saveInputTitle(data:any) {
+    itemStore.saveInputTitleData(props.podcastId, data)
+  },
+  saveInputSpecialDay(data:any) {
+    itemStore.saveInputSpecialDayData(props.podcastId, data)
+  },
+  saveInputBirthdays(data:any) {
+    itemStore.saveInputBirthdaysData(props.podcastId, data)
   },
   onClickDelete(item: Item) {
     if (window.confirm('Are you sure?')) {

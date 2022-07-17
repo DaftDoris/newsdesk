@@ -3,14 +3,14 @@
     <input
       class="input break-all max-w-full"
       :placeholder="placeholder"
-      v-model="value"
+      v-model="text"
 @keydown.enter.exact.prevent="save"
     />
   </label>
 </template>
 
 <script lang="ts" setup>
-
+import { ref } from "vue"
 const props = defineProps({
   placeholder: {
     type: String,
@@ -22,9 +22,11 @@ const props = defineProps({
   },
 })
 
+const text = ref<string>('')
+
 const emits = defineEmits(['save'])
 const save = () => {
-  emits("save")
+  emits("save", text.value)
 }
 </script>
 
