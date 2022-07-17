@@ -5,7 +5,6 @@
     class="handle flex justify-between items-center"
     :draggable="dropzone"
     @dragend="dropped"
-    @draggedDraft="draggedDraft($event, text, podcastId)"
     @mousemove="selectedText"
   >
     <component

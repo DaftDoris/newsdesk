@@ -55,7 +55,7 @@ const deleteClip = (setIndex:any) => {
 
 const text = ref<string>('')
 const save = () => {
-  emits('save', items.value, props.slotno)
+  emits('save', props.clipFieldData, props.slotno)
 }
 </script>
 
