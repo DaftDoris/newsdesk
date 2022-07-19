@@ -16,13 +16,15 @@ import { db } from "@/plugins/firebase"
 
 interface State {
   itemList: Item[]
-  slotTitleList: string[]
+  slotTitleList: string[],
+  slotList: string[],
 }
 
 export const useItemStore = defineStore("item", {
   state: (): State => ({
     itemList: [],
     slotTitleList: [],
+    slotList: [],
   }),
   actions: {
     async addItem(params: Item, podcastname: string, docname: string) {
@@ -32,6 +34,12 @@ export const useItemStore = defineStore("item", {
       this.saveData(podcastname, docname)
     },
 
+    async setItemToSlot(item: any, slot: number) {
+      this.slotList[slot] = item;
+    },
+    async getSlotItem() {
+      return await this.slotList.filter(item => item !== null);
+    },
     async updateSlotItem(item: [], podcastname: string, docname: string) {
       this.itemList = item
       this.saveData(podcastname, docname)

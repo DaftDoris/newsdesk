@@ -99,6 +99,9 @@
           />
       </ListActionButton>
       </div>
+      <div class="">
+        Clips: <span id="totalClipTime">{{ totalClipTime }}</span>
+      </div>
       <div class="mt-20" id="script-data">
         <div
         v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
@@ -108,6 +111,7 @@
             class="my-5"
             :slotno="slot"
             @save="events.onClickSave"
+            @change="checkUpdate(slot)"
           />
         </div>
       </div>
@@ -139,6 +143,8 @@ const itemStore = useItemStore()
 const shareStore = useShareStore()
 const initiated = ref(false)
 const route = useRoute()
+let totalClipTime: string = '00:00';
+const slotItems: any = [];
 
 const { user, isAuthenticated } = storeToRefs(authStore)
 
@@ -175,6 +181,37 @@ const draggedInbox = (x: number, y: number, text: string, key: string) => {
     shareStore.removeDraggedItem(text, props.podcastId, key)
     shareStore.connect(props.podcastId)
   }
+}
+
+const checkUpdate = async (slot: any) => {
+  let items: any = await itemStore.getSlotItem();
+  let currentItem = items[0].value;
+  slotItems[slot] = {
+    slot: `${props.podcastId}-script-${slot}`,
+    items: currentItem
+  };
+  await updateClipTime();
+}
+
+const updateClipTime = async () => {
+  let totalClipSeconds = 0;
+  slotItems.forEach(async (item: any) => {
+    item.items.forEach(async (element: any) => {
+      const clipField = element.clipField;
+      // change strint to minutes and seconds
+      const in_time = clipField.in_time.split(":");
+      const out_time = clipField.out_time.split(":");
+      const in_seconds = (parseInt(in_time[0]) * 60) + parseInt(in_time[1]);
+      const out_seconds = (parseInt(out_time[0]) * 60) + parseInt(out_time[1]);
+      let seconds = out_seconds - in_seconds;
+      if (!isNaN(seconds)) { totalClipSeconds += seconds }
+    });
+  });
+  const remainingSeconds = totalClipSeconds % 60;
+  const minutes = Math.floor(totalClipSeconds / 60);
+  totalClipTime = `${(minutes < 10)? "0" + minutes:minutes}:${(remainingSeconds < 10)? "0" + remainingSeconds : remainingSeconds}`;
+  let shoetime = document.getElementById("totalClipTime") as HTMLSpanElement;
+  shoetime.innerText = totalClipTime;
 }
 
 const dragged = (x: number, y: number, item: Item) => {

@@ -10,7 +10,7 @@
       :placeholder="`Enter things into ${slotno}...`"
       @keydown.enter.exact.prevent="save"
     />
-    <ClipField :index="index" :clipField="item?.clipField" @delete="deleteClip"></ClipField>
+    <ClipField :index="index" :clipField="item?.clipField" @delete="deleteClip" @change="updateClips(index, item?.clipField)"></ClipField>
     </span>
    
   </div>
@@ -21,7 +21,9 @@ import { watch, ref, reactive, onMounted } from "vue"
 import Input from '@/components/atoms/Input.vue'
 import ClipField from '@/components/atoms/ClipField.vue'
 import { VolumeUpIcon } from "@heroicons/vue/outline"
+import { useItemStore } from "@/store/item"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+const itemStore = useItemStore()
 const props = defineProps({
   slotno: {
     type: Number,
@@ -48,6 +50,11 @@ const updateClipField = () => {
 const deleteClip = (setIndex:any) => {
   items.value.splice(setIndex, 1)
 
+}
+
+const updateClips = (setIndex:any, clipField:any) => {
+  items.value[setIndex].clipField = clipField;
+  itemStore.setItemToSlot(items, setIndex)
 }
 
 const text = ref<string>('')
