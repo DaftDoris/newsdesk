@@ -8,7 +8,6 @@
      <Input
       v-model="item.label"
       :placeholder="`Enter things into ${slotno}...`"
-      @keydown.enter.exact.prevent="save"
     />
     <ClipField :index="index" :clipField="item?.clipField" @delete="deleteClip"></ClipField>
     </span>
@@ -51,10 +50,7 @@ const deleteClip = (setIndex:any) => {
 }
 
 const text = ref<string>('')
-const save = () => {
-  emits('save', text.value, props.slotno)
-  text.value = ''
-}
+
 </script>
 
 <style scoped lang="scss">
