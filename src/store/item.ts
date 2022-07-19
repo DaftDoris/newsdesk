@@ -36,7 +36,7 @@ export const useItemStore = defineStore("item", {
     },
     async addScriptItem(params: Item, podCastName: string, slot: any) {
       const id = nanoid()
-      const item: Item = { ...params, slot, id }
+      const item: any = { params, slot, id }
       const newDocName : string = JSON.stringify(item)
       this.scriptItemList.push(item)
       this.saveScriptData(podCastName, newDocName)

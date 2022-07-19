@@ -100,7 +100,6 @@
                 @share="events.onClickShare"
                 @update="events.onClickUpdate"
                 @dragged="dragged"
-                @draggedDraft="draggedDraft"
               />
             </ListItem>
           </template>
@@ -208,28 +207,6 @@ const draggedInbox = (x: number, y: number, text: string, key: string) => {
     shareStore.connect(props.podcastId)
   }
 }
-const draggedDraft = (x: number, y: number, text: string, key: string) => {
-  const slot = <Item["slot"]>parseInt(
-    <
-      string // @ts-ignore
-    >document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
-  )
-  if (slot) {
-    let params: any = {
-      slot: slot,
-      label: text,
-      clipField: {
-        clip_url: "",
-        in_time: "",
-        in_msg: "",
-        out_time: "",
-        out_msg: "",
-      },
-    }
-    itemStore.addScriptItem(params, props.podcastId, slot)
-    shareStore.connect(props.podcastId)
-  }
-}
 
 const dragged = (x: number, y: number, item: Item) => {
   
@@ -246,6 +223,20 @@ const dragged = (x: number, y: number, item: Item) => {
   if (scriptColumn) {
     hideShowColumn.script = true
     hideShowColumn.inbox = hideShowColumn.draft = false
+     const data: any = [{
+      label: item.text,
+      clipField: {
+        clip_url: "",
+        in_time: "",
+        in_msg: "",
+        out_time: "",
+        out_msg: "",
+      },
+    }]
+    
+    itemStore.addScriptItem(data, props.podcastId, item.slot)
+    itemStore.getScriptListData()
+
   } else {
     hideShowColumn.draft = true
     hideShowColumn.script = hideShowColumn.inbox = false

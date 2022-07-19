@@ -4,8 +4,9 @@
       {{ slotno }} :
       <span @click="updateClipField" class="text-gray-400 flex justify-between  items-center w-11/12">{{ slotno }} title <VolumeUpIcon class="h-8"  /></span>
     </label>
+    
     <div v-for="(itemMain, index) in clipFieldData" :key="index">
-    <span v-for="(itemIn, indexNew) in itemMain.clipField" :key="indexNew">
+    <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
      <Input
       v-model="itemIn.label"
       :placeholder="`Enter things into ${slotno}...`"
@@ -40,7 +41,7 @@ const props = defineProps({
 })
 const emits = defineEmits(['save', 'dragged'])
 const updateClipField = () => {
-  props.clipFieldData[0].clipField.push({label:'', clipField :{
+  props.clipFieldData[0].params.push({label:'', clipField :{
    clip_url : "",
    in_time : "",
    in_msg : "",
@@ -49,13 +50,13 @@ const updateClipField = () => {
 }})
 }
 const deleteClip = (setIndex:any) => {
-  props.clipFieldData[0].clipField.splice(setIndex, 1)
+  props.clipFieldData[0].params.splice(setIndex, 1)
 
 }
 
 const text = ref<string>('')
 const save = () => {
-  emits('save', props.clipFieldData, props.slotno)
+  // emits('save', props.clipFieldData, props.slotno)
 }
 </script>
 
