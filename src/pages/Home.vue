@@ -170,7 +170,6 @@ const itemStore = useItemStore()
 const shareStore = useShareStore()
 const initiated = ref(false)
 const route = useRoute()
-const scriptList = itemStore.getScriptListData()
 const { user, isAuthenticated } = storeToRefs(authStore)
 
 const props = defineProps({
@@ -235,7 +234,7 @@ const dragged = (x: number, y: number, item: Item) => {
     }]
     
     itemStore.addScriptItem(data, props.podcastId, item.slot)
-    itemStore.getScriptListData()
+    itemStore.getScriptListData(props.podcastId)
 
   } else {
     hideShowColumn.draft = true
@@ -277,7 +276,8 @@ const moveArrayItemToNewIndex = (
 }
 
 const connect = () => {
-  if (initiated.value) itemStore.connect(props.podcastId, docname.value)
+  if (initiated.value){ itemStore.connect(props.podcastId, docname.value)}
+  itemStore.getScriptListData(props.podcastId)
 }
 watch(
   () => route.params,
@@ -302,6 +302,7 @@ watch(
 
 watch(() => props.podcastId, connect, {
   immediate: true,
+
 })
 
 const copySlotText = (slot: number) => {

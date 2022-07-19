@@ -115,14 +115,15 @@ export const useItemStore = defineStore("item", {
       }
 
     },
-    async getScriptListData() {
-      const docRef = doc(db, "dev", "script");
+    async getScriptListData(podcastId:string) {
+      const docRef = doc(db, podcastId, "script");
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
-        this.scriptItemList = (docSnap.data()?.items ?? []) as Item[]
+        this.scriptItemList = (docSnap.data().items ? docSnap.data().items : [])
         return docSnap.data()
       } else {
+        this.scriptItemList = []
         // doc.data() will be undefined in this case
         console.log("No such document!");
       }
