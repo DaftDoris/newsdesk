@@ -2,7 +2,7 @@
   <div class="border-2 script-section rounded-lg border-gray-400">
     <label class="w-full p-4 flex">
       {{ slotno }} :
-      <span @click="updateClipField" class="text-gray-400 flex justify-between  items-center w-11/12">{{ slotno }} title <VolumeUpIcon class="h-8"  /></span>
+      <span  class="text-gray-400 flex justify-between  items-center w-11/12">{{ slotno }} title <span @click="updateClipField"><VolumeUpIcon class="h-8"  /></span></span>
     </label>
     <span v-for="(item, index) in items" :key="index">
      <Input

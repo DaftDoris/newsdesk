@@ -99,10 +99,11 @@
           />
       </ListActionButton>
       </div>
-      <div class="">
+      
+      <div class="mt-20" id="script-data">
+        <div class="text-center font-bold text-lg">
         Clips: <span id="totalClipTime">{{ totalClipTime }}</span>
       </div>
-      <div class="mt-20" id="script-data">
         <div
         v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
         :key="slot"
