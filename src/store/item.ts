@@ -6,7 +6,6 @@ import {
   collection,
   doc,
   setDoc,
-  getDoc,
   onSnapshot,
   updateDoc,
   arrayUnion,
@@ -117,16 +116,15 @@ export const useItemStore = defineStore("item", {
     },
     async getScriptListData(podcastId:string) {
       const docRef = doc(db, podcastId, "script");
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-        this.scriptItemList = (docSnap.data().items ? docSnap.data().items : [])
-        return docSnap.data()
-      } else {
-        this.scriptItemList = []
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
-      }
+      onSnapshot(doc(db, podcastId, "script"), (doc) => {
+        if (doc.data()) {
+          this.scriptItemList = (doc.data()?.items ?? []) as Item[]
+          return doc.data()
+        } else {
+          this.scriptItemList = []
+        }
+      })
+     
     },
     connect(podcastname: string, docname: string) {
       onSnapshot(doc(db, podcastname, docname), (doc) => {
