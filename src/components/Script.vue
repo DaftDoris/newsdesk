@@ -4,40 +4,44 @@
       {{ slotno }} :
       <span @click="updateClipField" class="text-gray-400 flex justify-between  items-center w-11/12">{{ slotno }} title <VolumeUpIcon class="h-8"  /></span>
     </label>
-    <span v-for="(item, index) in items" :key="index">
+    
+    <div v-for="(itemMain, index) in clipFieldData" :key="index">
+    <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
      <Input
-      v-model="item.label"
+      v-model="itemIn.label"
       :placeholder="`Enter things into ${slotno}...`"
       @keydown.enter.exact.prevent="save"
     />
-    <ClipField :index="index" :clipField="item?.clipField" @delete="deleteClip"></ClipField>
+    <ClipField :index="indexNew" :clipField="itemIn?.clipField" @delete="deleteClip"></ClipField>
     </span>
+    </div>
+    
    
   </div>
 </template>
 
 <script lang="ts" setup>
 import { watch, ref, reactive, onMounted } from "vue"
+import { useItemStore } from "@/store/item"
+
 import Input from '@/components/atoms/Input.vue'
 import ClipField from '@/components/atoms/ClipField.vue'
 import { VolumeUpIcon } from "@heroicons/vue/outline"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+const itemStore = useItemStore()
 const props = defineProps({
   slotno: {
     type: Number,
     default: 1,
   },
+  clipFieldData: {
+    type: Object,
+    default: null,
+  },
 })
-const emits = defineEmits(['save'])
-const items = ref([{label:'', clipField :{
-   clip_url : "",
-   in_time : "",
-   in_msg : "",
-   out_time : "",
-   out_msg : ""
-}}])
+const emits = defineEmits(['save', 'dragged'])
 const updateClipField = () => {
-  items.value.push({label:'', clipField :{
+  props.clipFieldData[0].params.push({label:'', clipField :{
    clip_url : "",
    in_time : "",
    in_msg : "",
@@ -46,14 +50,13 @@ const updateClipField = () => {
 }})
 }
 const deleteClip = (setIndex:any) => {
-  items.value.splice(setIndex, 1)
+  props.clipFieldData[0].params.splice(setIndex, 1)
 
 }
 
 const text = ref<string>('')
 const save = () => {
-  emits('save', text.value, props.slotno)
-  text.value = ''
+  // emits('save', props.clipFieldData, props.slotno)
 }
 </script>
 
