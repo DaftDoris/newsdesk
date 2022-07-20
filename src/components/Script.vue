@@ -17,6 +17,7 @@
 </template>
 
 <script lang="ts" setup>
+import {arrayMoveImmutable} from 'array-move';
 import { watch, ref, reactive, onMounted } from "vue"
 import Input from '@/components/atoms/Input.vue'
 import ClipField from '@/components/atoms/ClipField.vue'
@@ -44,6 +45,9 @@ const updateClipField = () => {
    out_time : "",
    out_msg : ""
 }})
+}
+const moveClipfield = () => {
+  
 }
 const deleteClip = (setIndex:any) => {
   items.value.splice(setIndex, 1)
