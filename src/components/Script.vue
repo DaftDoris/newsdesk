@@ -12,7 +12,7 @@
       :placeholder="`Enter things into ${slotno}...`"
       @keydown.enter.exact.prevent="save"
     />
-    <ClipField :index="index" :clipField="item?.clipField" @delete="deleteClip" @change="updateClips(index, item?.clipField)"></ClipField>
+    <ClipField :index="indexNew" :clipField="itemIn?.clipField" @delete="deleteClip" @change="updateClips(indexNew, itemIn?.clipField)"></ClipField>
 
     </span>
     </div>
@@ -28,7 +28,6 @@ import { useItemStore } from "@/store/item"
 import Input from '@/components/atoms/Input.vue'
 import ClipField from '@/components/atoms/ClipField.vue'
 import { VolumeUpIcon } from "@heroicons/vue/outline"
-import { useItemStore } from "@/store/item"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const itemStore = useItemStore()
 const props = defineProps({
@@ -56,9 +55,8 @@ const deleteClip = (setIndex:any) => {
 
 }
 
-const updateClips = (setIndex:any, clipField:any) => {
-  items.value[setIndex].clipField = clipField;
-  itemStore.setItemToSlot(items, setIndex)
+const updateClips = (setIndex:number, clipField:any) => {
+  itemStore.setItemToSlot(clipField, setIndex)
 }
 
 const text = ref<string>('')
