@@ -13,7 +13,10 @@
       @keydown.enter.exact.prevent="save"
     />
     <ClipField :index="indexNew" :clipField="itemIn?.clipField" @delete="deleteClip" @change="updateClips(indexNew, itemIn?.clipField)"></ClipField>
+<<<<<<< HEAD
 
+=======
+>>>>>>> e32a643
     </span>
     </div>
     
@@ -56,7 +59,8 @@ const deleteClip = (setIndex:any) => {
 }
 
 const updateClips = (setIndex:number, clipField:any) => {
-  itemStore.setItemToSlot(clipField, setIndex)
+  props.clipFieldData[0].params[setIndex].clipField = clipField;
+  itemStore.setItemToSlot(props.clipFieldData[0].params, props.slotno)
 }
 
 const text = ref<string>('')

@@ -126,9 +126,12 @@
           />
         </ListActionButton>
       </div>
+<<<<<<< HEAD
       
+=======
+>>>>>>> e32a643
       <div class="mt-20" id="script-data">
-        <div class="text-center font-bold text-lg">
+         <div class="text-center font-bold text-lg">
         Clips: <span id="totalClipTime">{{ totalClipTime }}</span>
       </div>
         <div
@@ -140,10 +143,9 @@
           <Scripts
             class="my-5"
             :slotno="slot"
-            @save="events.onClickSave"
-            @change="checkUpdate(slot)"
             :clipFieldData="itemStore.getScriptList(slot)"
-         
+            @save="events.onClickScriptsSave"
+            @change="checkUpdate(slot)"
           />
         
         </div>
@@ -176,11 +178,17 @@ const itemStore = useItemStore()
 const shareStore = useShareStore()
 const initiated = ref(false)
 const route = useRoute()
+<<<<<<< HEAD
 
 let totalClipTime: string = '00:00';
 const slotItems: any = [];
 
 
+=======
+let totalClipTime: string = '00:00';
+const slotItems: any = [];
+
+>>>>>>> e32a643
 const { user, isAuthenticated } = storeToRefs(authStore)
 
 const props = defineProps({
