@@ -13,10 +13,6 @@
       @keydown.enter.exact.prevent="save"
     />
     <ClipField :index="indexNew" :clipField="itemIn?.clipField" @delete="deleteClip" @change="updateClips(indexNew, itemIn?.clipField)"></ClipField>
-<<<<<<< HEAD
-
-=======
->>>>>>> e32a643
     </span>
     </div>
     
