@@ -2,6 +2,7 @@
   <label class="w-11/12">
     <input
       class="input break-all max-w-full"
+      :id="id"
       :placeholder="placeholder"
       v-model="text"
 @keydown.enter.exact.prevent="save"
@@ -17,6 +18,10 @@ const props = defineProps({
     default: null,
   },
   value: {
+    type: String,
+    default: null,
+  },
+  id: {
     type: String,
     default: null,
   },

@@ -237,6 +237,22 @@ describe("newsdesk logged in", () => {
       cy.get("#script-data span").should("contain", `${section} title`)
     }
   })
+  it("should be able to enter in input fields", () => {
+    switchPodCast("dev sandbox")
+    cy.get("#scriptTitleInput").type("Script Title Input{enter}", {
+      force: true,
+    })
+    cy.get("#scriptSpecialDaysInput").type("Script SpecialDays Input{enter}", {
+      force: true,
+    })
+    cy.get("#scriptBirthdaysInput").type("Script Birthdays Input{enter}", {
+      force: true,
+    })
+    cy.get("#scriptTitleInput").should("contain", "Script Title Input")
+    cy.get("#scriptSpecialDaysInput").should("contain", "Script SpecialDays Input")
+    cy.get("#scriptBirthdaysInput").should("contain", "Script Birthdays Input")
+   
+  })
 })
 
 import firebaseConfig from "../../firebase.json"

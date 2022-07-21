@@ -128,14 +128,17 @@
       </div>
       <div class="mt-10" id="script-data">
          <ScriptInput
+         id="scriptTitleInput"
           placeholder="Title"
           @save="events.saveInputTitle"
         />
          <ScriptInput
+         id="scriptSpecialDaysInput"
           placeholder="Special Days"
           @save="events.saveInputSpecialDay"
         />
          <ScriptInput
+         id="scriptBirthdaysInput"
           placeholder="Birthdays"
           @save="events.saveInputBirthdays"
         />
