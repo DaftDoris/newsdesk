@@ -152,7 +152,7 @@ const draggedInbox = (x: number, y: number, text: string, key: string) => {
 const removeItemFromSlot = async () => {
 
   if (localStorage.getItem("deleteClip") != null) {
-    const deleteClip = JSON.parse(localStorage.getItem("deleteClip"));
+    const deleteClip = JSON.parse(localStorage.getItem("deleteClip") || "");
     localStorage.removeItem("deleteClip");
     let slotitemData = slotItems[deleteClip.slotno].items;
     slotitemData.splice(deleteClip.index, 1);
