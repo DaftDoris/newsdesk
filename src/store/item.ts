@@ -43,11 +43,11 @@ export const useItemStore = defineStore("item", {
       this.saveScriptData(podCastName, newDocName)
     },
 
-    async setItemToSlot(item: any, slot: number) {
+    async setItemToSlot(item: any) {
       this.slotList = item;
     },
-    async getSlotItem() {
-      return await this.slotList.filter(item => item !== null);
+     getSlotItem() {
+      return this.slotList.filter(item => item !== null);
     },
     async updateSlotItem(item: [], podcastname: string, docname: string) {
       this.itemList = item

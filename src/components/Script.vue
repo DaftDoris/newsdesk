@@ -62,8 +62,6 @@ const deleteClip = (setIndex: any) => {
 
 const updateClips = (setIndex: number, clipField: any) => {
   console.log(setIndex, props.clipFieldData[0].params);
-
-  // props.clipFieldData[0].params[setIndex].clipField = clipField;
   const data = {
     label: props.clipFieldData[0].params[setIndex].label,
     clipField: clipField,
@@ -73,7 +71,7 @@ const updateClips = (setIndex: number, clipField: any) => {
     index: setIndex,
     data: data,
   }
-  itemStore.setItemToSlot(clipFieldData, props.slotno)
+  itemStore.setItemToSlot(clipFieldData)
 }
 
 const text = ref<string>("")
