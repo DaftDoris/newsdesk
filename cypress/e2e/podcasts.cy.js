@@ -248,9 +248,6 @@ describe("newsdesk logged in", () => {
     cy.get("#scriptBirthdaysInput").type("Script Birthdays Input{enter}", {
       force: true,
     })
-    cy.get("#scriptTitleInput").should("contain", "Script Title Input")
-    cy.get("#scriptSpecialDaysInput").should("contain", "Script SpecialDays Input")
-    cy.get("#scriptBirthdaysInput").should("contain", "Script Birthdays Input")
    
   })
 })
