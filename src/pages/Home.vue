@@ -1,75 +1,37 @@
 <template>
-  <main
-    v-show="initiated && isAuthenticated"
-    class="h-full grid grid-cols-5 gap-4 divide-x"
-  >
-    <div
-      class="px-4 column-h overflow-y-auto"
-      id="inbox-column"
-      :class="{ 'col-span-3': hideShowColumn.inbox }"
-    >
+  <main v-show="initiated && isAuthenticated" class="h-full grid grid-cols-5 gap-4 divide-x">
+    <div class="px-4 column-h overflow-y-auto" id="inbox-column" :class="{ 'col-span-3': hideShowColumn.inbox }">
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Inbox</h2>
         <ListActionButton title="toggle inbox expansion">
-          <PlusIcon
-            @click="hideShowColumn.inbox = true,hideShowColumn.script = hideShowColumn.draft = false"
-            v-if="!hideShowColumn.inbox"
-            class="dark:text-white bg-transparent transition-colors w-6"
-          />
-          <MinusIcon
-            class="dark:text-white bg-transparent transition-colors w-6"
-            @click="hideShowColumn.inbox = false,hideShowColumn.draft = true"
-            v-else
-          />
+          <PlusIcon @click="hideShowColumn.inbox = true, hideShowColumn.script = hideShowColumn.draft = false"
+            v-if="!hideShowColumn.inbox" class="dark:text-white bg-transparent transition-colors w-6" />
+          <MinusIcon class="dark:text-white bg-transparent transition-colors w-6"
+            @click="hideShowColumn.inbox = false, hideShowColumn.draft = true" v-else />
         </ListActionButton>
       </div>
-      <inbox
-        :podcastId="podcastId"
-        :docname="docname"
-        @draggedInbox="draggedInbox"
-        @delete="events.onClickInboxDelete"
-      />
+      <inbox :podcastId="podcastId" :docname="docname" @draggedInbox="draggedInbox"
+        @delete="events.onClickInboxDelete" />
     </div>
-    <div
-      class="px-4 column-h overflow-y-auto"
-      id="draft-column"
-      :class="{ 'col-span-3': hideShowColumn.draft }"
-    >
+    <div class="px-4 column-h overflow-y-auto" id="draft-column" :class="{ 'col-span-3': hideShowColumn.draft }">
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Draft</h2>
         <ListActionButton title="toggle draft expansion">
-          <PlusIcon
-            @click="hideShowColumn.draft = true,hideShowColumn.script = hideShowColumn.inbox = false"
-            v-if="!hideShowColumn.draft"
-            class="dark:text-white bg-transparent transition-colors w-6"
-          />
-          <MinusIcon
-            class="dark:text-white bg-transparent transition-colors w-6"
-            @click="hideShowColumn.draft = false,hideShowColumn.inbox = true"
-            v-else
-          />
+          <PlusIcon @click="hideShowColumn.draft = true, hideShowColumn.script = hideShowColumn.inbox = false"
+            v-if="!hideShowColumn.draft" class="dark:text-white bg-transparent transition-colors w-6" />
+          <MinusIcon class="dark:text-white bg-transparent transition-colors w-6"
+            @click="hideShowColumn.draft = false, hideShowColumn.inbox = true" v-else />
         </ListActionButton>
       </div>
-      <section
-        v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
-        :key="slot"
-        :slotno="slot"
-      >
+      <section v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)" :key="slot" :slotno="slot">
         <div class="flex items-center justify-between">
-          <SlotTitleInput
-            v-model="itemStore.getSlotTitleList[slot]"
-            :slotno="slot"
-            :updateEvent="events.onUpdateSaveDoc"
-          />
+          <SlotTitleInput v-model="itemStore.getSlotTitleList[slot]" :slotno="slot"
+            :updateEvent="events.onUpdateSaveDoc" />
           <span class="relative flex">
-            <button
-              title="Copy Slot item"
-              @click="copySlotText(slot)"
-              class="text-white font-bold p-2 rounded transition-colors"
-            >
+            <button title="Copy Slot item" @click="copySlotText(slot)"
+              class="text-white font-bold p-2 rounded transition-colors">
               <ClipboardCopyIcon class="h-6 w-6 text-black" />
-              <div
-                class="
+              <div class="
                   rounded-md
                   absolute
                   bottom-10
@@ -79,9 +41,7 @@
                   bg-black
                   p-1
                   border-radius
-                "
-                v-if="showTooltip[slot]"
-              >
+                " v-if="showTooltip[slot]">
                 Copied
               </div>
             </button>
@@ -89,65 +49,35 @@
         </div>
         <InputCard @save="events.onClickSave" :slot="slot" />
         <List>
-          <template
-            v-for="item in itemStore.getSlotList(slot).reverse()"
-            :key="item.id"
-          >
+          <template v-for="item in itemStore.getSlotList(slot).reverse()" :key="item.id">
             <ListItem>
-              <ItemCard
-                :item="item"
-                @delete="events.onClickDelete"
-                @share="events.onClickShare"
-                @update="events.onClickUpdate"
-                @dragged="dragged"
-              />
+              <ItemCard :item="item" @delete="events.onClickDelete" @share="events.onClickShare"
+                @update="events.onClickUpdate" @dragged="dragged" />
             </ListItem>
           </template>
         </List>
       </section>
     </div>
-    <div
-      class="px-4 column-h overflow-y-auto"
-      id="script-column"
-      :class="{ 'col-span-3': hideShowColumn.script }"
-    >
+    <div class="px-4 column-h overflow-y-auto" id="script-column" :class="{ 'col-span-3': hideShowColumn.script }">
       <div class="flex justify-between items-center">
         <h2 class="text-2xl dark:text-white">Script</h2>
         <ListActionButton title="toggle script expansion">
-          <PlusIcon
-            @click="hideShowColumn.script = true,hideShowColumn.draft = hideShowColumn.inbox = false"
-            v-if="!hideShowColumn.script"
-            class="dark:text-white bg-transparent transition-colors w-6"
-          />
-          <MinusIcon
-            class="dark:text-white bg-transparent transition-colors w-6"
-            @click="hideShowColumn.script = false,hideShowColumn.inbox = true"
-            v-else
-          />
+          <PlusIcon @click="hideShowColumn.script = true, hideShowColumn.draft = hideShowColumn.inbox = false"
+            v-if="!hideShowColumn.script" class="dark:text-white bg-transparent transition-colors w-6" />
+          <MinusIcon class="dark:text-white bg-transparent transition-colors w-6"
+            @click="hideShowColumn.script = false, hideShowColumn.inbox = true" v-else />
         </ListActionButton>
       </div>
-<<<<<<< HEAD
-      
-=======
->>>>>>> e32a643
       <div class="mt-20" id="script-data">
-         <div class="text-center font-bold text-lg">
-        Clips: <span id="totalClipTime">{{ totalClipTime }}</span>
-      </div>
-        <div
-          v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
-          :key="slot"
-        >
-       
-        
-          <Scripts
-            class="my-5"
-            :slotno="slot"
-            :clipFieldData="itemStore.getScriptList(slot)"
-            @save="events.onClickScriptsSave"
-            @change="checkUpdate(slot)"
-          />
-        
+        <div class="text-center font-bold text-lg">
+          Clips: <span id="totalClipTime">{{ totalClipTime }}</span>
+        </div>
+        <div v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)" :key="slot">
+
+
+          <Scripts class="my-5" :slotno="slot" :clipFieldData="itemStore.getScriptList(slot)"
+            @save="events.onClickScriptsSave" @change="checkUpdate(slot)" />
+
         </div>
       </div>
     </div>
@@ -178,17 +108,10 @@ const itemStore = useItemStore()
 const shareStore = useShareStore()
 const initiated = ref(false)
 const route = useRoute()
-<<<<<<< HEAD
 
-let totalClipTime: string = '00:00';
 const slotItems: any = [];
-
-
-=======
 let totalClipTime: string = '00:00';
-const slotItems: any = [];
 
->>>>>>> e32a643
 const { user, isAuthenticated } = storeToRefs(authStore)
 
 const props = defineProps({
@@ -215,7 +138,7 @@ const hideShowColumn = reactive({
 const draggedInbox = (x: number, y: number, text: string, key: string) => {
   const slot = <Item["slot"]>parseInt(
     <
-      string // @ts-ignore
+    string // @ts-ignore
     >document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
   )
 
@@ -226,14 +149,30 @@ const draggedInbox = (x: number, y: number, text: string, key: string) => {
   }
 }
 
+const removeItemFromSlot = async () => {
+
+  if (localStorage.getItem("deleteClip") != null) {
+    const deleteClip = JSON.parse(localStorage.getItem("deleteClip"));
+    localStorage.removeItem("deleteClip");
+    let slotitemData = slotItems[deleteClip.slotno].items;
+    slotitemData.splice(deleteClip.index, 1);
+    let slotitem: any = [];
+    if (slotitemData.length > 0) { slotitemData.forEach((element: any) => { slotitem.push(element) }); }
+    slotItems[deleteClip.slotno].items = slotitem;
+    await updateClipTime();
+  }
+}
+
 const checkUpdate = async (slot: any) => {
   let items: any = await itemStore.getSlotItem();
-  let currentItem = items[0].value;
+  let currentItem = (slotItems[slot]) ? slotItems[slot].items : [];
+  currentItem[items[0].index] = items[0].data;
   slotItems[slot] = {
     slot: `${props.podcastId}-script-${slot}`,
     items: currentItem
   };
   await updateClipTime();
+  setInterval(async () => { await removeItemFromSlot(); }, 1000);
 }
 
 const updateClipTime = async () => {
@@ -252,16 +191,16 @@ const updateClipTime = async () => {
   });
   const remainingSeconds = totalClipSeconds % 60;
   const minutes = Math.floor(totalClipSeconds / 60);
-  totalClipTime = `${(minutes < 10)? "0" + minutes:minutes}:${(remainingSeconds < 10)? "0" + remainingSeconds : remainingSeconds}`;
+  totalClipTime = `${(minutes < 10) ? "0" + minutes : minutes}:${(remainingSeconds < 10) ? "0" + remainingSeconds : remainingSeconds}`;
   let shoetime = document.getElementById("totalClipTime") as HTMLSpanElement;
   shoetime.innerText = totalClipTime;
 }
 
 const dragged = (x: number, y: number, item: Item) => {
-  
+
   const slot = <Item["slot"]>parseInt(
     <
-      string // @ts-ignore
+    string // @ts-ignore
     >document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
   )
 
@@ -272,7 +211,7 @@ const dragged = (x: number, y: number, item: Item) => {
   if (scriptColumn) {
     hideShowColumn.script = true
     hideShowColumn.inbox = hideShowColumn.draft = false
-     const data: any = [{
+    const data: any = [{
       label: item.text,
       clipField: {
         clip_url: "",
@@ -282,7 +221,7 @@ const dragged = (x: number, y: number, item: Item) => {
         out_msg: "",
       },
     }]
-    
+
     itemStore.addScriptItem(data, props.podcastId, item.slot)
     itemStore.getScriptListData(props.podcastId)
 
@@ -294,7 +233,7 @@ const dragged = (x: number, y: number, item: Item) => {
   if (slot && slot === item.slot) {
     const id = <
       string // @ts-ignore
-    >document.elementFromPoint(x, y)?.attributes["data-id"]?.value
+      >document.elementFromPoint(x, y)?.attributes["data-id"]?.value
 
     if (id) {
       const slotItem = itemStore.getList
@@ -326,7 +265,7 @@ const moveArrayItemToNewIndex = (
 }
 
 const connect = () => {
-  if (initiated.value){ itemStore.connect(props.podcastId, docname.value)}
+  if (initiated.value) { itemStore.connect(props.podcastId, docname.value) }
   itemStore.getScriptListData(props.podcastId)
 }
 watch(
@@ -381,7 +320,7 @@ const events = {
     itemStore.addItem({ text, slot }, props.podcastId, docname.value)
   },
   onClickScriptsSave(params: any, slotno: string) {
-    let data:any =  {clipField: params}
+    let data: any = { clipField: params }
     itemStore.addScriptItem(data, props.podcastId, slotno)
   },
   onUpdateSaveDoc() {
@@ -410,6 +349,7 @@ const events = {
 h2 {
   @apply ss-furniture;
 }
+
 .column-h {
   height: calc(100vh - 72px);
 }

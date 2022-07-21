@@ -38,13 +38,13 @@ export const useItemStore = defineStore("item", {
     async addScriptItem(params: Item, podCastName: string, slot: any) {
       const id = nanoid()
       const item: any = { params, slot, id }
-      const newDocName : string = JSON.stringify(item)
+      const newDocName: string = JSON.stringify(item)
       this.scriptItemList.push(item)
       this.saveScriptData(podCastName, newDocName)
     },
 
     async setItemToSlot(item: any, slot: number) {
-      this.slotList[slot] = item;
+      this.slotList = item;
     },
     async getSlotItem() {
       return await this.slotList.filter(item => item !== null);
@@ -122,7 +122,7 @@ export const useItemStore = defineStore("item", {
       }
 
     },
-    async getScriptListData(podcastId:string) {
+    async getScriptListData(podcastId: string) {
       const docRef = doc(db, podcastId, "script");
       onSnapshot(doc(db, podcastId, "script"), (doc) => {
         if (doc.data()) {
@@ -132,7 +132,7 @@ export const useItemStore = defineStore("item", {
           this.scriptItemList = []
         }
       })
-     
+
     },
     connect(podcastname: string, docname: string) {
       onSnapshot(doc(db, podcastname, docname), (doc) => {
