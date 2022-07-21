@@ -43,7 +43,7 @@
 import { watch } from "vue"
 import { useShareStore } from "@/store/itemShare"
 import { HandIcon, BackspaceIcon } from "@heroicons/vue/outline"
-
+import ListActionButton from "@/components/atoms/ListActionButton.vue"
 const props = defineProps({
   podcastId: {
     type: String,
