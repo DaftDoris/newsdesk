@@ -16,6 +16,7 @@ import { db } from "@/plugins/firebase"
 
 interface State {
   itemList: Item[]
+  scriptItemList: any[]
   slotTitleList: string[]
 }
 
@@ -23,6 +24,7 @@ export const useItemStore = defineStore("item", {
   state: (): State => ({
     itemList: [],
     slotTitleList: [],
+    scriptItemList: [],
   }),
   actions: {
     async addItem(params: Item, podcastname: string, docname: string) {
@@ -30,6 +32,13 @@ export const useItemStore = defineStore("item", {
       const item: Item = { ...params, id }
       this.itemList.push(item)
       this.saveData(podcastname, docname)
+    },
+    async addScriptItem(params: Item, podCastName: string, slot: any) {
+      const id = nanoid()
+      const item: any = { params, slot, id }
+      const newDocName : string = JSON.stringify(item)
+      this.scriptItemList.push(item)
+      this.saveScriptData(podCastName, newDocName)
     },
 
     async updateSlotItem(item: [], podcastname: string, docname: string) {
@@ -89,14 +98,41 @@ export const useItemStore = defineStore("item", {
         } else throw e
       }
     },
+    async saveScriptData(podcastname: string, docname: string) {
+      const docRef = doc(collection(db, podcastname), 'script')
+      try {
+        return await updateDoc(docRef, {
+          items: this.scriptItemList
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+          return await setDoc(docRef, {
+            items: this.scriptItemList,
+          })
+        } else throw e
+      }
 
+    },
+    async getScriptListData(podcastId:string) {
+      const docRef = doc(db, podcastId, "script");
+      onSnapshot(doc(db, podcastId, "script"), (doc) => {
+        if (doc.data()) {
+          this.scriptItemList = (doc.data()?.items ?? []) as Item[]
+          return doc.data()
+        } else {
+          this.scriptItemList = []
+        }
+      })
+     
+    },
     connect(podcastname: string, docname: string) {
       onSnapshot(doc(db, podcastname, docname), (doc) => {
         this.slotTitleList = (
           doc.data()?.slotTitles && doc.data()?.slotTitles.length > 0
             ? doc.data()?.slotTitles
             : Array.from({ length: 7 }, () => "") ??
-              Array.from({ length: 7 }, () => "")
+            Array.from({ length: 7 }, () => "")
         ) as string[]
         this.itemList = (doc.data()?.items ?? []) as Item[]
       })
@@ -108,6 +144,10 @@ export const useItemStore = defineStore("item", {
     getSlotList: (state) => {
       return (slot: number) =>
         state.itemList.filter((item) => item.slot === slot)
+    },
+    getScriptList: (state) => {
+      return (slot: number) =>
+        state.scriptItemList.filter((item) => item.slot === slot)
     },
   },
 })
