@@ -12,10 +12,10 @@
     <div
       v-for="(itemMain, index) in clipFieldData"
       :key="index"
-      draggable="true"
+      
     >
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
-        <span @dragend="dropped($event, indexNew, itemIn)">
+        <span @dragend="dropped($event, indexNew, itemIn)" draggable="true">
           <Input
             v-model="itemIn.label"
             :placeholder="`Enter things into ${slotno}...`"
@@ -69,13 +69,14 @@ const dropped = (e: DragEvent, item: string, podcastId: any) => {
   console.log(e, "eventsssss")
 }
 const moveClipfield = (x: number, y: number) => {
-  const array1 = arrayMoveImmutable(input, 1, 2)
+  const array1 = arrayMoveImmutable(props.clipFieldData[0].params, 1, 2)
 }
 const deleteClip = (setIndex: any) => {
   props.clipFieldData[0].params.splice(setIndex, 1)
 }
 
-const text = ref<string>("")
+const text = ref<string>('')
+
 const save = () => {
   // emits('save', props.clipFieldData, props.slotno)
 }
