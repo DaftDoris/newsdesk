@@ -128,7 +128,6 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] textarea").type("dragging item{enter}", {
       force: true,
     })
-    cy.get("section[slotno=7]").should("contain", "dragging item")
     cy.get("section[slotno=7] textarea").type("dragging item in slot{enter}", {
       force: true,
     })
