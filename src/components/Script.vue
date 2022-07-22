@@ -11,7 +11,7 @@
     <div v-for="(itemMain, index) in clipFieldData" :key="index">
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
         <Input v-model="itemIn.label" :placeholder="`Enter things into ${slotno}...`"
-          @keydown.enter.exact.prevent="save" />
+           />
         <ClipField :index="indexNew" :clipField="itemIn?.clipField" @delete="deleteClip"
           @change="updateClips(indexNew, itemIn?.clipField)"></ClipField>
       </span>

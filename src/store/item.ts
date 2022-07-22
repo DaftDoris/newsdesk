@@ -19,6 +19,9 @@ interface State {
   slotTitleList: string[],
   slotList: string[],
   scriptItemList: any[]
+  title: string
+  special_day: string
+  birthdays: string
 }
 
 export const useItemStore = defineStore("item", {
@@ -26,6 +29,9 @@ export const useItemStore = defineStore("item", {
     itemList: [],
     slotTitleList: [],
     slotList: [],
+    title: "",
+    special_day: "",
+    birthdays: "",
     scriptItemList: [],
   }),
   actions: {
@@ -88,7 +94,6 @@ export const useItemStore = defineStore("item", {
       //TODO: update only the individual item
       return this.saveData(podcastname, docname)
     },
-
     async saveData(podcastname: string, docname: string) {
       const docRef = doc(collection(db, podcastname), docname)
       try {
@@ -102,6 +107,52 @@ export const useItemStore = defineStore("item", {
           return await setDoc(docRef, {
             items: this.itemList,
             slotTitles: this.slotTitleList,
+          })
+        } else throw e
+      }
+    },
+
+    async saveInputSpecialDayData(podcastname: string, data: string) {
+      const docRef = doc(collection(db, podcastname), 'title')
+      try {
+         await updateDoc(docRef, {
+          special_day: data
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+           await setDoc(docRef, {
+            special_day: data
+          })
+        } else throw e
+      }
+    },
+    async saveInputTitleData(podcastname: string, data: string) {
+      const docRef = doc(collection(db, podcastname), 'title')
+      try {
+         await updateDoc(docRef, {
+          title: data
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+           await setDoc(docRef, {
+            title: data
+          })
+        } else throw e
+      }
+    },
+    async saveInputBirthdaysData(podcastname: string, data: string) {
+      const docRef = doc(collection(db, podcastname), 'title')
+      try {
+         await updateDoc(docRef, {
+          birthdays: data
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+           await setDoc(docRef, {
+            birthdays: data
           })
         } else throw e
       }

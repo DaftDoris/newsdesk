@@ -150,7 +150,6 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] button[title='Delete']").eq(0).click({
       force: true,
     })
-
   })
 
   it("should add item to slot and remove from inbox when dragging from inbox", () => {
@@ -187,7 +186,7 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] button[title='Share to podcast']").click()
     cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
     switchPodCast("dev 2 sandbox")
-    cy.get("#inbox-column").should("contain", "new share item") 
+    cy.get("#inbox-column").should("contain", "new share item")
     cy.get("#delete-inbox").eq(0).click({
       force: true,
     })
@@ -237,6 +236,19 @@ describe("newsdesk logged in", () => {
     for (let section = 1; section <= 7; section++) {
       cy.get("#script-data span").should("contain", `${section} title`)
     }
+  })
+  it("should be able to enter in input fields", () => {
+    switchPodCast("dev sandbox")
+    cy.get("#scriptTitleInput").type("Script Title Input{enter}", {
+      force: true,
+    })
+    cy.get("#scriptSpecialDaysInput").type("Script SpecialDays Input{enter}", {
+      force: true,
+    })
+    cy.get("#scriptBirthdaysInput").type("Script Birthdays Input{enter}", {
+      force: true,
+    })
+   
   })
 })
 
