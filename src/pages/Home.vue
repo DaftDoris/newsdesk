@@ -127,6 +127,21 @@
         </ListActionButton>
       </div>
       <div class="mt-10" id="script-data">
+         <ScriptInput
+         id="scriptTitleInput"
+          placeholder="Title"
+          @save="events.saveInputTitle"
+        />
+         <ScriptInput
+         id="scriptSpecialDaysInput"
+          placeholder="Special Days"
+          @save="events.saveInputSpecialDay"
+        />
+         <ScriptInput
+         id="scriptBirthdaysInput"
+          placeholder="Birthdays"
+          @save="events.saveInputBirthdays"
+        />
         <div
           v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
           :key="slot"
@@ -160,6 +175,7 @@ import Inbox from "@/components/Inbox.vue"
 import ItemCard from "@/components/molecules/Cards/ItemCard.vue"
 import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
+import ScriptInput from "@/components/atoms/ScriptInput.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
 import { PlusIcon, MinusIcon, ClipboardCopyIcon } from "@heroicons/vue/outline"
 import Scripts from "@/components/Script.vue"
@@ -170,6 +186,8 @@ const itemStore = useItemStore()
 const shareStore = useShareStore()
 const initiated = ref(false)
 const route = useRoute()
+
+
 const { user, isAuthenticated } = storeToRefs(authStore)
 
 const props = defineProps({
@@ -336,6 +354,15 @@ const events = {
   },
   onUpdateSaveDoc() {
     itemStore.saveData(props.podcastId, docname.value)
+  },
+  saveInputTitle(data:any) {
+    itemStore.saveInputTitleData(props.podcastId, data)
+  },
+  saveInputSpecialDay(data:any) {
+    itemStore.saveInputSpecialDayData(props.podcastId, data)
+  },
+  saveInputBirthdays(data:any) {
+    itemStore.saveInputBirthdaysData(props.podcastId, data)
   },
   onClickDelete(item: Item) {
     if (window.confirm("Are you sure?")) {

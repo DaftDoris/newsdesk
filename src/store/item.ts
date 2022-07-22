@@ -18,12 +18,18 @@ interface State {
   itemList: Item[]
   scriptItemList: any[]
   slotTitleList: string[]
+  title: string
+  special_day: string
+  birthdays: string
 }
 
 export const useItemStore = defineStore("item", {
   state: (): State => ({
     itemList: [],
     slotTitleList: [],
+    title: "",
+    special_day: "",
+    birthdays: "",
     scriptItemList: [],
   }),
   actions: {
@@ -36,7 +42,7 @@ export const useItemStore = defineStore("item", {
     async addScriptItem(params: Item, podCastName: string, slot: any) {
       const id = nanoid()
       const item: any = { params, slot, id }
-      const newDocName : string = JSON.stringify(item)
+      const newDocName: string = JSON.stringify(item)
       this.scriptItemList.push(item)
       this.saveScriptData(podCastName, newDocName)
     },
@@ -80,7 +86,6 @@ export const useItemStore = defineStore("item", {
       //TODO: update only the individual item
       return this.saveData(podcastname, docname)
     },
-
     async saveData(podcastname: string, docname: string) {
       const docRef = doc(collection(db, podcastname), docname)
       try {
@@ -94,6 +99,52 @@ export const useItemStore = defineStore("item", {
           return await setDoc(docRef, {
             items: this.itemList,
             slotTitles: this.slotTitleList,
+          })
+        } else throw e
+      }
+    },
+
+    async saveInputSpecialDayData(podcastname: string, data: string) {
+      const docRef = doc(collection(db, podcastname), 'title')
+      try {
+         await updateDoc(docRef, {
+          special_day: data
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+           await setDoc(docRef, {
+            special_day: data
+          })
+        } else throw e
+      }
+    },
+    async saveInputTitleData(podcastname: string, data: string) {
+      const docRef = doc(collection(db, podcastname), 'title')
+      try {
+         await updateDoc(docRef, {
+          title: data
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+           await setDoc(docRef, {
+            title: data
+          })
+        } else throw e
+      }
+    },
+    async saveInputBirthdaysData(podcastname: string, data: string) {
+      const docRef = doc(collection(db, podcastname), 'title')
+      try {
+         await updateDoc(docRef, {
+          birthdays: data
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+           await setDoc(docRef, {
+            birthdays: data
           })
         } else throw e
       }
@@ -114,7 +165,7 @@ export const useItemStore = defineStore("item", {
       }
 
     },
-    async getScriptListData(podcastId:string) {
+    async getScriptListData(podcastId: string) {
       const docRef = doc(db, podcastId, "script");
       onSnapshot(doc(db, podcastId, "script"), (doc) => {
         if (doc.data()) {
@@ -124,7 +175,7 @@ export const useItemStore = defineStore("item", {
           this.scriptItemList = []
         }
       })
-     
+
     },
     connect(podcastname: string, docname: string) {
       onSnapshot(doc(db, podcastname, docname), (doc) => {
