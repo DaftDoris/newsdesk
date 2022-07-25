@@ -9,13 +9,9 @@
       /></span>
     </label>
 
-    <div
-      v-for="(itemMain, index) in clipFieldData"
-      :key="index"
-      
-    >
+    <div v-for="(itemMain, index) in clipFieldData" :key="index">
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
-        <span @dragend="dropped($event, indexNew, itemIn)" draggable="true">
+        <div @dragend="dropped($event, indexNew, itemIn)" draggable="true">
           <Input
             v-model="itemIn.label"
             :placeholder="`Enter things into ${slotno}...`"
@@ -26,7 +22,7 @@
             :clipField="itemIn?.clipField"
             @delete="deleteClip"
           ></ClipField>
-        </span>
+        </div>
       </span>
     </div>
   </div>
@@ -65,17 +61,34 @@ const updateClipField = () => {
     },
   })
 }
-const dropped = (e: DragEvent, item: string, podcastId: any) => {
-  console.log(e, "eventsssss")
+const dropped = (e: DragEvent, index: number) => {
+  console.log(e.offsetY, "eventsssss")
+  if (e.offsetY < -20) {
+    moveClipField(index, "top")
+  } else {
+    moveClipField(index, "bottom")
+  }
 }
-const moveClipfield = (x: number, y: number) => {
-  const array1 = arrayMoveImmutable(props.clipFieldData[0].params, 1, 2)
+const moveClipField = (indexFrom: number, position: string) => {
+  if (position == "top") {
+    props.clipFieldData[0].params = arrayMoveImmutable(
+      props.clipFieldData[0].params,
+      indexFrom,
+      indexFrom - 1,
+    )
+  } else {
+    props.clipFieldData[0].params = arrayMoveImmutable(
+      props.clipFieldData[0].params,
+      indexFrom,
+      indexFrom + 1,
+    )
+  }
 }
 const deleteClip = (setIndex: any) => {
   props.clipFieldData[0].params.splice(setIndex, 1)
 }
 
-const text = ref<string>('')
+const text = ref<string>("")
 
 const save = () => {
   // emits('save', props.clipFieldData, props.slotno)
