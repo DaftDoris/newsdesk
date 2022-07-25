@@ -213,7 +213,7 @@ const checkUpdate = async () => {
   let calculatedSeconds = Math.floor(combinedSeconds % 60);
   let combinedMinutes = minutes + ScriptMinutes + calculatedMinutes;
   let TotalCombinedSecomds = combinedMinutes * 60 + calculatedSeconds;
-  let totalTime = "00:00";
+  totalTime = "00:00";
   if ((TotalCombinedSecomds > 58)) {
     totalTime = `${(combinedMinutes < 10) ? "0" + combinedMinutes : combinedMinutes}:${(calculatedSeconds < 10) ? "0" + calculatedSeconds : calculatedSeconds}`;
   }
