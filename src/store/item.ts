@@ -61,13 +61,13 @@ export const useItemStore = defineStore("item", {
     async saveDataUpdate(podcastname: string, docname: string) {
       const docRef = doc(collection(db, podcastname), docname)
       try {
-        return await updateDoc(docRef, {
+        await updateDoc(docRef, {
           items: this.scriptItemList,
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         if (e.code === "not-found" && e.name === "FirebaseError") {
-          return await setDoc(docRef, {
+          await setDoc(docRef, {
             items: this.scriptItemList,
           })
         } else throw e

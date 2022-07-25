@@ -77,7 +77,7 @@
           Clips: <span id="totalClipTime">{{ totalClipTime }}</span> |
           Script: <span id="totalScriptTime">{{ totalScriptTime }}</span> |
           Total: <span id="totalTime">{{ totalTime }}</span> |
-          <span @click="exportScript">
+          <span>
             Export
             <CloudUploadIcon class="dark:text-white bg-transparent transition-colors w-6 in-line" />
           </span>
