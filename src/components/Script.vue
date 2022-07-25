@@ -10,10 +10,9 @@
     </label>
     <div v-for="(itemMain, index) in clipFieldData" :key="index">
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
-        <Input v-model="itemIn.label" :placeholder="`Enter things into ${slotno}...`"
-           />
-        <ClipField :index="indexNew" :clipField="itemIn?.clipField" @delete="deleteClip"
-          @change="updateClips(indexNew, itemIn?.clipField)"></ClipField>
+        <Input v-model="itemIn.label" :placeholder="`Enter things into ${slotno}...`" @change="updateClips()" />
+        <ClipField :index="indexNew" :clipField="itemIn?.clipField" @delete="deleteClip" @change="updateClips()">
+        </ClipField>
       </span>
     </div>
   </div>
@@ -29,6 +28,10 @@ import { VolumeUpIcon } from "@heroicons/vue/outline"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const itemStore = useItemStore()
 const props = defineProps({
+  podcastId: {
+    type: String,
+    required: true
+  },
   slotno: {
     type: Number,
     default: 1,
@@ -60,18 +63,8 @@ const deleteClip = (setIndex: any) => {
   props.clipFieldData[0].params.splice(setIndex, 1)
 }
 
-const updateClips = (setIndex: number, clipField: any) => {
-  console.log(setIndex, props.clipFieldData[0].params);
-  const data = {
-    label: props.clipFieldData[0].params[setIndex].label,
-    clipField: clipField,
-  }
-  const clipFieldData = []
-  clipFieldData[setIndex] = {
-    index: setIndex,
-    data: data,
-  }
-  itemStore.setItemToSlot(clipFieldData)
+const updateClips = () => {
+  itemStore.setItemToSlot(props.clipFieldData, props.podcastId)
 }
 
 const text = ref<string>("")

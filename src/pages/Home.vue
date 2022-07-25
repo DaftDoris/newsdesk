@@ -68,30 +68,24 @@
             @click="hideShowColumn.script = false, hideShowColumn.inbox = true" v-else />
         </ListActionButton>
       </div>
-     
-        <div class="mt-10" id="script-data">
-         <ScriptInput
-         id="scriptTitleInput"
-          placeholder="Title"
-          @save="events.saveInputTitle"
-        />
-         <ScriptInput
-         id="scriptSpecialDaysInput"
-          placeholder="Special Days"
-          @save="events.saveInputSpecialDay"
-        />
-         <ScriptInput
-         id="scriptBirthdaysInput"
-          placeholder="Birthdays"
-          @save="events.saveInputBirthdays"
-        />
+
+      <div class="mt-10" id="script-data">
+        <ScriptInput id="scriptTitleInput" placeholder="Title" @save="events.saveInputTitle" />
+        <ScriptInput id="scriptSpecialDaysInput" placeholder="Special Days" @save="events.saveInputSpecialDay" />
+        <ScriptInput id="scriptBirthdaysInput" placeholder="Birthdays" @save="events.saveInputBirthdays" />
         <div class="text-center font-bold text-lg">
-          Clips: <span id="totalClipTime">{{ totalClipTime }}</span>
+          Clips: <span id="totalClipTime">{{ totalClipTime }}</span> |
+          Script: <span id="totalScriptTime">{{ totalScriptTime }}</span> |
+          Total: <span id="totalTime">{{ totalTime }}</span> |
+          <span @click="exportScript">
+            Export
+            <CloudUploadIcon class="dark:text-white bg-transparent transition-colors w-6 in-line" />
+          </span>
         </div>
         <div v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)" :key="slot">
 
 
-          <Scripts class="my-5" :slotno="slot" :clipFieldData="itemStore.getScriptList(slot)"
+          <Scripts class="my-5" :slotno="slot" :clipFieldData="itemStore.getScriptList(slot)" :podcastId="podcastId"
             @save="events.onClickScriptsSave" @change="checkUpdate(slot)" />
 
         </div>
@@ -116,7 +110,7 @@ import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
 import ScriptInput from "@/components/atoms/ScriptInput.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
-import { PlusIcon, MinusIcon, ClipboardCopyIcon } from "@heroicons/vue/outline"
+import { PlusIcon, MinusIcon, ClipboardCopyIcon, CloudUploadIcon } from "@heroicons/vue/outline"
 import Scripts from "@/components/Script.vue"
 import { useRoute } from "vue-router"
 
@@ -128,6 +122,8 @@ const route = useRoute()
 
 const slotItems: any = [];
 let totalClipTime: string = '00:00';
+let totalScriptTime: string = '00:00';
+let totalTime: string = '00:00';
 
 const { user, isAuthenticated } = storeToRefs(authStore)
 
@@ -181,15 +177,56 @@ const removeItemFromSlot = async () => {
 }
 
 const checkUpdate = async (slot: any) => {
-  let items: any = await itemStore.getSlotItem();
-  let currentItem = (slotItems[slot]) ? slotItems[slot].items : [];
-  currentItem[items[0].index] = items[0].data;
-  slotItems[slot] = {
-    slot: `${props.podcastId}-script-${slot}`,
-    items: currentItem
-  };
-  await updateClipTime();
-  setInterval(async () => { await removeItemFromSlot(); }, 1000);
+  // let items: any = await itemStore.getSlotItem();
+  let totalClipSeconds = 0;
+  let scriptCount = 0;
+  for (let i = 1; i < 8; i++) {
+    const slotitemData = itemStore.getScriptList(i)
+    if (slotitemData.length > 0) {
+      console.log(`slotitemData => ${i}`, slotitemData);
+      slotitemData.forEach((element) => {
+        const clipField = element.params[0].clipField
+        let text = element.params[0].label.replace(/\n/g, "");
+        scriptCount += text.split(" ").length;
+
+        const in_time = clipField.in_time.split(":");
+        const out_time = clipField.out_time.split(":");
+        const in_seconds = (parseInt(in_time[0]) * 60) + parseInt(in_time[1]);
+        const out_seconds = (parseInt(out_time[0]) * 60) + parseInt(out_time[1]);
+        let seconds = out_seconds - in_seconds;
+        if (!isNaN(seconds)) { totalClipSeconds += seconds }
+        console.log(`slotitem => ${i}`, clipField);
+      });
+    }
+  }
+
+  const remainingSeconds = totalClipSeconds % 60;
+  const minutes = Math.floor(totalClipSeconds / 60);
+  totalClipTime = `${(minutes < 10) ? "0" + minutes : minutes}:${(remainingSeconds < 10) ? "0" + remainingSeconds : remainingSeconds}`;
+  let shoetime = document.getElementById("totalClipTime") as HTMLSpanElement;
+  shoetime.innerText = totalClipTime;
+
+  // Total Script Time
+  let ratio = (scriptCount / 185) * 60;
+  const ScriptSeconds = Math.floor(ratio % 60);
+  const ScriptMinutes = Math.floor(ratio / 60);
+  totalScriptTime = `${(ScriptMinutes < 10) ? "0" + ScriptMinutes : ScriptMinutes}:${(ScriptSeconds < 10) ? "0" + ScriptSeconds.toFixed(0) : ScriptSeconds.toFixed(0)}`;
+  let showScriptTime = document.getElementById("totalScriptTime") as HTMLSpanElement;
+  showScriptTime.innerText = totalScriptTime;
+
+  // totalTime
+  let combinedSeconds = remainingSeconds + ScriptSeconds + 58;
+  let calculatedMinutes = Math.floor(combinedSeconds / 60);
+  let calculatedSeconds = Math.floor(combinedSeconds % 60);
+  let combinedMinutes = minutes + ScriptMinutes + calculatedMinutes;
+  let TotalCombinedSecomds = combinedMinutes * 60 + calculatedSeconds;
+  totalTime = (TotalCombinedSecomds > 58)
+    ? `${(combinedMinutes < 10) ? "0" + combinedMinutes : combinedMinutes}:${(calculatedSeconds < 10) ? "0" + calculatedSeconds : calculatedSeconds}`
+    : "00:00"
+  let showTotalTime = document.getElementById("totalTime") as HTMLSpanElement;
+  showTotalTime.innerText = totalTime;
+  showTotalTime.style.color = (TotalCombinedSecomds < (7 * 60)) ? "red" : "black";
+
 }
 
 const updateClipTime = async () => {
@@ -343,13 +380,13 @@ const events = {
   onUpdateSaveDoc() {
     itemStore.saveData(props.podcastId, docname.value)
   },
-  saveInputTitle(data:any) {
+  saveInputTitle(data: any) {
     itemStore.saveInputTitleData(props.podcastId, data)
   },
-  saveInputSpecialDay(data:any) {
+  saveInputSpecialDay(data: any) {
     itemStore.saveInputSpecialDayData(props.podcastId, data)
   },
-  saveInputBirthdays(data:any) {
+  saveInputBirthdays(data: any) {
     itemStore.saveInputBirthdaysData(props.podcastId, data)
   },
   onClickDelete(item: Item) {
@@ -378,5 +415,9 @@ h2 {
 
 .column-h {
   height: calc(100vh - 72px);
+}
+
+.in-line {
+  display: inline-block;
 }
 </style>
