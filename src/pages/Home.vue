@@ -86,7 +86,7 @@
 
 
           <Scripts class="my-5" :slotno="slot" :clipFieldData="itemStore.getScriptList(slot)" :podcastId="podcastId"
-            @save="events.onClickScriptsSave" @change="checkUpdate(slot)" />
+            @save="events.onClickScriptsSave" @change="checkUpdate()" />
 
         </div>
       </div>
@@ -176,36 +176,30 @@ const removeItemFromSlot = async () => {
   }
 }
 
-const checkUpdate = async (slot: any) => {
-  // let items: any = await itemStore.getSlotItem();
+const checkUpdate = async () => {
   let totalClipSeconds = 0;
   let scriptCount = 0;
   for (let i = 1; i < 8; i++) {
     const slotitemData = itemStore.getScriptList(i)
     if (slotitemData.length > 0) {
-      console.log(`slotitemData => ${i}`, slotitemData);
       slotitemData.forEach((element) => {
         const clipField = element.params[0].clipField
         let text = element.params[0].label.replace(/\n/g, "");
         scriptCount += text.split(" ").length;
-
         const in_time = clipField.in_time.split(":");
         const out_time = clipField.out_time.split(":");
         const in_seconds = (parseInt(in_time[0]) * 60) + parseInt(in_time[1]);
         const out_seconds = (parseInt(out_time[0]) * 60) + parseInt(out_time[1]);
         let seconds = out_seconds - in_seconds;
         if (!isNaN(seconds)) { totalClipSeconds += seconds }
-        console.log(`slotitem => ${i}`, clipField);
       });
     }
   }
-
   const remainingSeconds = totalClipSeconds % 60;
   const minutes = Math.floor(totalClipSeconds / 60);
   totalClipTime = `${(minutes < 10) ? "0" + minutes : minutes}:${(remainingSeconds < 10) ? "0" + remainingSeconds : remainingSeconds}`;
   let shoetime = document.getElementById("totalClipTime") as HTMLSpanElement;
   shoetime.innerText = totalClipTime;
-
   // Total Script Time
   let ratio = (scriptCount / 185) * 60;
   const ScriptSeconds = Math.floor(ratio % 60);
@@ -213,20 +207,19 @@ const checkUpdate = async (slot: any) => {
   totalScriptTime = `${(ScriptMinutes < 10) ? "0" + ScriptMinutes : ScriptMinutes}:${(ScriptSeconds < 10) ? "0" + ScriptSeconds.toFixed(0) : ScriptSeconds.toFixed(0)}`;
   let showScriptTime = document.getElementById("totalScriptTime") as HTMLSpanElement;
   showScriptTime.innerText = totalScriptTime;
-
   // totalTime
   let combinedSeconds = remainingSeconds + ScriptSeconds + 58;
   let calculatedMinutes = Math.floor(combinedSeconds / 60);
   let calculatedSeconds = Math.floor(combinedSeconds % 60);
   let combinedMinutes = minutes + ScriptMinutes + calculatedMinutes;
   let TotalCombinedSecomds = combinedMinutes * 60 + calculatedSeconds;
-  totalTime = (TotalCombinedSecomds > 58)
-    ? `${(combinedMinutes < 10) ? "0" + combinedMinutes : combinedMinutes}:${(calculatedSeconds < 10) ? "0" + calculatedSeconds : calculatedSeconds}`
-    : "00:00"
+  let totalTime = "00:00";
+  if ((TotalCombinedSecomds > 58)) {
+    totalTime = `${(combinedMinutes < 10) ? "0" + combinedMinutes : combinedMinutes}:${(calculatedSeconds < 10) ? "0" + calculatedSeconds : calculatedSeconds}`;
+  }
   let showTotalTime = document.getElementById("totalTime") as HTMLSpanElement;
   showTotalTime.innerText = totalTime;
   showTotalTime.style.color = (TotalCombinedSecomds < (7 * 60)) ? "red" : "black";
-
 }
 
 const updateClipTime = async () => {
