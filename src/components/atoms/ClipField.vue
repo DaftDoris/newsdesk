@@ -50,12 +50,12 @@ const emits = defineEmits(["delete"])
   
   <style scoped lang="scss">
   .title {
-    @apply appearance-none text-5xl dark: text-white bg-transparent focus:outline-none;
+    @apply appearance-none text-5xl focus:outline-none;
     width: 47vw;
   }
   
   label {
-    @apply text-5xl dark: text-white;
+    @apply text-5xl;
   }
   
   .clip-field {
