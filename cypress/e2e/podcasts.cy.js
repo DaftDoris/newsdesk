@@ -247,7 +247,45 @@ describe("newsdesk logged in", () => {
     cy.get("#scriptBirthdaysInput").type("Script Birthdays Input{enter}", {
       force: true,
     })
-   
+  })
+
+  it("should be able to enter in script clips", () => {
+    switchPodCast("dev sandbox")
+    cy.get("section[slotno=7] textarea").type("new share item{enter}", { force: true, })
+    cy.get("section[slotno=7]").should("contain", "new share item")
+    // cy.get("#script-column button").click()
+
+    cy.get("#script-data").then((el) => {
+      cy.get("#draft-column ul li p:eq(0)").trigger(
+        "dragend",
+        {
+          clientX: el[0].getBoundingClientRect().right,
+          clientY: el[0].getBoundingClientRect().top,
+        },
+        { force: true },
+      )
+    })
+    cy.get("#clip_url").type("https://www.lipsum.com/", {
+      force: true,
+    })
+    cy.get("#in_time").type("00:00", {
+      force: true,
+    })
+    cy.get("#in_msg").type("hi", {
+      force: true,
+    })
+    cy.get("#out_time").type("00:30", {
+      force: true,
+    })
+    cy.get("#out_msg").type("bye", {
+      force: true,
+    })
+    cy.get("#clipLabel").should("contain", `new share item`)
+    cy.get("#clip_url").should("contain", `https://www.lipsum.com/`)
+    cy.get("#in_time").should("contain", `00:00`)
+    cy.get("#out_time").should("contain", `00:30`)
+    cy.get("#in_msg").should("contain", `hi`)
+    cy.get("#out_msg").should("contain", `bye`)
   })
 })
 

@@ -1,6 +1,6 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <div class="border-2 script-section rounded-lg border-gray-400">
+  <div id="script-{{ slotno }}" class="border-2 script-section rounded-lg border-gray-400">
     <label class="w-full p-4 flex">
       {{ slotno }} :
       <span class="text-gray-400 flex justify-between  items-center w-11/12">{{ slotno }} title <span
@@ -10,7 +10,8 @@
     </label>
     <div v-for="(itemMain, index) in clipFieldData" :key="index">
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
-        <Input v-model="itemIn.label" :placeholder="`Enter things into ${slotno}...`" @change="updateClips()" />
+        <Input id="clipLabel" v-model="itemIn.label" :placeholder="`Enter things into ${slotno}...`"
+          @change="updateClips()" />
         <ClipField :index="indexNew" :clipField="itemIn?.clipField" @delete="deleteClip" @change="updateClips()">
         </ClipField>
       </span>
