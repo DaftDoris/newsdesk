@@ -20,7 +20,7 @@
           <ClipField
             :index="indexNew"
             :clipField="itemIn?.clipField"
-            @delete="deleteClip"
+            @delete="deleteClip(itemMain.id)"
           ></ClipField>
         </div>
       </span>
@@ -29,7 +29,6 @@
 </template>
 
 <script lang="ts" setup>
-import { arrayMoveImmutable } from "array-move"
 import { watch, ref, reactive, onMounted } from "vue"
 import { useItemStore } from "@/store/item"
 
@@ -47,7 +46,12 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  podcastId: {
+    type: String,
+    default: null,
+  },
 })
+const mainArray = props.clipFieldData
 const emits = defineEmits(["save", "dragged"])
 const updateClipField = () => {
   props.clipFieldData[0].params.push({
@@ -62,31 +66,18 @@ const updateClipField = () => {
   })
 }
 const dropped = (e: DragEvent, index: number) => {
-  console.log(e.offsetY, "eventsssss")
   if (e.offsetY < -20) {
-    moveClipField(index, "top")
+    itemStore.moveClipField(index, "top", props.podcastId, props.slotno)
+    console.log("top", index)
   } else {
-    moveClipField(index, "bottom")
+    itemStore.moveClipField(index, "bottom", props.podcastId, props.slotno)
+    console.log("bottom", index)
   }
 }
-const moveClipField = (indexFrom: number, position: string) => {
-  if (position == "top") {
-    props.clipFieldData[0].params = arrayMoveImmutable(
-      props.clipFieldData[0].params,
-      indexFrom,
-      indexFrom - 1,
-    )
-  } else {
-    props.clipFieldData[0].params = arrayMoveImmutable(
-      props.clipFieldData[0].params,
-      indexFrom,
-      indexFrom + 1,
-    )
-  }
+const deleteClip = (id: string) => {
+  itemStore.deleteScriptClipField(id, props.podcastId)
 }
-const deleteClip = (setIndex: any) => {
-  props.clipFieldData[0].params.splice(setIndex, 1)
-}
+
 
 const text = ref<string>("")
 

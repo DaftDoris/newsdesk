@@ -152,6 +152,7 @@
             class="my-5"
             :slotno="slot"
             :clipFieldData="itemStore.getScriptList(slot)"
+            :podcastId="podcastId"
             @save="events.onClickScriptsSave"
           />
         

@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid"
 import { defineStore } from "pinia"
 import { Item } from "@/types/item"
+import { arrayMoveImmutable } from "array-move"
 
 import {
   collection,
@@ -107,13 +108,13 @@ export const useItemStore = defineStore("item", {
     async saveInputSpecialDayData(podcastname: string, data: string) {
       const docRef = doc(collection(db, podcastname), 'title')
       try {
-         await updateDoc(docRef, {
+        await updateDoc(docRef, {
           special_day: data
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         if (e.code === "not-found" && e.name === "FirebaseError") {
-           await setDoc(docRef, {
+          await setDoc(docRef, {
             special_day: data
           })
         } else throw e
@@ -122,13 +123,13 @@ export const useItemStore = defineStore("item", {
     async saveInputTitleData(podcastname: string, data: string) {
       const docRef = doc(collection(db, podcastname), 'title')
       try {
-         await updateDoc(docRef, {
+        await updateDoc(docRef, {
           title: data
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         if (e.code === "not-found" && e.name === "FirebaseError") {
-           await setDoc(docRef, {
+          await setDoc(docRef, {
             title: data
           })
         } else throw e
@@ -137,13 +138,13 @@ export const useItemStore = defineStore("item", {
     async saveInputBirthdaysData(podcastname: string, data: string) {
       const docRef = doc(collection(db, podcastname), 'title')
       try {
-         await updateDoc(docRef, {
+        await updateDoc(docRef, {
           birthdays: data
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         if (e.code === "not-found" && e.name === "FirebaseError") {
-           await setDoc(docRef, {
+          await setDoc(docRef, {
             birthdays: data
           })
         } else throw e
@@ -176,6 +177,65 @@ export const useItemStore = defineStore("item", {
         }
       })
 
+    },
+    async moveClipField(indexFrom: number, position: string, podcastname: string, slot: number) {
+      let sortArray = this.scriptItemList.filter((item) => item.slot === slot)
+      if (position == "top") {
+        sortArray = arrayMoveImmutable(
+          sortArray,
+          indexFrom,
+          indexFrom - 1,
+        )
+        console.log(sortArray, 'topArray')
+      } else {
+        sortArray = arrayMoveImmutable(
+          sortArray,
+          indexFrom,
+          indexFrom + 1,
+        )
+        console.log(sortArray, 'bottomArray')
+
+      }
+      let filteredArray = this.scriptItemList.filter((item) => item.slot != slot)
+      sortArray.map((item) =>{
+        filteredArray.push(item)
+      })
+      const docRef = doc(collection(db, podcastname), 'script')
+      try {
+        return await updateDoc(docRef, {
+          items: filteredArray
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+          return await setDoc(docRef, {
+            items: filteredArray,
+          })
+        } else throw e
+      }
+    },
+    async deleteScriptClipField(id: string, podcastname: string){
+      let selectedIndex: number = 0
+      
+      this.scriptItemList.map((item, index) => {
+        if(item.id === id){
+          selectedIndex = index
+        }
+      })
+      this.scriptItemList.splice(selectedIndex, 1)
+      const docRef = doc(collection(db, podcastname), 'script')
+      try {
+        return await updateDoc(docRef, {
+          items: this.scriptItemList
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+          return await setDoc(docRef, {
+            items: this.scriptItemList,
+          })
+        } else throw e
+      }
     },
     connect(podcastname: string, docname: string) {
       onSnapshot(doc(db, podcastname, docname), (doc) => {
