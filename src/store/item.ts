@@ -202,7 +202,7 @@ export const useItemStore = defineStore("item", {
       onSnapshot(doc(db, podcastId, "script"), (doc) => {
         if (doc.data()) {
           this.scriptItemList = (doc.data()?.items ?? []) as Item[]
-          console.log('Document Data ==>', this.scriptItemList)
+          // console.log('Document Data ==>', this.scriptItemList)
           return doc.data()
         } else {
           this.scriptItemList = []
