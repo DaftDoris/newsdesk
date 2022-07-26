@@ -22,6 +22,7 @@ interface State {
   title: string
   special_day: string
   birthdays: string
+  getScriptListClips: any[]
 }
 
 export const useItemStore = defineStore("item", {
@@ -33,6 +34,7 @@ export const useItemStore = defineStore("item", {
     special_day: "",
     birthdays: "",
     scriptItemList: [],
+    getScriptListClips: [],
   }),
   actions: {
     async addItem(params: Item, podcastname: string, docname: string) {
@@ -200,6 +202,7 @@ export const useItemStore = defineStore("item", {
       onSnapshot(doc(db, podcastId, "script"), (doc) => {
         if (doc.data()) {
           this.scriptItemList = (doc.data()?.items ?? []) as Item[]
+          console.log('Document Data ==>', this.scriptItemList)
           return doc.data()
         } else {
           this.scriptItemList = []
@@ -221,6 +224,7 @@ export const useItemStore = defineStore("item", {
   },
   getters: {
     getList: (state: State) => state.itemList,
+    getScriptListClips: (state: State) => state.scriptItemList,
     getSlotTitleList: (state: State) => state.slotTitleList,
     getSlotList: (state) => {
       return (slot: number) =>

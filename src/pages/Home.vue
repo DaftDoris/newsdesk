@@ -175,12 +175,12 @@ const removeItemFromSlot = async () => {
     await updateClipTime();
   }
 }
-
+const slotitemData = itemStore.getScriptListData(props.podcastId)
+  console.log('slotitemData ===> ', slotitemData) 
 const checkUpdate = async () => {
   let totalClipSeconds = 0;
   let scriptCount = 0;
-  const slotitemData = await itemStore.getScriptListData(props.podcastId)
-  console.log('slotitemData ===> ', slotitemData)
+  
   // for (let i = 1; i < 8; i++) {
   //   const slotitemData = itemStore.getScriptListData(props.podcastId)
   //   if (slotitemData.length > 0) {
