@@ -11,7 +11,7 @@
 
     <div v-for="(itemMain, index) in clipFieldData" :key="index">
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
-        <div @dragend="dropped($event, indexNew, itemIn)" draggable="true">
+        <div @dragend="dropped($event, indexNew)" draggable="true">
           <Input
             v-model="itemIn.label"
             :placeholder="`Enter things into ${slotno}...`"

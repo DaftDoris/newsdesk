@@ -196,7 +196,7 @@ export const useItemStore = defineStore("item", {
         console.log(sortArray, 'bottomArray')
 
       }
-      let filteredArray = this.scriptItemList.filter((item) => item.slot != slot)
+      const filteredArray = this.scriptItemList.filter((item) => item.slot != slot)
       sortArray.map((item) =>{
         filteredArray.push(item)
       })
@@ -208,14 +208,14 @@ export const useItemStore = defineStore("item", {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         if (e.code === "not-found" && e.name === "FirebaseError") {
-          return await setDoc(docRef, {
+           await setDoc(docRef, {
             items: filteredArray,
           })
         } else throw e
       }
     },
     async deleteScriptClipField(id: string, podcastname: string){
-      let selectedIndex: number = 0
+      let selectedIndex = 0
       
       this.scriptItemList.map((item, index) => {
         if(item.id === id){
@@ -231,7 +231,7 @@ export const useItemStore = defineStore("item", {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         if (e.code === "not-found" && e.name === "FirebaseError") {
-          return await setDoc(docRef, {
+           await setDoc(docRef, {
             items: this.scriptItemList,
           })
         } else throw e
