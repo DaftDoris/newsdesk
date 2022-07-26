@@ -45,7 +45,7 @@
     "cypress": "10.3.1",
     "eslint": "8.20.0",
     "eslint-plugin-cypress": "^2.12.1",
-    "firebase-tools": "11.3.0",
+    "firebase-tools": "11.4.0",
     "postcss": "8.4.14",
     "prettier": "2.7.1",
     "sass": "1.53.0",
