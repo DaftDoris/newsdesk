@@ -14,6 +14,7 @@
         class="input break-all bg-transparent w-8/12 text-gray-600"
         placeholder="In"
         v-model="clipField.in_time"
+        id="inTimeClipField"
       />
     </div>
     <div class="clip-section border-l-2 border-gray-400">
@@ -29,6 +30,7 @@
         class="input break-all bg-transparent w-8/12 text-gray-600"
         placeholder="Out"
         v-model="clipField.out_time"
+        id="outTimeClipField"
       />
     </div>
     <div class="clip-section border-l-2 border-gray-400">
@@ -60,7 +62,6 @@ const props = defineProps({
 })
 
 const emits = defineEmits(["delete"])
-
 </script>
   
   <style scoped lang="scss">
