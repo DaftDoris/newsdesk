@@ -287,6 +287,9 @@ describe("newsdesk logged in", () => {
     cy.get("#in_msg").should("contain", `hi`)
     cy.get("#out_msg").should("contain", `bye`)
   })
+  it.skip(
+    "should be able to enter in script clips",
+  )
 })
 
 import firebaseConfig from "../../firebase.json"
