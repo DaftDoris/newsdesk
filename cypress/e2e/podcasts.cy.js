@@ -256,6 +256,8 @@ describe("newsdesk logged in", () => {
     cy.get("#script-column").should("have.class", "col-span-3")
     cy.get("section[slotno=7] textarea").type("new share item{enter}", { force: true, })
     cy.get("section[slotno=7]").should("contain", "new share item")
+    cy.get("section[slotno=6] textarea").type("new share item{enter}", { force: true, })
+    cy.get("section[slotno=6]").should("contain", "new share item")
     cy.get("#script-data").then((el) => {
       cy.get("section[slotno=7] ul  li div").eq(0).trigger(
         "dragend",
@@ -267,7 +269,7 @@ describe("newsdesk logged in", () => {
       )
     })
     cy.get("#script-data").then((el) => {
-      cy.get("section[slotno=7] ul  li div").eq(0).trigger(
+      cy.get("section[slotno=6] ul  li div").eq(0).trigger(
         "dragend",
         {
           clientX: el[0].getBoundingClientRect().right,
