@@ -257,26 +257,15 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] textarea").type("new share item{enter}", { force: true, })
     cy.get("section[slotno=7]").should("contain", "new share item")
     cy.get("#script-data").then((el) => {
-      cy.get("section[slotno=7] ul div").eq(0).trigger(
+      cy.get("section[slotno=7] ul  li div").eq(0).trigger(
         "dragend",
         {
-          clientX: el[0].getBoundingClientRect().left,
+          clientX: el[0].getBoundingClientRect().right,
           clientY: el[0].getBoundingClientRect().top,
         },
         { force: true },
       )
     })
-
-    // cy.get("#script-data").then((el) => {
-    //   cy.get("#draft-column ul li p:eq(0)").trigger(
-    //     "dragend",
-    //     {
-    //       clientX: el[0].getBoundingClientRect().right,
-    //       clientY: el[0].getBoundingClientRect().top,
-    //     },
-    //     { force: true },
-    //   )
-    // })
     cy.get("#clip_url").type("https://www.lipsum.com/", {
       force: true,
     })
