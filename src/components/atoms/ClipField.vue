@@ -45,7 +45,6 @@ const props = defineProps({
 })
 
 const emits = defineEmits(["delete"])
-
 </script>
   
   <style scoped lang="scss">

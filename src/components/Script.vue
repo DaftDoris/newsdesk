@@ -3,17 +3,28 @@
   <div id="script-{{ slotno }}" class="border-2 script-section rounded-lg border-gray-400">
     <label class="w-full p-4 flex">
       {{ slotno }} :
-      <span class="text-gray-400 flex justify-between  items-center w-11/12">{{ slotno }} title <span
-          @click="updateClipField">
-          <VolumeUpIcon class="h-8" />
-        </span></span>
+      <span
+        @click="updateClipField"
+        class="text-gray-400 flex justify-between items-center w-11/12"
+        >{{ slotno }} title <VolumeUpIcon class="h-8"
+      /></span>
     </label>
+
     <div v-for="(itemMain, index) in clipFieldData" :key="index">
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
-        <Input id="clipLabel" v-model="itemIn.label" :placeholder="`Enter things into ${slotno}...`"
-          @change="updateClips()" />
-        <ClipField :index="indexNew" :clipField="itemIn?.clipField" @delete="deleteClip" @change="updateClips()">
-        </ClipField>
+        <div @dragend="dropped($event, indexNew)" draggable="true">
+          <Input
+            v-model="itemIn.label"
+            :placeholder="`Enter things into ${slotno}...`"
+            @keydown.enter.exact.prevent="save"
+          />
+          <ClipField
+            :index="indexNew"
+            :clipField="itemIn?.clipField"
+            @delete="deleteClip(itemMain.id)"
+            @change="updateClips()"
+          ></ClipField>
+        </div>
       </span>
     </div>
   </div>
@@ -42,11 +53,12 @@ const props = defineProps({
     default: null,
   },
 })
+const mainArray = props.clipFieldData
 const emits = defineEmits(["save", "dragged"])
-
 const updateClipField = () => {
   props.clipFieldData[0].params.push({
-    label: '', clipField: {
+    label: "",
+    clipField: {
       clip_url: "",
       in_time: "",
       in_msg: "",
@@ -55,18 +67,24 @@ const updateClipField = () => {
     },
   })
 }
-const deleteClip = (setIndex: any) => {
-  localStorage.setItem(
-    "deleteClip",
-    JSON.stringify({ index: setIndex, slotno: props.slotno })
-  );
-
-  props.clipFieldData[0].params.splice(setIndex, 1)
-}
 
 const updateClips = () => {
   itemStore.setItemToSlot(props.clipFieldData, props.podcastId)
 }
+const dropped = (e: DragEvent, index: number) => {
+  if (e.offsetY < -20) {
+    itemStore.moveClipField(index, "top", props.podcastId, props.slotno)
+    console.log("top", index)
+  } else {
+    itemStore.moveClipField(index, "bottom", props.podcastId, props.slotno)
+    console.log("bottom", index)
+  }
+}
+const deleteClip = (id: string) => {
+  itemStore.deleteScriptClipField(id, props.podcastId)
+}
+
+
 
 const text = ref<string>("")
 const save = () => {
