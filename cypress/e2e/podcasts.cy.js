@@ -266,6 +266,16 @@ describe("newsdesk logged in", () => {
         { force: true },
       )
     })
+    cy.get("#script-data").then((el) => {
+      cy.get("section[slotno=7] ul  li div").eq(0).trigger(
+        "dragend",
+        {
+          clientX: el[0].getBoundingClientRect().right,
+          clientY: el[0].getBoundingClientRect().top,
+        },
+        { force: true },
+      )
+    })
     cy.get("#clip_url").type("https://www.lipsum.com/", {
       force: true,
     })
