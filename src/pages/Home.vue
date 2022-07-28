@@ -73,7 +73,7 @@
         <ScriptInput id="scriptTitleInput" placeholder="Title" @save="events.saveInputTitle" />
         <ScriptInput id="scriptSpecialDaysInput" placeholder="Special Days" @save="events.saveInputSpecialDay" />
         <ScriptInput id="scriptBirthdaysInput" placeholder="Birthdays" @save="events.saveInputBirthdays" />
-        <div class="text-center font-bold text-lg">
+        <div class="text-center text-2xl">
           Clips: <span id="totalClipTime">{{ totalClipTime }}</span> |
           Script: <span id="totalScriptTime">{{ totalScriptTime }}</span> |
           Total: <span id="totalTime">{{ totalTime }}</span> |
@@ -83,11 +83,8 @@
           </span>
         </div>
         <div v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)" :key="slot">
-
-
           <Scripts class="my-5" :slotno="slot" :clipFieldData="itemStore.getScriptList(slot)" :podcastId="podcastId"
             @save="events.onClickScriptsSave" @change="checkUpdate()" />
-
         </div>
       </div>
     </div>
