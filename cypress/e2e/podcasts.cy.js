@@ -268,30 +268,6 @@ it("should drag item from draft to script", () => {
     )
   })
 })
-  it("should be able to enter in script clips", () => {
-    switchPodCast("dev sandbox")
-    cy.get("#clip_url").type("https://www.lipsum.com/", {
-      force: true,
-    })
-    cy.get("#in_time").type("00:00", {
-      force: true,
-    })
-    cy.get("#in_msg").type("hi", {
-      force: true,
-    })
-    cy.get("#out_time").type("00:30", {
-      force: true,
-    })
-    cy.get("#out_msg").type("bye", {
-      force: true,
-    })
-    cy.get("#clipLabel").should("contain", `new share item`)
-    cy.get("#clip_url").should("contain", `https://www.lipsum.com/`)
-    cy.get("#in_time").should("contain", `00:00`)
-    cy.get("#out_time").should("contain", `00:30`)
-    cy.get("#in_msg").should("contain", `hi`)
-    cy.get("#out_msg").should("contain", `bye`)
-  })
   })
 
 import firebaseConfig from "../../firebase.json"
