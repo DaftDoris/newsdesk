@@ -239,7 +239,7 @@ const updateClipTime = async () => {
   shoetime.innerText = totalClipTime;
 }
 
-const dragged = (x: number, y: number, item: Item) => {
+const dragged = async (x: number, y: number, item: Item) => {
 
   const slot = <Item["slot"]>parseInt(
     <
@@ -265,9 +265,10 @@ const dragged = (x: number, y: number, item: Item) => {
       },
     }]
 
-    itemStore.addScriptItem(data, props.podcastId, item.slot)
-    itemStore.getScriptListData(props.podcastId)
+    await itemStore.addScriptItem(data, props.podcastId, item.slot)
+    await itemStore.getScriptListData(props.podcastId)
 
+    await itemStore.removeItem(item, props.podcastId, props.date)
   } else {
     hideShowColumn.draft = true
     hideShowColumn.script = hideShowColumn.inbox = false
@@ -282,13 +283,13 @@ const dragged = (x: number, y: number, item: Item) => {
       const slotItem = itemStore.getList
       const index1 = slotItem.findIndex((ele) => ele.id === item.id)
       const index2 = slotItem.findIndex((ele) => ele.id === id)
-      const data = moveArrayItemToNewIndex(slotItem, index1, index2)
-      itemStore.updateSlotItem(data, props.podcastId, docname.value)
+      const data = await moveArrayItemToNewIndex(slotItem, index1, index2)
+      await itemStore.updateSlotItem(data, props.podcastId, docname.value)
     }
   }
   if (slot) {
     item.slot = slot
-    itemStore.saveData(props.podcastId, docname.value)
+    await itemStore.saveData(props.podcastId, docname.value)
   }
 }
 

@@ -77,7 +77,7 @@ describe("newsdesk logged in", () => {
     })
     cy.get("section[slotno=7]").should("contain", "new share item")
     cy.get("section[slotno=7] button[title='Share to podcast']").click()
-    cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
+    cy.get("section[slotno=7] input[id='dev'][type='checkbox']").click()
     switchPodCast("dev 2 sandbox")
     cy.get("#inbox-column").should("contain", "new share item")
   })
@@ -173,9 +173,9 @@ describe("newsdesk logged in", () => {
     cy.get("#inbox-column ul").should("not.contain", "Remove item in inbox")
   })
 
-  it.skip(
-    "should add item to slot and remove from inbox when dragging from inbox",
-  )
+  it.skip("should add item to slot and remove from inbox when dragging from inbox", () => {
+    switchPodCast("dev sandbox")
+  })
   it("should add item to slot and remove from inbox", () => {
     switchPodCast("dev sandbox")
     cy.get("section[slotno=7] textarea").type("new share item{enter}", {
@@ -202,7 +202,7 @@ describe("newsdesk logged in", () => {
     cy.window()
       .its("navigator.clipboard")
       .invoke("readText")
-      .should("equal", textToCopy + "\r\n\n")
+      .should("equal", textToCopy + "\r\n\r\n")
     cy.get("section[slotno=7] button[title='Delete']").click()
     cy.get("section[slotno=7]").should("not.contain", textToCopy)
   })
@@ -248,27 +248,46 @@ describe("newsdesk logged in", () => {
       force: true,
     })
   })
-it("should drag item from draft to script", () => {
-  switchPodCast("dev sandbox")
-  cy.get("#script-column").should("not.have.class", "col-span-3")
-  cy.get("button[title='toggle script expansion'").click()
-  cy.get("#script-column").should("have.class", "col-span-3")
-  cy.get("section[slotno=7] textarea").type("new share item{enter}", { force: true, })
-  cy.get("section[slotno=7]").should("contain", "new share item")
-  cy.get("section[slotno=6] textarea").type("new share item{enter}", { force: true, })
-  cy.get("section[slotno=6]").should("contain", "new share item")
-  cy.get("#script-data").then((el) => {
-    cy.get("section[slotno=7] ul  li div").eq(0).trigger(
-      "dragend",
-      {
-        clientX: el[0].getBoundingClientRect().right,
-        clientY: el[0].getBoundingClientRect().top,
-      },
-      { force: true },
-    )
+  it("should drag item from draft to script", () => {
+    switchPodCast("dev sandbox")
+    cy.get("#script-column").should("not.have.class", "col-span-3")
+    cy.get("button[title='toggle script expansion'").click()
+    cy.get("#script-column").should("have.class", "col-span-3")
+    cy.get("section[slotno=7] textarea").type("new share item{enter}", { force: true, })
+    cy.get("section[slotno=7]").should("contain", "new share item")
+    cy.get("section[slotno=6] textarea").type("new share item{enter}", { force: true, })
+    cy.get("section[slotno=6]").should("contain", "new share item")
+    cy.get("#script-data").then((el) => {
+      cy.get("section[slotno=7] ul  li div").eq(0).trigger(
+        "dragend",
+        {
+          clientX: el[0].getBoundingClientRect().right,
+          clientY: el[0].getBoundingClientRect().top,
+        },
+        { force: true },
+      )
+    })
+  })
+  it("should remove item from draft after it is dragged", () => {
+    switchPodCast("dev sandbox")
+    cy.get("#script-column").should("not.have.class", "col-span-3")
+    cy.get("button[title='toggle script expansion'").click()
+    cy.get("#script-column").should("have.class", "col-span-3")
+    cy.get("section[slotno=7] textarea").type("new share item{enter}", { force: true, })
+    cy.get("section[slotno=7]").should("contain", "new share item")
+    cy.get("#script-data").then((el) => {
+      cy.get("section[slotno=7] ul  li div").eq(0).trigger(
+        "dragend",
+        {
+          clientX: el[0].getBoundingClientRect().right,
+          clientY: el[0].getBoundingClientRect().top,
+        },
+        { force: true },
+      )
+    })
+    cy.get("section[slotno=7] textarea").should("not.contain", "new share item")
   })
 })
-  })
 
 import firebaseConfig from "../../firebase.json"
 import { firebaseConfig as firebaseAppConfig } from "../../src/plugins/firebase"
