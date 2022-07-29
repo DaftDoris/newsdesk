@@ -202,7 +202,7 @@ describe("newsdesk logged in", () => {
     cy.window()
       .its("navigator.clipboard")
       .invoke("readText")
-      .should("equal", textToCopy + "\r\n\r\n")
+      .should("equal", textToCopy + "\r\n\n")
     cy.get("section[slotno=7] button[title='Delete']").click()
     cy.get("section[slotno=7]").should("not.contain", textToCopy)
   })
