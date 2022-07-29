@@ -8,10 +8,11 @@
 </template>
 
 <script lang="ts" setup>
-import AppBar from '@/components/organisms/AppBar.vue'
-
+import AppBar from "@/components/organisms/AppBar.vue"
 </script>
 
 <style scoped lang="scss">
-
+* {
+  font-family: "Bree Serif", serif !important;
+}
 </style>
