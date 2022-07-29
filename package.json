@@ -39,7 +39,7 @@
     "@rushstack/eslint-patch": "1.1.4",
     "@tailwindcss/typography": "0.5.4",
     "@types/node": "16.11.46",
-    "@vitejs/plugin-vue": "2.3.3",
+    "@vitejs/plugin-vue": "3.0.1",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "11.0.0",
     "autoprefixer": "10.4.8",
