@@ -248,7 +248,7 @@ describe("newsdesk logged in", () => {
       force: true,
     })
   })
-  it("should drag item from draft to script", () => {
+  it("should drag item from draft to script and remove from draft", () => {
     switchPodCast("dev sandbox")
     cy.get("#script-column").should("not.have.class", "col-span-3")
     cy.get("button[title='toggle script expansion'").click()
@@ -267,25 +267,8 @@ describe("newsdesk logged in", () => {
         { force: true },
       )
     })
-  })
-  it("should remove item from draft after it is dragged", () => {
-    switchPodCast("dev sandbox")
-    cy.get("#script-column").should("not.have.class", "col-span-3")
-    cy.get("button[title='toggle script expansion'").click()
-    cy.get("#script-column").should("have.class", "col-span-3")
-    cy.get("section[slotno=7] textarea").type("new share item{enter}", { force: true, })
-    cy.get("section[slotno=7]").should("contain", "new share item")
-    cy.get("#script-data").then((el) => {
-      cy.get("section[slotno=7] ul  li div").eq(0).trigger(
-        "dragend",
-        {
-          clientX: el[0].getBoundingClientRect().right,
-          clientY: el[0].getBoundingClientRect().top,
-        },
-        { force: true },
-      )
-    })
     cy.get("section[slotno=7] textarea").should("not.contain", "new share item")
+    cy.get("section[slotno=6] textarea").should("not.contain", "new share item")
   })
 })
 
