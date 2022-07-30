@@ -85,6 +85,17 @@ export const useItemStore = defineStore("item", {
       this.saveData(podcastname, docname)
     },
 
+    async removeDraftItem(item: unknown, destination: string, from: string) {
+      const docRef = doc(db, destination, "draft", from, "shares")
+      try {
+        await updateDoc(docRef, {
+          items: arrayRemove(item),
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        console.log(e)
+      }
+    },
     async removeItem(item: Item, podcastname: string, docname: string) {
       const docRef = doc(collection(db, podcastname), docname)
       try {
@@ -230,7 +241,7 @@ export const useItemStore = defineStore("item", {
 
       }
       const filteredArray = this.scriptItemList.filter((item) => item.slot != slot)
-      sortArray.map((item) =>{
+      sortArray.map((item) => {
         filteredArray.push(item)
       })
       const docRef = doc(collection(db, podcastname), 'script')
@@ -241,17 +252,17 @@ export const useItemStore = defineStore("item", {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         if (e.code === "not-found" && e.name === "FirebaseError") {
-           await setDoc(docRef, {
+          await setDoc(docRef, {
             items: filteredArray,
           })
         } else throw e
       }
     },
-    async deleteScriptClipField(id: string, podcastname: string){
+    async deleteScriptClipField(id: string, podcastname: string) {
       let selectedIndex = 0
-      
+
       this.scriptItemList.map((item, index) => {
-        if(item.id === id){
+        if (item.id === id) {
           selectedIndex = index
         }
       })
@@ -264,7 +275,7 @@ export const useItemStore = defineStore("item", {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         if (e.code === "not-found" && e.name === "FirebaseError") {
-           await setDoc(docRef, {
+          await setDoc(docRef, {
             items: this.scriptItemList,
           })
         } else throw e
