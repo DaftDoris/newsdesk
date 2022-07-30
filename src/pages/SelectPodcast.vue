@@ -41,6 +41,7 @@ h2 {
   height: calc(100vh - 161px);
 }
 .podcastName {
-  @apply text-center text-xl mt-2 font-bold
+  @apply text-center text-xl mt-2;
+  font-family: 'Bree Serif', serif;
 }
 </style>
