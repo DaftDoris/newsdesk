@@ -17,21 +17,25 @@ import { db } from "@/plugins/firebase"
 
 interface State {
   itemList: Item[]
+  slotTitleList: string[],
+  slotList: string[],
   scriptItemList: any[]
-  slotTitleList: string[]
   title: string
   special_day: string
   birthdays: string
+  getScriptListClips: any[]
 }
 
 export const useItemStore = defineStore("item", {
   state: (): State => ({
     itemList: [],
     slotTitleList: [],
+    slotList: [],
     title: "",
     special_day: "",
     birthdays: "",
     scriptItemList: [],
+    getScriptListClips: [],
   }),
   actions: {
     async addItem(params: Item, podcastname: string, docname: string) {
@@ -48,6 +52,34 @@ export const useItemStore = defineStore("item", {
       this.saveScriptData(podCastName, newDocName)
     },
 
+    async setItemToSlot(item: any, podcastname: string) {
+      const slot2: any[] = []
+      this.scriptItemList.forEach(element => {
+        if (element.id === item.id) { element = item }
+        slot2.push(element)
+      });
+      this.scriptItemList = slot2
+      this.saveDataUpdate(podcastname, 'script')
+    },
+    async saveDataUpdate(podcastname: string, docname: string) {
+      const docRef = doc(collection(db, podcastname), docname)
+      try {
+        await updateDoc(docRef, {
+          items: this.scriptItemList,
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e.code === "not-found" && e.name === "FirebaseError") {
+          await setDoc(docRef, {
+            items: this.scriptItemList,
+          })
+        } else throw e
+      }
+    },
+
+    getSlotItem() {
+      return this.slotList.filter(item => item !== null);
+    },
     async updateSlotItem(item: [], podcastname: string, docname: string) {
       this.itemList = item
       this.saveData(podcastname, docname)
@@ -171,6 +203,7 @@ export const useItemStore = defineStore("item", {
       onSnapshot(doc(db, podcastId, "script"), (doc) => {
         if (doc.data()) {
           this.scriptItemList = (doc.data()?.items ?? []) as Item[]
+          // console.log('Document Data ==>', this.scriptItemList)
           return doc.data()
         } else {
           this.scriptItemList = []
@@ -251,6 +284,7 @@ export const useItemStore = defineStore("item", {
   },
   getters: {
     getList: (state: State) => state.itemList,
+    getScriptListClips: (state: State) => state.scriptItemList,
     getSlotTitleList: (state: State) => state.slotTitleList,
     getSlotList: (state) => {
       return (slot: number) =>

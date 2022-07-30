@@ -1,5 +1,6 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
-  <div class="border-2 script-section rounded-lg border-gray-400">
+  <div id="script-{{ slotno }}" class="border-2 script-section rounded-lg border-gray-400">
     <label class="w-full p-4 flex">
       {{ slotno }} :
       <span
@@ -21,6 +22,7 @@
             :index="indexNew"
             :clipField="itemIn?.clipField"
             @delete="deleteClip(itemMain.id)"
+            @change="updateClips()"
           ></ClipField>
         </div>
       </span>
@@ -38,16 +40,16 @@ import { VolumeUpIcon } from "@heroicons/vue/outline"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const itemStore = useItemStore()
 const props = defineProps({
+  podcastId: {
+    type: String,
+    required: true
+  },
   slotno: {
     type: Number,
     default: 1,
   },
   clipFieldData: {
     type: Object,
-    default: null,
-  },
-  podcastId: {
-    type: String,
     default: null,
   },
 })
@@ -65,6 +67,10 @@ const updateClipField = () => {
     },
   })
 }
+
+const updateClips = () => {
+  itemStore.setItemToSlot(props.clipFieldData, props.podcastId)
+}
 const dropped = (e: DragEvent, index: number) => {
   if (e.offsetY < -20) {
     itemStore.moveClipField(index, "top", props.podcastId, props.slotno)
@@ -79,8 +85,8 @@ const deleteClip = (id: string) => {
 }
 
 
-const text = ref<string>("")
 
+const text = ref<string>("")
 const save = () => {
   // emits('save', props.clipFieldData, props.slotno)
 }
@@ -88,26 +94,32 @@ const save = () => {
 
 <style scoped lang="scss">
 .title {
-  @apply appearance-none text-5xl dark:text-white bg-transparent focus:outline-none;
+  @apply appearance-none text-5xl;
   width: 47vw;
 }
+
 label {
-  @apply text-5xl dark:text-white;
+  @apply text-5xl;
 }
+
 .clip-field {
   @apply border-2 rounded-b-lg flex border-gray-400;
   background-color: #e3e4e4;
   margin: 20px -2px -2px -2px;
 }
+
 .clip-field label {
   @apply text-base whitespace-nowrap mr-2;
 }
+
 .clip-field .clip-section {
   @apply p-2 flex;
 }
+
 .clip-field .clip-section input {
   @apply font-semibold outline-none;
 }
+
 .script-section textarea.input {
   font-size: 16px !important;
 }
