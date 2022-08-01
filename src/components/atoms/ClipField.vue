@@ -3,7 +3,7 @@
     <div class="clip-section">
       <label for="">CLIP URL:</label>
       <input class="input break-all bg-transparent" id="clip_url" placeholder="URL"
-        v-model="clipField.clip_url" /><a class="text-blue-600" target="_blank" :href="clipField.clip_url">{{clipField.clip_url}}</a>
+        v-model="clipField.clip_url" /><a class="text-blue-600" target="_blank" @click="redirectTo(clipField.clip_url)">{{clipField.clip_url}}</a>
     </div>
     <div class="clip-section border-l-2 border-gray-400">
       <label for="">In:</label>
@@ -43,7 +43,9 @@ const props = defineProps({
     default: null,
   },
 })
-
+const redirectTo = (url: string) => {
+  window.open(url, '_blank');
+}
 const emits = defineEmits(["delete"])
 </script>
   
