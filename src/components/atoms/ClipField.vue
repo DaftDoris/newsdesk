@@ -2,8 +2,8 @@
   <div class="clip-field">
     <div class="clip-section">
       <label for="">CLIP URL:</label>
-      <input class="input break-all bg-transparent text-blue-600" id="clip_url" placeholder="URL"
-        v-model="clipField.clip_url" />
+      <input class="input break-all bg-transparent" id="clip_url" placeholder="URL"
+        v-model="clipField.clip_url" /><a class="text-blue-600" target="_blank" :href="clipField.clip_url">{{clipField.clip_url}}</a>
     </div>
     <div class="clip-section border-l-2 border-gray-400">
       <label for="">In:</label>
