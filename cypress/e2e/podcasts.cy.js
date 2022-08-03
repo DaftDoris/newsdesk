@@ -273,7 +273,7 @@ describe("newsdesk logged in", () => {
   it("should contain redirect date", () => {
     cy.visit('http://localhost:3000/#/dev/2022-10-10')
     cy.reload()
-    cy.get("#podcast_date").should("contain", "10-10-2022")
+    cy.get("#podcast_date").should("contain", "10/10/2022")
   })
 })
 
