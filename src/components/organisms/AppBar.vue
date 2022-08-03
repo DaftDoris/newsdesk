@@ -28,7 +28,7 @@
               class="z-10 origin-top-right absolute left-0 mt-2 sm:w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div class="py-1">
                 <MenuItem v-slot="{ active }" v-for="podcast in podcastData" :key="podcast.id">
-                <a :href="`#${podcast.id}/${date}`" :class="[
+                <a @click="redirectTo(`#${podcast.id}/${date}`)"  :class="[
                   active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                   'block px-4 py-2 text-sm',
                 ]">{{ podcast.name }}</a>
@@ -78,7 +78,9 @@ let date = ref(
     .toISOString()
     .split("T")[0],
 )
-
+const redirectTo = (url: string) => {
+  window.location.href = url
+}
 if (route.params.date) {
   date = ref(
     new Date(route.params.date.toString())
