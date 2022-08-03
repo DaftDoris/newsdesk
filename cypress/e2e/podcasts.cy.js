@@ -271,7 +271,7 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=6] textarea").should("not.contain", "new share item")
   })
   it("should contain podcast title", () => {
-   cy.visit('http://localhost:3001/')
+   cy.visit('http://localhost:3000/')
    cy.get('#podcast_title').eq(0).should('contain', 'The Smart 7: UK')
   })
 })
