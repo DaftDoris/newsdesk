@@ -73,22 +73,14 @@ const route = useRoute()
 const router = useRouter()
 const store = usePodcastStore()
 
-let date = ref(
-  new Date(new Date().setDate(new Date().getDate() + 1))
+const date = ref(
+  new Date(route.params.date ? route.params.date.toString() : new Date().setDate(new Date().getDate() + 1))
     .toISOString()
     .split("T")[0],
 )
 const redirectTo = (url: string) => {
   window.location.href = url
 }
-if (route.params.date) {
-  date = ref(
-    new Date(route.params.date.toString())
-      .toISOString()
-      .split("T")[0],
-  )
-}
-
 const changeDate = () => {
   router.push({
     name: "Podcast",
