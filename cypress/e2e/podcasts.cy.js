@@ -270,6 +270,10 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] textarea").should("not.contain", "new share item")
     cy.get("section[slotno=6] textarea").should("not.contain", "new share item")
   })
+  it("should contain redirect date", () => {
+    cy.visit('http://localhost:3000/#/dev/2022-10-10')
+    cy.get("#podcast_date").should("contain", "10-10-2022")
+  })
 })
 
 import firebaseConfig from "../../firebase.json"

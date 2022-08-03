@@ -38,7 +38,7 @@
           </transition>
         </Menu>
         <div class="date-input sm:ml-2 sm:mt-0 mt-1 w-56 sm:w-36 mx-auto sm:mx-0">
-          <input
+          <input id="podcast_date"
             class="inline-flex justify-between w-full items-center rounded-lg border border-black shadow-sm px-2 py-1 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
             type="date" v-model="date" @input="changeDate" />
         </div>
