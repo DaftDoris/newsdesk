@@ -15,7 +15,7 @@
             <div class="mx-auto" v-if="podcast.image">
               <a id="select-podcast" :href="`#${podcast.id}/${date}`">
                 <img :src="podcast.image" />
-                <p class="podcastName">{{podcast.name}}</p>
+                <p class="podcastName" id="podcast_title">{{podcast.name}}</p>
               </a>
             </div>
           </template>
