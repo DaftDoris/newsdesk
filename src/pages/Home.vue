@@ -77,7 +77,7 @@
           Clips: <span id="totalClipTime">{{ totalClipTime }}</span> |
           Script: <span id="totalScriptTime">{{ totalScriptTime }}</span> |
           Total: <span id="totalTime">{{ totalTime }}</span> |
-          <span>
+          <span class="cursor-pointer" @click="exportScript()">
             Export
             <CloudUploadIcon class="dark:text-white bg-transparent transition-colors w-6 in-line" />
           </span>
@@ -136,7 +136,13 @@ const props = defineProps({
       .split("T")[0],
   },
 })
+const exportScript = () =>{
+  const scriptSection = document.getElementById("script-data")?.innerHTML!
+  navigator.clipboard.writeText(scriptSection)
 
+  /* Alert the copied text */
+  alert("Text Copied");
+}
 const showTooltip = ref(Array.from({ length: 7 }, (_, i) => false))
 // @TODO: work with todays date
 const docname: any = ref(props.date)
