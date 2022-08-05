@@ -20,9 +20,9 @@
     "@headlessui/vue": "1.6.7",
     "@heroicons/vue": "1.0.6",
     "@types/linkify-it": "^3.0.2",
-    "@vueuse/core": "9.0.2",
+    "@vueuse/core": "9.1.0",
     "array-move": "^4.0.0",
-    "firebase": "9.9.1",
+    "firebase": "9.9.2",
     "moment": "2.29.4",
     "nanoid": "4.0.0",
     "pinia": "2.0.17",
@@ -46,15 +46,15 @@
     "cypress": "10.4.0",
     "eslint": "8.21.0",
     "eslint-plugin-cypress": "^2.12.1",
-    "firebase-tools": "11.4.0",
+    "firebase-tools": "11.4.2",
     "postcss": "8.4.14",
     "prettier": "2.7.1",
-    "sass": "1.53.0",
+    "sass": "1.54.3",
     "start-server-and-test": "^1.14.0",
     "tailwindcss": "3.1.7",
     "typescript": "4.7.4",
     "vite": "2.9.14",
     "vite-plugin-pwa": "0.12.3",
-    "vue-tsc": "0.39.2"
+    "vue-tsc": "0.39.4"
   }
 }
