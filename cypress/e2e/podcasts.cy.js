@@ -276,7 +276,6 @@ describe("newsdesk logged in", () => {
   })
   it("should be delete a delete test item", () => {
     switchPodCast("dev sandbox")
-
     cy.get("section[slotno=7] textarea").type("delete test item{enter}", {
       force: true,
     })
@@ -286,6 +285,25 @@ describe("newsdesk logged in", () => {
   })
   it("should be able to enter and clip on clip url", () => {
     switchPodCast("dev sandbox")
+    cy.get("#script-column").should("not.have.class", "col-span-3")
+    cy.get("button[title='toggle script expansion'").click()
+    cy.get("#script-column").should("have.class", "col-span-3")
+    cy.get("section[slotno=7] textarea").type("new share item{enter}", { force: true, })
+    cy.get("section[slotno=7]").should("contain", "new share item")
+    cy.get("section[slotno=6] textarea").type("new share item{enter}", { force: true, })
+    cy.get("section[slotno=6]").should("contain", "new share item")
+    cy.get("#script-data").then((el) => {
+      cy.get("section[slotno=7] ul  li div").eq(0).trigger(
+        "dragend",
+        {
+          clientX: el[0].getBoundingClientRect().right,
+          clientY: el[0].getBoundingClientRect().top,
+        },
+        { force: true },
+      )
+    })
+    cy.get("section[slotno=7] textarea").should("not.contain", "new share item")
+    cy.get("section[slotno=6] textarea").should("not.contain", "new share item")
     cy.get("#clip_url").type("https://www.google.com", {
       force: true,
     })
