@@ -274,6 +274,24 @@ describe("newsdesk logged in", () => {
     cy.visit('http://localhost:3000/#/dev/2022-10-10')
     cy.reload()
   })
+  it("should be delete a delete test item", () => {
+    switchPodCast("dev sandbox")
+
+    cy.get("section[slotno=7] textarea").type("delete test item{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7]").should("contain", "delete test item")
+    cy.get("section[slotno=7] button[title='Delete']").click()
+    cy.get("section[slotno=7]").should("not.contain", "delete test item")
+  })
+  it("should be able to enter and clip on clip url", () => {
+    switchPodCast("dev sandbox")
+    cy.get("#clip_url").type("https://www.google.com", {
+      force: true,
+    })
+    cy.get("#clip_url_link").should("contain", "https://www.google.com")
+    cy.get("#clip_url_link").click()
+  })
 })
 
 import firebaseConfig from "../../firebase.json"

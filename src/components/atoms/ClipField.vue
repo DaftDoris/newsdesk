@@ -3,7 +3,7 @@
     <div class="clip-section">
       <label for="">CLIP URL:</label>
      <div class="relative"> <input class="input break-all bg-transparent text-transparent" id="clip_url" placeholder="URL"
-        v-model="clipField.clip_url" /><a class="text-blue-600 left-0" target="_blank" @click="redirectTo(clipField.clip_url)">{{clipField.clip_url}}</a></div>
+        v-model="clipField.clip_url" /><a class="text-blue-600 left-0" id="clip_url_link" target="_blank" @click="redirectTo(clipField.clip_url)">{{clipField.clip_url}}</a></div>
     </div>
     <div class="clip-section border-l-2 border-gray-400">
       <label for="">In:</label>
