@@ -7,7 +7,22 @@ const switchPodCast = (podcast) => {
   cy.get("#headlessui-menu-button-1").click()
   cy.contains(podcast).click()
 }
-
+const dragDraftToScript = () => {
+  cy.get("#script-column").should("not.have.class", "col-span-3")
+  cy.get("button[title='toggle script expansion'").click()
+  cy.get("section[slotno=6] textarea").type("new share item{enter}", { force: true, })
+  cy.get("section[slotno=6]").should("contain", "new share item")
+  cy.get("#script-data div label").then((el) => {
+  cy.get("section[slotno=6] ul div").eq(0).trigger(
+      "dragend",
+      {
+        clientX: el[0].getBoundingClientRect().left,
+        clientY: el[0].getBoundingClientRect().top,
+      },
+      { force: true },
+    )
+  })
+}
 describe("newsdesk logged in", () => {
   beforeEach(() => {
     cy.request(
@@ -285,30 +300,8 @@ describe("newsdesk logged in", () => {
   })
   it("should be able to enter and clip on clip url", () => {
     switchPodCast("dev sandbox")
-    cy.get("#script-column").should("not.have.class", "col-span-3")
-    cy.get("button[title='toggle script expansion'").click()
-    cy.get("#script-column").should("have.class", "col-span-3")
-    cy.get("section[slotno=7] textarea").type("new share item{enter}", { force: true, })
-    cy.get("section[slotno=7]").should("contain", "new share item")
-    cy.get("section[slotno=6] textarea").type("new share item{enter}", { force: true, })
-    cy.get("section[slotno=6]").should("contain", "new share item")
-    cy.get("#script-data").then((el) => {
-      cy.get("section[slotno=7] ul  li div").eq(0).trigger(
-        "dragend",
-        {
-          clientX: el[0].getBoundingClientRect().right,
-          clientY: el[0].getBoundingClientRect().top,
-        },
-        { force: true },
-      )
-    })
-    cy.get("section[slotno=7] textarea").should("not.contain", "new share item")
-    cy.get("section[slotno=6] textarea").should("not.contain", "new share item")
-    cy.get("#clip_url").type("https://www.google.com", {
-      force: true,
-    })
-    cy.get("#clip_url_link").should("contain", "https://www.google.com")
-    cy.get("#clip_url_link").click()
+    dragDraftToScript()
+    cy.reload()
   })
 })
 
