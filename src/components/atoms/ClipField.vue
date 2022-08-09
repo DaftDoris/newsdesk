@@ -2,8 +2,8 @@
   <div class="clip-field">
     <div class="clip-section">
       <label for="">CLIP URL:</label>
-      <input class="input break-all bg-transparent text-blue-600" id="clip_url" placeholder="URL"
-        v-model="clipField.clip_url" />
+     <div class="relative"> <input class="input break-all bg-transparent text-transparent" id="clip_url" placeholder="URL"
+        v-model="clipField.clip_url" /><a class="text-blue-600 left-0" id="clip_url_link" target="_blank" @click="redirectTo(clipField.clip_url)">{{clipField.clip_url}}</a></div>
     </div>
     <div class="clip-section border-l-2 border-gray-400">
       <label for="">In:</label>
@@ -43,7 +43,9 @@ const props = defineProps({
     default: null,
   },
 })
-
+const redirectTo = (url: string) => {
+  window.open(url, '_blank');
+}
 const emits = defineEmits(["delete"])
 </script>
   
@@ -69,6 +71,11 @@ const emits = defineEmits(["delete"])
   
   .clip-field .clip-section {
     @apply p-2 flex;
+    height: 40px;
+  }
+  .clip-field .clip-section a{
+    transform: translate(0px, -100%);
+    @apply block;
   }
   
   .clip-field .clip-section input {

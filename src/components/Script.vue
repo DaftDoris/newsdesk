@@ -12,7 +12,7 @@
 
     <div v-for="(itemMain, index) in clipFieldData" :key="index">
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
-        <div @dragend="dropped($event, indexNew)" draggable="true">
+        <div @dragend="dropped($event, indexNew)" draggable="true" class="mt-5">
           <Input
             v-model="itemIn.label"
             :placeholder="`Enter things into ${slotno}...`"
@@ -122,5 +122,6 @@ label {
 
 .script-section textarea.input {
   font-size: 16px !important;
+  margin-top: 5px !important;
 }
 </style>
