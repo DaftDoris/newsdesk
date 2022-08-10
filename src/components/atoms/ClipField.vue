@@ -52,7 +52,7 @@ const emits = defineEmits(["delete"])
   
   <style scoped lang="scss">
   .title {
-    @apply appearance-none text-5xl focus: outline-none;
+    @apply appearance-none text-5xl focus:outline-none;
     width: 47vw;
   }
   

@@ -26,7 +26,7 @@ const value = useVModel(props, 'modelValue', emit)
 
 <style scoped lang="scss">
 .input {
-  @apply shadow appearance-none border rounded w-full py-4 px-4 text-2xl font-bold leading-6 text-gray-700 dark: text-gray-50 dark:bg-gray-900 leading-tight focus:outline-none transition-colors;
+  @apply shadow appearance-none border rounded w-full py-4 px-4 text-2xl font-bold leading-6 text-gray-700 dark:text-gray-50 dark:bg-gray-900 leading-tight focus:outline-none transition-colors;
 }
 
 .input::placeholder {}
