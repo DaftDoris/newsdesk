@@ -1,29 +1,20 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div id="script-{{ slotno }}" class="border-2 script-section rounded-lg border-gray-400">
-    <label class="w-full p-4 flex">
+    <label class="w-full p-4 flex text-4xl">
       {{ slotno }} :
-      <span
-        @click="updateClipField"
-        class="text-gray-400 flex justify-between items-center w-11/12"
-        >{{ slotno }} title <VolumeUpIcon class="h-8"
-      /></span>
+      <span @click="updateClipField" class="text-gray-400 flex justify-between items-center w-11/12">{{ slotno }} title
+        <VolumeUpIcon class="h-8" />
+      </span>
     </label>
 
     <div v-for="(itemMain, index) in clipFieldData" :key="index">
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
         <div @dragend="dropped($event, indexNew)" draggable="true" class="mt-5">
-          <Input
-            v-model="itemIn.label"
-            :placeholder="`Enter things into ${slotno}...`"
-            @keydown.enter.exact.prevent="save"
-          />
-          <ClipField
-            :index="indexNew"
-            :clipField="itemIn?.clipField"
-            @delete="deleteClip(itemMain.id)"
-            @change="updateClips()"
-          ></ClipField>
+          <Input v-model="itemIn.label" :placeholder="`Enter things into ${slotno}...`"
+            @keydown.enter.exact.prevent="save" />
+          <ClipField class="text-base" :index="indexNew" :clipField="itemIn?.clipField"
+            @delete="deleteClip(itemMain.id)" @change="updateClips()"></ClipField>
         </div>
       </span>
     </div>

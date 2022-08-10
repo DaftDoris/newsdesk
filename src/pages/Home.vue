@@ -2,7 +2,7 @@
   <main v-show="initiated && isAuthenticated" class="h-full grid grid-cols-5 gap-4 divide-x">
     <div class="px-4 column-h overflow-y-auto" id="inbox-column" :class="{ 'col-span-3': hideShowColumn.inbox }">
       <div class="flex justify-between items-center">
-        <h2 class="text-2xl dark:text-white">Inbox</h2>
+        <h2 class="text-3xl dark:text-white">Inbox</h2>
         <ListActionButton title="toggle inbox expansion">
           <PlusIcon @click="hideShowColumn.inbox = true, hideShowColumn.script = hideShowColumn.draft = false"
             v-if="!hideShowColumn.inbox" class="dark:text-white bg-transparent transition-colors w-6" />
@@ -15,7 +15,7 @@
     </div>
     <div class="px-4 column-h overflow-y-auto" id="draft-column" :class="{ 'col-span-3': hideShowColumn.draft }">
       <div class="flex justify-between items-center">
-        <h2 class="text-2xl dark:text-white">Draft</h2>
+        <h2 class="text-3xl dark:text-white">Draft</h2>
         <ListActionButton title="toggle draft expansion">
           <PlusIcon @click="hideShowColumn.draft = true, hideShowColumn.script = hideShowColumn.inbox = false"
             v-if="!hideShowColumn.draft" class="dark:text-white bg-transparent transition-colors w-6" />
@@ -60,7 +60,7 @@
     </div>
     <div class="px-4 column-h overflow-y-auto" id="script-column" :class="{ 'col-span-3': hideShowColumn.script }">
       <div class="flex justify-between items-center">
-        <h2 class="text-2xl dark:text-white">Script</h2>
+        <h2 class="text-3xl dark:text-white">Script</h2>
         <ListActionButton title="toggle script expansion">
           <PlusIcon @click="hideShowColumn.script = true, hideShowColumn.draft = hideShowColumn.inbox = false"
             v-if="!hideShowColumn.script" class="dark:text-white bg-transparent transition-colors w-6" />
@@ -70,10 +70,12 @@
       </div>
 
       <div class="mt-10" id="script-data">
-        <ScriptInput id="scriptTitleInput" placeholder="Title" @save="events.saveInputTitle" />
-        <ScriptInput id="scriptSpecialDaysInput" placeholder="Special Days" @save="events.saveInputSpecialDay" />
-        <ScriptInput id="scriptBirthdaysInput" placeholder="Birthdays" @save="events.saveInputBirthdays" />
-        <div class="text-center text-2xl">
+        <ScriptInput class="text-lg" id="scriptTitleInput" placeholder="Title" @save="events.saveInputTitle" />
+        <ScriptInput class="text-lg" id="scriptSpecialDaysInput" placeholder="Special Days"
+          @save="events.saveInputSpecialDay" />
+        <ScriptInput class="text-lg" id="scriptBirthdaysInput" placeholder="Birthdays"
+          @save="events.saveInputBirthdays" />
+        <div class="text-center text-lg">
           Clips: <span id="totalClipTime">{{ totalClipTime }}</span> |
           Script: <span id="totalScriptTime">{{ totalScriptTime }}</span> |
           Total: <span id="totalTime">{{ totalTime }}</span> |
