@@ -77,7 +77,7 @@
           Clips: <span id="totalClipTime">{{ totalClipTime }}</span> |
           Script: <span id="totalScriptTime">{{ totalScriptTime }}</span> |
           Total: <span id="totalTime">{{ totalTime }}</span> |
-          <span class="cursor-pointer" @click="exportScript()">
+          <span id="exportScript" class="cursor-pointer" @click="exportScript()">
             Export
             <CloudUploadIcon class="dark:text-white bg-transparent transition-colors w-6 in-line" />
           </span>
@@ -110,20 +110,18 @@ import ListActionButton from "@/components/atoms/ListActionButton.vue"
 import { PlusIcon, MinusIcon, ClipboardCopyIcon, CloudUploadIcon } from "@heroicons/vue/outline"
 import Scripts from "@/components/Script.vue"
 import { useRoute } from "vue-router"
+import jsPDF from "jspdf";
+import { GoogleAuth } from "google-auth-library";
+import { google } from "googleapis";
+
 
 const authStore = useAuthStore()
 const itemStore = useItemStore()
 const shareStore = useShareStore()
 const initiated = ref(false)
 const route = useRoute()
-
-const slotItems: any = [];
-let totalClipTime: string = '00:00';
-let totalScriptTime: string = '00:00';
-let totalTime: string = '00:00';
-
 const { user, isAuthenticated } = storeToRefs(authStore)
-
+const slotItems: any = [];
 const props = defineProps({
   podcastId: {
     type: String,
@@ -136,13 +134,94 @@ const props = defineProps({
       .split("T")[0],
   },
 })
-const exportScript = () =>{
-  const scriptSection = document.getElementById("script-data")?.innerHTML!
-  navigator.clipboard.writeText(scriptSection)
 
-  /* Alert the copied text */
-  alert("Text Copied");
+let totalClipTime: string = '00:00';
+let totalScriptTime: string = '00:00';
+let totalTime: string = '00:00';
+let slotItemsNew: any = [];
+let doc = new jsPDF("p", "pt", "letter");
+let y = 30;
+let pageHeight = 0;
+
+
+const createSlotItem = async () => {
+  slotItemsNew = [];
+  for (let i = 0; i < itemStore.scriptItemList.length; i++) {
+    const item = itemStore.scriptItemList[i];
+    if (!slotItemsNew[item.slot]) {
+      slotItemsNew[item.slot] = { items: [], };
+    }
+    slotItemsNew[item.slot].items.push(item);
+  }
 }
+
+const exportScript = async () => {
+  createSlotItem();
+  doc = new jsPDF("p", "pt", "letter");
+
+  y = 30;
+  pageHeight = doc.internal.pageSize.height - 20;
+  const scriptTitleInput = document.getElementById('scriptTitleInput') as HTMLInputElement;
+  const scriptSpecialDaysInput = document.getElementById('scriptSpecialDaysInput') as HTMLInputElement;
+  const scriptBirthdaysInput = document.getElementById('scriptBirthdaysInput') as HTMLInputElement;
+  // create pdf for each slot
+  let pagetitle = 'NewsDesk Draft Doris';
+  let xOffset1 = (doc.internal.pageSize.width / 2) - (doc.getStringUnitWidth(pagetitle) * doc.internal.getFontSize() / 2);
+  doc.setFontSize(18).text('NewsDesk Draft Doris', xOffset1, y); y += 20;
+  doc.setFontSize(18).text(scriptTitleInput.value, 20, y); y += 20;
+  doc.setFontSize(18).text(scriptSpecialDaysInput.value, 20, y); y += 20;
+  doc.setFontSize(18).text(scriptBirthdaysInput.value, 20, y); y += 20;
+  let clipText = `Clips: ${totalClipTime} | Script: ${totalScriptTime} | Total: ${totalTime}`;
+  let xOffset = (doc.internal.pageSize.width / 2) - (doc.getStringUnitWidth(clipText) * doc.internal.getFontSize() / 2);
+  doc.setFontSize(18).text(clipText, xOffset, y); y += 20;
+  for (let i = 7; i > 0; i--) {
+    if (y > pageHeight) { y = 30; doc.addPage(); } y += 50
+    doc.setFontSize(18).text(`${i} title`, 30, y); y += 30;
+    if (slotItemsNew[i]) {
+      slotItemsNew[i].items.filter((element: any) => {
+        if (y > pageHeight) { y = 30; doc.addPage(); }
+        var splitText = doc.splitTextToSize(element.params[0].label, 600);
+        splitText.map((text: string, ind: number) => {
+          if (y > pageHeight) { y = 30; doc.addPage(); }
+          doc.setFontSize(15).text(text, 20, y); y += 20;
+        });
+        let clipfield = element.params[0].clipField;
+        doc.setFontSize(15).text(`CLIP URL: ${clipfield.clip_url} | In: ${clipfield.in_time} | ${clipfield.in_msg} | Out: ${clipfield.out_time} | ${clipfield.out_msg}`, 40, y); y += 40;
+      })
+    }
+  }
+
+  // doc.save(`${props.podcastId}-${props.date}.pdf`); // save pdf to local system
+  // const pdfBlob = doc.output('blob'); // get pdf blob
+  window.open(doc.output('bloburl'), '_blank'); // open pdf in new tab
+
+  // const oauth2Client = await new google.auth.OAuth2(
+  //   '978154844694-36mpaj755nemo3ummj31ou3uve5kdiqt.apps.googleusercontent.com',
+  //   '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',
+  //   'http://localhost:3001'
+  // );
+  // const drive = google.drive({
+  //   version: 'v3',
+  //   auth: oauth2Client
+  // });
+  // const res = await drive.files.create({
+  //   requestBody: {
+  //     name: 'test.pdf',
+  //     mimeType: 'application/pdf'
+  //   },
+  //   media: {
+  //     mimeType: 'application/octet-stream',
+  //     body: pdfBlob
+  //   }
+  // });
+  // console.log(res);
+
+
+  // const scriptSection = document.getElementById("script-data")?.innerHTML!
+  // navigator.clipboard.writeText(scriptSection)
+  // alert("Text Copied");
+}
+
 const showTooltip = ref(Array.from({ length: 7 }, (_, i) => false))
 // @TODO: work with todays date
 const docname: any = ref(props.date)
@@ -151,6 +230,7 @@ const hideShowColumn = reactive({
   draft: true,
   script: false,
 })
+
 const draggedInbox = (x: number, y: number, text: string, key: string) => {
   const slot = <Item["slot"]>parseInt(
     <
