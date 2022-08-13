@@ -137,7 +137,7 @@ let totalClipTime: string = '00:00';
 let totalScriptTime: string = '00:00';
 let totalTime: string = '00:00';
 let slotItemsNew: any = [];
-let doc = new jsPDF("p", "pt", "letter");
+let doc: any = new jsPDF("p", "pt", "letter");
 let y = 30;
 let pageHeight = 0;
 
