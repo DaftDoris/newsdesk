@@ -1,30 +1,30 @@
 <template>
   <div class="clip-field">
-    <div class="clip-section text-base">
+    <div class="clip-section">
       <label for="">CLIP URL:</label>
-      <div class="relative"> <input class="input break-all bg-transparent text-transparent" id="clip_url"
+      <div class="relative"> <input class="input break-all bg-transparent text-transparent workSans" id="clip_url"
           placeholder="URL" v-model="clipField.clip_url" /><a class="text-blue-600 left-0" id="clip_url_link"
           target="_blank" @click="redirectTo(clipField.clip_url)">{{ clipField.clip_url }}</a></div>
     </div>
-    <div class="clip-section border-l-2 border-gray-400">
+    <div class="clip-section border-l border-gray-400">
       <label for="">In:</label>
-      <input class="input break-all bg-transparent w-8/12 text-gray-600" id="in_time" placeholder="In"
+      <input class="input break-all bg-transparent w-8/12 text-gray-600 workSans" id="in_time" placeholder="In"
         v-model="clipField.in_time" />
     </div>
-    <div class="clip-section border-l-2 border-gray-400">
+    <div class="clip-section border-l border-gray-400">
       <input class="input break-all bg-transparent w-10/12 text-gray-600" id="in_msg" placeholder="message"
         v-model="clipField.in_msg" />
     </div>
-    <div class="clip-section border-l-2 border-gray-400">
+    <div class="clip-section border-l border-gray-400">
       <label for="">Out:</label>
-      <input class="input break-all bg-transparent w-8/12 text-gray-600" id="out_time" placeholder="Out"
+      <input class="input break-all bg-transparent w-8/12 text-gray-600 workSans" id="out_time" placeholder="Out"
         v-model="clipField.out_time" />
     </div>
-    <div class="clip-section border-l-2 border-gray-400">
+    <div class="clip-section border-l border-gray-400">
       <input class="input break-all bg-transparent w-10/12 text-gray-600" id="out_msg" placeholder="message"
         v-model="clipField.out_msg" />
     </div>
-    <div class="clip-section border-l-2 border-gray-400">
+    <div class="clip-section border-l border-gray-400">
       <BackspaceIcon class="w-5 h-5" @click="emits('delete', index)" />
     </div>
   </div>
@@ -61,9 +61,9 @@ const emits = defineEmits(["delete"])
   }
   
   .clip-field {
-    @apply border-2 rounded-b-lg flex border-gray-400;
+    @apply rounded-b-lg flex border-gray-400;
     background-color: #e3e4e4;
-    margin: 20px -2px -2px -2px;
+    margin: 0px !important;
   }
   
   .clip-field label {
@@ -86,6 +86,9 @@ const emits = defineEmits(["delete"])
   
   .script-section textarea.input {
     font-size: 16px !important;
+  }
+  .workSans {
+    font-family: 'Work Sans' !important;
   }
   </style>
   

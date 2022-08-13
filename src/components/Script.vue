@@ -1,7 +1,7 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <div id="script-{{ slotno }}" class="border-2 script-section rounded-lg border-gray-400">
-    <label class="w-full p-4 flex text-4xl">
+  <div id="script-{{ slotno }}" class="border script-section rounded-lg border-gray-400">
+    <label class="w-full p-4 flex">
       {{ slotno }} :
       <span @click="updateClipField" class="text-gray-400 flex justify-between items-center w-11/12">{{ slotno }} title
         <VolumeUpIcon class="h-8" />
@@ -10,7 +10,7 @@
 
     <div v-for="(itemMain, index) in clipFieldData" :key="index">
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
-        <div @dragend="dropped($event, indexNew)" draggable="true" class="mt-5">
+        <div @dragend="dropped($event, indexNew)" draggable="true">
           <Input v-model="itemIn.label" :placeholder="`Enter things into ${slotno}...`"
             @keydown.enter.exact.prevent="save" />
           <ClipField class="text-base" :index="indexNew" :clipField="itemIn?.clipField"
@@ -90,11 +90,11 @@ const save = () => {
 }
 
 label {
-  @apply text-5xl;
+  @apply text-4xl;
 }
 
 .clip-field {
-  @apply border-2 rounded-b-lg flex border-gray-400;
+  @apply border rounded-b-lg flex border-gray-400;
   background-color: #e3e4e4;
   margin: 20px -2px -2px -2px;
 }

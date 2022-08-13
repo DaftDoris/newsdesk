@@ -75,7 +75,7 @@
           @save="events.saveInputSpecialDay" />
         <ScriptInput class="text-lg" id="scriptBirthdaysInput" placeholder="Birthdays"
           @save="events.saveInputBirthdays" />
-        <div class="text-center text-lg">
+        <div class="text-center text-lg text-gray-700">
           Clips: <span id="totalClipTime">{{ totalClipTime }}</span> |
           Script: <span id="totalScriptTime">{{ totalScriptTime }}</span> |
           Total: <span id="totalTime">{{ totalTime }}</span> |

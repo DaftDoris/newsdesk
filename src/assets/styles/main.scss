@@ -15,6 +15,11 @@ body,
   opacity: 0;
 }
 
+@font-face {
+  font-family: 'Work Sans';
+  src: url('../font/work-sans.regular.ttf') format('truetype');
+}
+
 * {
   font-family: 'Bree Serif', serif;
 }
