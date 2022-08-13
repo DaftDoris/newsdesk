@@ -144,13 +144,12 @@ let pageHeight = 0;
 
 const createSlotItem = async () => {
   slotItemsNew = [];
-  for (let i = 0; i < itemStore.scriptItemList.length; i++) {
-    const item = itemStore.scriptItemList[i];
-    if (!slotItemsNew[item.slot]) {
+  itemStore.scriptItemList.forEach((item) => {
+     if (!slotItemsNew[item.slot]) {
       slotItemsNew[item.slot] = { items: [], };
     }
     slotItemsNew[item.slot].items.push(item);
-  }
+  });
 }
 
 const exportScript = async () => {
