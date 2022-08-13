@@ -15,6 +15,7 @@
             <div class="mx-auto" v-if="podcast.image">
               <a id="select-podcast" :href="`#${podcast.id}/${date}`">
                 <img :src="podcast.image" />
+                <p class="podcastName" id="podcast_title">{{podcast.name}}</p>
               </a>
             </div>
           </template>
@@ -38,5 +39,9 @@ h2 {
 }
 .select-podcast {
   height: calc(100vh - 161px);
+}
+.podcastName {
+  @apply text-center text-xl mt-2;
+  font-family: 'Bree Serif', serif;
 }
 </style>
