@@ -145,7 +145,7 @@ let pageHeight = 0;
 const createSlotItem = async () => {
   slotItemsNew = [];
   itemStore.scriptItemList.forEach((item) => {
-     if (!slotItemsNew[item.slot]) {
+    if (!slotItemsNew[item.slot]) {
       slotItemsNew[item.slot] = { items: [], };
     }
     slotItemsNew[item.slot].items.push(item);
@@ -156,40 +156,47 @@ const exportScript = async () => {
   createSlotItem();
   doc = new jsPDF("p", "pt", "letter");
 
-  y = 30;
-  pageHeight = doc.internal.pageSize.height - 20;
+  y = 50;
+  let x = 50;
+  pageHeight = doc.internal.pageSize.height - 100;
   const scriptTitleInput = document.getElementById('scriptTitleInput') as HTMLInputElement;
   const scriptSpecialDaysInput = document.getElementById('scriptSpecialDaysInput') as HTMLInputElement;
   const scriptBirthdaysInput = document.getElementById('scriptBirthdaysInput') as HTMLInputElement;
   // create pdf for each slot
-  let pagetitle = 'NewsDesk Draft Doris';
-  let xOffset1 = (doc.internal.pageSize.width / 2) - (doc.getStringUnitWidth(pagetitle) * doc.internal.getFontSize() / 2);
-  doc.setFontSize(18).text('NewsDesk Draft Doris', xOffset1, y); y += 20;
-  doc.setFontSize(18).text(scriptTitleInput.value, 20, y); y += 20;
-  doc.setFontSize(18).text(scriptSpecialDaysInput.value, 20, y); y += 20;
-  doc.setFontSize(18).text(scriptBirthdaysInput.value, 20, y); y += 20;
+
+  doc.setFont("Helvetica", "bold").setFontSize(24).text(props.podcastId, x, y);
+  const textWidth = doc.getTextWidth(props.podcastId);
+  doc
+    .line(x, y + 2, x + textWidth, y + 2)
+    .line(x, y + 3, x + textWidth, y + 3);
+  y += 35;
+  doc.setFont("Helvetica", "bold").setFontSize(18).text(scriptTitleInput.value, x, y); y += 20;
+  doc.setFont("Helvetica", "bold").setFontSize(18).text(scriptSpecialDaysInput.value, x, y); y += 20;
+  doc.setFont("Helvetica", "bold").setFontSize(18).text(scriptBirthdaysInput.value, x, y); y += 25;
   let clipText = `Clips: ${totalClipTime} | Script: ${totalScriptTime} | Total: ${totalTime}`;
-  let xOffset = (doc.internal.pageSize.width / 2) - (doc.getStringUnitWidth(clipText) * doc.internal.getFontSize() / 2);
-  doc.setFontSize(18).text(clipText, xOffset, y); y += 20;
+  doc.setFont("Helvetica", "").setFontSize(13).text(clipText, x, y); y += 20;
   for (let i = 7; i > 0; i--) {
-    if (y > pageHeight) { y = 30; doc.addPage(); } y += 50
-    doc.setFontSize(18).text(`${i} title`, 30, y); y += 30;
+    if (y > pageHeight) { y = 50; doc.addPage(); } y += 20
+    doc.setFont("Helvetica", "bold").setFontSize(18).text(`${i} title`, x, y); y += 20;
     if (slotItemsNew[i]) {
       slotItemsNew[i].items.filter((element: any) => {
-        if (y > pageHeight) { y = 30; doc.addPage(); }
-        let splitText = doc.splitTextToSize(element.params[0].label, 600);
+        if (y > pageHeight) { y = 50; doc.addPage(); }
+        let splitText = doc.setFont("Helvetica", "").setFontSize(13).splitTextToSize(element.params[0].label, 500);
         splitText.map((text: string, ind: number) => {
-          if (y > pageHeight) { y = 30; doc.addPage(); }
-          doc.setFontSize(15).text(text, 20, y); y += 20;
+          if (y > pageHeight) { y = 50; doc.addPage(); }
+          doc.setFont("Helvetica", "").setFontSize(13).text(text, x, y); y += 20;
         });
         let clipfield = element.params[0].clipField;
-        doc.setFontSize(15).text(`CLIP URL: ${clipfield.clip_url} | In: ${clipfield.in_time} | ${clipfield.in_msg} | Out: ${clipfield.out_time} | ${clipfield.out_msg}`, 40, y); y += 40;
+        const cliptest = `CLIP URL: ${clipfield.clip_url} | In: ${clipfield.in_time} | ${clipfield.in_msg} | Out: ${clipfield.out_time} | ${clipfield.out_msg}`;
+        doc.setFont("Helvetica", "Oblique").setFontSize(13)
+          .text(cliptest, x, y);
+        const clipWidth = doc.getTextWidth(cliptest);
+        doc.line(x, y + 2, x + clipWidth, y + 2);
+        y += 40;
       })
     }
   }
-
   window.open(doc.output('bloburl'), '_blank'); // open pdf in new tab
-
 }
 
 const showTooltip = ref(Array.from({ length: 7 }, (_, i) => false))
