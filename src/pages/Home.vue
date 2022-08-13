@@ -77,7 +77,7 @@
           Clips: <span id="totalClipTime">{{ totalClipTime }}</span> |
           Script: <span id="totalScriptTime">{{ totalScriptTime }}</span> |
           Total: <span id="totalTime">{{ totalTime }}</span> |
-          <span>
+          <span id="exportScript" class="cursor-pointer" @click="exportScript()">
             Export
             <CloudUploadIcon class="dark:text-white bg-transparent transition-colors w-6 in-line" />
           </span>
@@ -110,20 +110,16 @@ import ListActionButton from "@/components/atoms/ListActionButton.vue"
 import { PlusIcon, MinusIcon, ClipboardCopyIcon, CloudUploadIcon } from "@heroicons/vue/outline"
 import Scripts from "@/components/Script.vue"
 import { useRoute } from "vue-router"
+import jsPDF from "jspdf";
+
 
 const authStore = useAuthStore()
 const itemStore = useItemStore()
 const shareStore = useShareStore()
 const initiated = ref(false)
 const route = useRoute()
-
-const slotItems: any = [];
-let totalClipTime: string = '00:00';
-let totalScriptTime: string = '00:00';
-let totalTime: string = '00:00';
-
 const { user, isAuthenticated } = storeToRefs(authStore)
-
+const slotItems: any = [];
 const props = defineProps({
   podcastId: {
     type: String,
@@ -137,6 +133,72 @@ const props = defineProps({
   },
 })
 
+let totalClipTime: string = '00:00';
+let totalScriptTime: string = '00:00';
+let totalTime: string = '00:00';
+let slotItemsNew: any = [];
+let doc: any = new jsPDF("p", "pt", "letter");
+let y = 30;
+let pageHeight = 0;
+
+
+const createSlotItem = async () => {
+  slotItemsNew = [];
+  itemStore.scriptItemList.forEach((item) => {
+    if (!slotItemsNew[item.slot]) {
+      slotItemsNew[item.slot] = { items: [], };
+    }
+    slotItemsNew[item.slot].items.push(item);
+  });
+}
+
+const exportScript = async () => {
+  createSlotItem();
+  doc = new jsPDF("p", "pt", "letter");
+
+  y = 50;
+  let x = 50;
+  pageHeight = doc.internal.pageSize.height - 100;
+  const scriptTitleInput = document.getElementById('scriptTitleInput') as HTMLInputElement;
+  const scriptSpecialDaysInput = document.getElementById('scriptSpecialDaysInput') as HTMLInputElement;
+  const scriptBirthdaysInput = document.getElementById('scriptBirthdaysInput') as HTMLInputElement;
+  // create pdf for each slot
+
+  doc.setFont("Helvetica", "bold").setFontSize(24).text(props.podcastId, x, y);
+  const textWidth = doc.getTextWidth(props.podcastId);
+  doc
+    .line(x, y + 2, x + textWidth, y + 2)
+    .line(x, y + 3, x + textWidth, y + 3);
+  y += 35;
+  doc.setFont("Helvetica", "bold").setFontSize(18).text(scriptTitleInput.value, x, y); y += 20;
+  doc.setFont("Helvetica", "bold").setFontSize(18).text(scriptSpecialDaysInput.value, x, y); y += 20;
+  doc.setFont("Helvetica", "bold").setFontSize(18).text(scriptBirthdaysInput.value, x, y); y += 25;
+  let clipText = `Clips: ${totalClipTime} | Script: ${totalScriptTime} | Total: ${totalTime}`;
+  doc.setFont("Helvetica", "").setFontSize(13).text(clipText, x, y); y += 20;
+  for (let i = 7; i > 0; i--) {
+    if (y > pageHeight) { y = 50; doc.addPage(); } y += 20
+    doc.setFont("Helvetica", "bold").setFontSize(18).text(`${i} title`, x, y); y += 20;
+    if (slotItemsNew[i]) {
+      slotItemsNew[i].items.filter((element: any) => {
+        if (y > pageHeight) { y = 50; doc.addPage(); }
+        let splitText = doc.setFont("Helvetica", "").setFontSize(13).splitTextToSize(element.params[0].label, 500);
+        splitText.map((text: string, ind: number) => {
+          if (y > pageHeight) { y = 50; doc.addPage(); }
+          doc.setFont("Helvetica", "").setFontSize(13).text(text, x, y); y += 20;
+        });
+        let clipfield = element.params[0].clipField;
+        const cliptest = `CLIP URL: ${clipfield.clip_url} | In: ${clipfield.in_time} | ${clipfield.in_msg} | Out: ${clipfield.out_time} | ${clipfield.out_msg}`;
+        doc.setFont("Helvetica", "Oblique").setFontSize(13)
+          .text(cliptest, x, y);
+        const clipWidth = doc.getTextWidth(cliptest);
+        doc.line(x, y + 2, x + clipWidth, y + 2);
+        y += 40;
+      })
+    }
+  }
+  window.open(doc.output('bloburl'), '_blank'); // open pdf in new tab
+}
+
 const showTooltip = ref(Array.from({ length: 7 }, (_, i) => false))
 // @TODO: work with todays date
 const docname: any = ref(props.date)
@@ -145,6 +207,7 @@ const hideShowColumn = reactive({
   draft: true,
   script: false,
 })
+
 const draggedInbox = (x: number, y: number, text: string, key: string) => {
   const slot = <Item["slot"]>parseInt(
     <
