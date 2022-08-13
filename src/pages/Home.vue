@@ -111,8 +111,6 @@ import { PlusIcon, MinusIcon, ClipboardCopyIcon, CloudUploadIcon } from "@heroic
 import Scripts from "@/components/Script.vue"
 import { useRoute } from "vue-router"
 import jsPDF from "jspdf";
-import { GoogleAuth } from "google-auth-library";
-import { google } from "googleapis";
 
 
 const authStore = useAuthStore()
@@ -180,7 +178,7 @@ const exportScript = async () => {
     if (slotItemsNew[i]) {
       slotItemsNew[i].items.filter((element: any) => {
         if (y > pageHeight) { y = 30; doc.addPage(); }
-        var splitText = doc.splitTextToSize(element.params[0].label, 600);
+        let splitText = doc.splitTextToSize(element.params[0].label, 600);
         splitText.map((text: string, ind: number) => {
           if (y > pageHeight) { y = 30; doc.addPage(); }
           doc.setFontSize(15).text(text, 20, y); y += 20;
@@ -191,35 +189,8 @@ const exportScript = async () => {
     }
   }
 
-  // doc.save(`${props.podcastId}-${props.date}.pdf`); // save pdf to local system
-  // const pdfBlob = doc.output('blob'); // get pdf blob
   window.open(doc.output('bloburl'), '_blank'); // open pdf in new tab
 
-  // const oauth2Client = await new google.auth.OAuth2(
-  //   '978154844694-36mpaj755nemo3ummj31ou3uve5kdiqt.apps.googleusercontent.com',
-  //   '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',
-  //   'http://localhost:3001'
-  // );
-  // const drive = google.drive({
-  //   version: 'v3',
-  //   auth: oauth2Client
-  // });
-  // const res = await drive.files.create({
-  //   requestBody: {
-  //     name: 'test.pdf',
-  //     mimeType: 'application/pdf'
-  //   },
-  //   media: {
-  //     mimeType: 'application/octet-stream',
-  //     body: pdfBlob
-  //   }
-  // });
-  // console.log(res);
-
-
-  // const scriptSection = document.getElementById("script-data")?.innerHTML!
-  // navigator.clipboard.writeText(scriptSection)
-  // alert("Text Copied");
 }
 
 const showTooltip = ref(Array.from({ length: 7 }, (_, i) => false))
