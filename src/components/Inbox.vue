@@ -96,6 +96,6 @@ h4 {
   @apply dark:text-white;
 }
 .component {
-  font-family: 'work sans';
+  font-family: 'Work Sans', sans-serif;
 }
 </style>

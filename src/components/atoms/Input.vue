@@ -27,7 +27,7 @@ const value = useVModel(props, 'modelValue', emit)
 <style scoped lang="scss">
 .input {
   @apply shadow appearance-none border rounded w-full py-4 px-4 text-base font-normal leading-6 text-gray-500 dark:text-gray-50 dark:bg-gray-900 leading-tight focus:outline-none transition-colors;
-  font-family: 'Work Sans';
+  font-family: 'Work Sans', sans-serif;
 }
 .zero-line-height {
   line-height: 0;

@@ -88,7 +88,7 @@ const emits = defineEmits(["delete"])
     font-size: 16px !important;
   }
   .workSans {
-    font-family: 'Work Sans' !important;
+    font-family: 'Work Sans', sans-serif !important;
   }
   </style>
   
