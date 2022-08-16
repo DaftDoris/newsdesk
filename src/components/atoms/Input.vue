@@ -31,6 +31,7 @@ const value = useVModel(props, 'modelValue', emit)
   font-size: 0.9rem;
   font-weight: 200;
   color: rgb(65, 65, 65);
+  box-shadow: none;
 }
 .zero-line-height {
   line-height: 0;

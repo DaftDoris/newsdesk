@@ -97,5 +97,9 @@ h4 {
 }
 .component {
   font-family: 'Work Sans', sans-serif;
+  font-size: .9rem;
+  font-weight: 200;
+  color: #414141;
+  line-height: 1.5rem;
 }
 </style>

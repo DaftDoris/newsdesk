@@ -54,41 +54,74 @@ const emits = defineEmits(["delete"])
   .title {
     @apply appearance-none text-5xl focus:outline-none;
     width: 47vw;
+    font-size: .9rem;
+    font-weight: 200;
+    color: #414141;
+    line-height: 1.5rem;
   }
   
   label {
     @apply text-5xl;
+    font-size: .9rem;
+    font-weight: 200;
+    color: #414141;
+    line-height: 1.5rem;
   }
   
   .clip-field {
     @apply rounded-b-lg flex border-gray-400;
     background-color: #e3e4e4;
     margin: 0px !important;
+    font-size: .9rem;
+    font-weight: 200;
+    color: #414141;
+    line-height: 1.5rem;
   }
   
   .clip-field label {
     @apply text-base whitespace-nowrap mr-2;
+    font-size: .9rem;
+    font-weight: 200;
+    color: #414141;
+    line-height: 1.5rem;
   }
   
   .clip-field .clip-section {
     @apply p-2 flex;
     height: 40px;
+    font-size: .9rem;
+    font-weight: 200;
+    color: #414141;
+    line-height: 1.5rem;
   }
   
   .clip-field .clip-section a {
     transform: translate(0px, -100%);
     @apply block;
+    
   }
   
   .clip-field .clip-section input {
     @apply font-semibold outline-none;
+    font-size: .9rem;
+    font-weight: 200;
+    color: #414141;
+    line-height: 1.5rem;
   }
   
   .script-section textarea.input {
     font-size: 16px !important;
+    font-size: .9rem;
+    font-weight: 200;
+    color: #414141;
+    line-height: 1.5rem;
   }
   .workSans {
     font-family: 'Work Sans', sans-serif !important;
+    font-size: .9rem;
+    font-weight: 200;
+    color: #414141;
+    line-height: 1.5rem;
   }
   </style>
   
