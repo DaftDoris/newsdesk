@@ -3,7 +3,7 @@
     {{ slotno }}:
     <input
       class="input break-all max-w-full"
-      :placeholder="`${slotno} title`"
+      :placeholder="title"
       v-model="value"
       @keydown.enter.prevent="updateEvent"
       @blur="updateEvent"

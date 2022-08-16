@@ -6,7 +6,7 @@
       <span
         @click="updateClipField"
         class="text-gray-400 flex justify-between items-center w-11/12"
-        >{{ slotno }} title <VolumeUpIcon class="h-8"
+        > title <VolumeUpIcon class="h-8"
       /></span>
     </label>
 
