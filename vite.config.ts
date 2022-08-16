@@ -19,6 +19,9 @@ const pwaOptions: Partial<VitePWAOptions> = {
 export default defineConfig({
   base: "/",
   plugins: [vue(), VitePWA(pwaOptions)],
+  define: {
+    "process.env": {}
+  },
   build: {
     minify: "esbuild",
     rollupOptions: {
