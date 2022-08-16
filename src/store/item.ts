@@ -212,7 +212,6 @@ export const useItemStore = defineStore("item", {
       }
     },
     async getScriptListData(podcastId: string) {
-      const docRef = doc(db, podcastId, "script")
       onSnapshot(doc(db, podcastId, "script"), (doc) => {
         if (doc.data()) {
           this.scriptItemList = (doc.data()?.items ?? []) as Item[]
