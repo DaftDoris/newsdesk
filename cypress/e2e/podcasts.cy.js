@@ -13,7 +13,7 @@ const dragDraftToScript = () => {
   cy.get("section[slotno=6] textarea").type("new share item{enter}", { force: true, })
   cy.get("section[slotno=6]").should("contain", "new share item")
   cy.get("#script-data div label").then((el) => {
-  cy.get("section[slotno=6] ul div").eq(0).trigger(
+    cy.get("section[slotno=6] ul div").eq(0).trigger(
       "dragend",
       {
         clientX: el[0].getBoundingClientRect().left,
@@ -248,7 +248,7 @@ describe("newsdesk logged in", () => {
   it("should script section", () => {
     switchPodCast("dev sandbox")
     for (let section = 1; section <= 7; section++) {
-      cy.get("#script-data span").should("contain", `${section} title`)
+      cy.get("#script-data span").should("contain", `title`)
     }
   })
   it("should be able to enter in input fields", () => {
