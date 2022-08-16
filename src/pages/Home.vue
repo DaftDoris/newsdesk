@@ -69,7 +69,7 @@
         </ListActionButton>
       </div>
 
-      <div class="mt-10" id="script-data">
+      <div class="mt-3" id="script-data">
         <ScriptInput class="text-lg" id="scriptTitleInput" placeholder="Title" @save="events.saveInputTitle" />
         <ScriptInput class="text-lg" id="scriptSpecialDaysInput" placeholder="Special Days"
           @save="events.saveInputSpecialDay" />

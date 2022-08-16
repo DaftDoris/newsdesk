@@ -28,6 +28,9 @@ const value = useVModel(props, 'modelValue', emit)
 .input {
   @apply shadow appearance-none border rounded w-full py-4 px-4 text-base font-normal leading-6 text-gray-500 dark:text-gray-50 dark:bg-gray-900 leading-tight focus:outline-none transition-colors;
   font-family: 'Work Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 200;
+  color: rgb(65, 65, 65);
 }
 .zero-line-height {
   line-height: 0;
