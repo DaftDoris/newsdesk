@@ -307,6 +307,10 @@ describe("newsdesk logged in", () => {
     dragDraftToScript()
     cy.reload()
   })
+  it("should be able to enter title in script slot title", () => {
+    switchPodCast("dev sandbox")
+    dragDraftToScript()
+  })
 })
 
 import firebaseConfig from "../../firebase.json"

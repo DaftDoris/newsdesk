@@ -1,14 +1,18 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div id="script-{{ slotno }}" class="border script-section rounded-lg border-gray-400">
-    <label class="w-full p-4 flex">
+    <label class="w-full p-4 flex" >
       {{ slotno }} :
-      <span @click="updateClipField" class="text-gray-400 flex justify-between items-center w-11/12">{{ slotno }} title
-        <VolumeUpIcon class="h-8" />
+   
+    </label> 
+    <div v-for="(itemMain, index) in clipFieldData" :key="index">
+       <label class="w-full pl-4 pb-2 flex">
+      <span  class="text-gray-400 flex justify-between items-center w-full">
+      <SlotTitleInput v-model="itemMain.SlotTitle" :slotno="slotno" :script="true"  :updateEvent="updateClips" />
+       <span class="mr-2" @click="updateClipField"><VolumeUpIcon class="h-8" /></span> 
       </span>
     </label>
-
-    <div v-for="(itemMain, index) in clipFieldData" :key="index">
+      
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
         <div @dragend="dropped($event, indexNew)" draggable="true">
           <Input v-model="itemIn.label" :placeholder="`Enter things into ${slotno}...`"
@@ -27,6 +31,7 @@ import { useItemStore } from "@/store/item"
 
 import Input from "@/components/atoms/Input.vue"
 import ClipField from "@/components/atoms/ClipField.vue"
+import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
 import { VolumeUpIcon } from "@heroicons/vue/outline"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const itemStore = useItemStore()
