@@ -52,7 +52,6 @@ export const useItemStore = defineStore("item", {
     ) {
       const id = nanoid()
       const item: any = { params, slot, id }
-      const newDocName: string = JSON.stringify(item)
       this.scriptItemList.push(item)
       this.saveData(podCastName, docname)
     },
