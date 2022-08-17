@@ -1,11 +1,25 @@
-html, body, #app {
-  @apply w-full h-full
+html,
+body,
+#app {
+  @apply w-full h-full;
+  font-family: 'Bree Serif', serif;
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.150s ease-in-out;
 }
 
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
+}
+
+@font-face {
+  font-family: 'Work Sans';
+  src: url('../font/work-sans.regular.ttf');
+}
+
+* {
+  font-family: 'Bree Serif', serif;
 }

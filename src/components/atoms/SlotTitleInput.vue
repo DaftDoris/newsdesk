@@ -32,10 +32,10 @@ const value = useVModel(props, "modelValue", emit)
 
 <style scoped lang="scss">
 .input {
-  @apply appearance-none text-5xl dark:text-white bg-transparent focus:outline-none;
+  @apply appearance-none text-4xl dark:text-white bg-transparent focus:outline-none;
   width: 47vw;
 }
 label {
-  @apply ss-furniture text-5xl dark:text-white;
+  @apply ss-furniture text-4xl dark:text-white;
 }
 </style>
