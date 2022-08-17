@@ -12,7 +12,7 @@
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
         <div @dragend="dropped($event, indexNew)" draggable="true">
           <Input v-model="itemIn.label" :placeholder="`Enter things into ${slotno}...`"
-            @keydown.enter.exact.prevent="save" />
+            @change="updateClips()" />
           <ClipField class="text-base" :index="indexNew" :clipField="itemIn?.clipField"
             @delete="deleteClip(itemMain.id)" @change="updateClips()"></ClipField>
         </div>
@@ -42,6 +42,12 @@ const props = defineProps({
   clipFieldData: {
     type: Object,
     default: null,
+  }, 
+  date: {
+    type: String,
+    default: new Date(new Date().setDate(new Date().getDate() + 1))
+      .toISOString()
+      .split("T")[0],
   },
 })
 const mainArray = props.clipFieldData
@@ -60,19 +66,20 @@ const updateClipField = () => {
 }
 
 const updateClips = () => {
-  itemStore.setItemToSlot(props.clipFieldData, props.podcastId)
+  console.log(window.location)
+  itemStore.setItemToSlot(props.clipFieldData, props.podcastId, props.date)
 }
 const dropped = (e: DragEvent, index: number) => {
   if (e.offsetY < -20) {
-    itemStore.moveClipField(index, "top", props.podcastId, props.slotno)
+    itemStore.moveClipField(index, "top", props.podcastId, props.slotno, props.date)
     console.log("top", index)
   } else {
-    itemStore.moveClipField(index, "bottom", props.podcastId, props.slotno)
+    itemStore.moveClipField(index, "bottom", props.podcastId, props.slotno, props.date)
     console.log("bottom", index)
   }
 }
 const deleteClip = (id: string) => {
-  itemStore.deleteScriptClipField(id, props.podcastId)
+  itemStore.deleteScriptClipField(id, props.podcastId, props.date)
 }
 
 
