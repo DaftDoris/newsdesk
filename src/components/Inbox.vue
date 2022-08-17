@@ -24,13 +24,12 @@
               :data-item="item"
               v-html="linkify(text)"
             />
-            <div>
+            <div class="flex justify-end">
               <HandIcon class="w-5 h-5" />
-              <ListActionButton title="Delete" id="delete-inbox" @click="emits('delete', text, podcastId)">
-                <BackspaceIcon
-                  class="dark:text-white bg-transparent transition-colors"
-                />
-              </ListActionButton>
+              <BackspaceIcon
+                title="Delete" id="delete-inbox" @click="emits('delete', text, podcastId)"
+                class="dark:text-white bg-transparent transition-colors"
+              />
             </div>
           </div>
         </span>
@@ -86,6 +85,9 @@ const emits = defineEmits(["draggedInbox", "delete"])
 </script>
 
 <style scoped lang="scss">
+svg {
+    @apply dark:text-white w-6 cursor-pointer;
+  }
 .podcast {
   @apply prose prose-a:text-blue-600;
   @apply prose prose-ul:pl-0;
