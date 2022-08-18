@@ -20,8 +20,6 @@ import { useItemStore } from "@/store/item"
 
 import Input from "@/components/atoms/Input.vue"
 import ClipField from "@/components/atoms/ClipField.vue"
-import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
-import { VolumeUpIcon } from "@heroicons/vue/outline"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const itemStore = useItemStore()
 const props = defineProps({
