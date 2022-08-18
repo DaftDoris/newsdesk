@@ -18,6 +18,7 @@ import { db } from "@/plugins/firebase"
 interface State {
   itemList: Item[]
   slotTitleList: string[]
+  scriptSlotTitleList: string[]
   slotList: string[]
   scriptItemList: any[]
   title: string
@@ -30,6 +31,7 @@ export const useItemStore = defineStore("item", {
   state: (): State => ({
     itemList: [],
     slotTitleList: [],
+    scriptSlotTitleList: [],
     slotList: [],
     title: "",
     special_day: "",
@@ -127,6 +129,7 @@ export const useItemStore = defineStore("item", {
         return await updateDoc(docRef, {
           items: this.itemList,
           slotTitles: this.slotTitleList,
+          scriptSlotTitleList: this.scriptSlotTitleList,
           script: this.scriptItemList,
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -135,6 +138,8 @@ export const useItemStore = defineStore("item", {
           return await setDoc(docRef, {
             items: this.itemList,
             slotTitles: this.slotTitleList,
+            scriptSlotTitleList: this.scriptSlotTitleList,
+            script: this.scriptItemList,
           })
         } else throw e
       }
@@ -228,6 +233,12 @@ export const useItemStore = defineStore("item", {
             : Array.from({ length: 7 }, () => "") ??
               Array.from({ length: 7 }, () => "")
         ) as string[]
+        this.scriptSlotTitleList = (
+          doc.data()?.scriptSlotTitleList && doc.data()?.scriptSlotTitleList.length > 0
+            ? doc.data()?.scriptSlotTitleList
+            : Array.from({ length: 7 }, () => "") ??
+              Array.from({ length: 7 }, () => "")
+        ) as string[]
         this.itemList = (doc.data()?.items ?? []) as Item[]
         this.scriptItemList = (doc.data()?.script ?? []) as Item[]
       })
@@ -237,6 +248,7 @@ export const useItemStore = defineStore("item", {
     getList: (state: State) => state.itemList,
     getScriptListClips: (state: State) => state.scriptItemList,
     getSlotTitleList: (state: State) => state.slotTitleList,
+    getScriptSlotTitleList: (state: State) => state.scriptSlotTitleList,
     getSlotList: (state) => {
       return (slot: number) =>
         state.itemList.filter((item) => item.slot === slot)

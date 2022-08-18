@@ -1,18 +1,7 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <div id="script-{{ slotno }}" class="border script-section rounded-lg border-gray-400">
-    <label class="w-full p-4 flex" >
-      {{ slotno }} :
-   
-    </label> 
+  <div id="script-{{ slotno }}" class="script-section">
     <div v-for="(itemMain, index) in clipFieldData" :key="index">
-       <label class="w-full pl-4 pb-2 flex">
-      <span  class="text-gray-400 flex justify-between items-center w-full">
-      <SlotTitleInput v-model="itemMain.SlotTitle" :slotno="slotno" :script="true"  :updateEvent="updateClips" />
-       <span class="mr-2" @click="updateClipField"><VolumeUpIcon class="h-8" /></span> 
-      </span>
-    </label>
-      
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
         <div @dragend="dropped($event, indexNew)" draggable="true">
           <Input v-model="itemIn.label" :placeholder="`Enter things into ${slotno}...`"
