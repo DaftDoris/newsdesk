@@ -1,13 +1,6 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <div id="script-{{ slotno }}" class="border script-section rounded-lg border-gray-400">
-    <label class="w-full p-4 flex">
-      {{ slotno }} :
-      <span @click="updateClipField" class="text-gray-400 flex justify-between items-center w-11/12">{{ slotno }} title
-        <VolumeUpIcon class="h-8" />
-      </span>
-    </label>
-
+  <div id="script-{{ slotno }}" class="script-section">
     <div v-for="(itemMain, index) in clipFieldData" :key="index">
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
         <div @dragend="dropped($event, indexNew)" draggable="true">
@@ -27,7 +20,6 @@ import { useItemStore } from "@/store/item"
 
 import Input from "@/components/atoms/Input.vue"
 import ClipField from "@/components/atoms/ClipField.vue"
-import { VolumeUpIcon } from "@heroicons/vue/outline"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const itemStore = useItemStore()
 const props = defineProps({
