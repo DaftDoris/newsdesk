@@ -44,16 +44,19 @@ export const useItemStore = defineStore("item", {
       this.itemList.push(item)
       this.saveData(podcastname, docname)
     },
-    async addScriptItem(params: Item, podCastName: string, slot: any) {
+    async addScriptItem(
+      params: Item,
+      podCastName: string,
+      slot: any,
+      docname: string,
+    ) {
       const id = nanoid()
-      const SlotTitle: any = ""
-      const item: any = { params, slot, id, SlotTitle }
-      const newDocName: string = JSON.stringify(item)
+      const item: any = { params, slot, id }
       this.scriptItemList.push(item)
-      this.saveScriptData(podCastName, newDocName)
+      this.saveData(podCastName, docname)
     },
 
-    async setItemToSlot(item: any, podcastname: string) {
+    async setItemToSlot(item: any, podcastname: string, docname: string) {
       const slot2: any[] = []
       this.scriptItemList.forEach((element) => {
         if (element.id === item.id) {
@@ -62,22 +65,7 @@ export const useItemStore = defineStore("item", {
         slot2.push(element)
       })
       this.scriptItemList = slot2
-      this.saveDataUpdate(podcastname, "script")
-    },
-    async saveDataUpdate(podcastname: string, docname: string) {
-      const docRef = doc(collection(db, podcastname), docname)
-      try {
-        await updateDoc(docRef, {
-          items: this.scriptItemList,
-        })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (e: any) {
-        if (e.code === "not-found" && e.name === "FirebaseError") {
-          await setDoc(docRef, {
-            items: this.scriptItemList,
-          })
-        } else throw e
-      }
+      this.saveData(podcastname, docname)
     },
 
     getSlotItem() {
@@ -139,6 +127,7 @@ export const useItemStore = defineStore("item", {
         return await updateDoc(docRef, {
           items: this.itemList,
           slotTitles: this.slotTitleList,
+          script: this.scriptItemList,
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
@@ -196,36 +185,12 @@ export const useItemStore = defineStore("item", {
         } else throw e
       }
     },
-    async saveScriptData(podcastname: string, docname: string) {
-      const docRef = doc(collection(db, podcastname), "script")
-      try {
-        return await updateDoc(docRef, {
-          items: this.scriptItemList,
-        })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (e: any) {
-        if (e.code === "not-found" && e.name === "FirebaseError") {
-          return await setDoc(docRef, {
-            items: this.scriptItemList,
-          })
-        } else throw e
-      }
-    },
-    async getScriptListData(podcastId: string) {
-      onSnapshot(doc(db, podcastId, "script"), (doc) => {
-        if (doc.data()) {
-          this.scriptItemList = (doc.data()?.items ?? []) as Item[]
-          return doc.data()
-        } else {
-          this.scriptItemList = []
-        }
-      })
-    },
     async moveClipField(
       indexFrom: number,
       position: string,
       podcastname: string,
       slot: number,
+      docname: string
     ) {
       let sortArray = this.scriptItemList.filter((item) => item.slot === slot)
       if (position == "top") {
@@ -241,21 +206,10 @@ export const useItemStore = defineStore("item", {
       sortArray.map((item) => {
         filteredArray.push(item)
       })
-      const docRef = doc(collection(db, podcastname), "script")
-      try {
-        return await updateDoc(docRef, {
-          items: filteredArray,
-        })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (e: any) {
-        if (e.code === "not-found" && e.name === "FirebaseError") {
-          await setDoc(docRef, {
-            items: filteredArray,
-          })
-        } else throw e
-      }
+      this.scriptItemList = filteredArray
+      this.saveData(podcastname, docname)
     },
-    async deleteScriptClipField(id: string, podcastname: string) {
+    async deleteScriptClipField(id: string, podcastname: string, docname: string) {
       let selectedIndex = 0
 
       this.scriptItemList.map((item, index) => {
@@ -264,19 +218,7 @@ export const useItemStore = defineStore("item", {
         }
       })
       this.scriptItemList.splice(selectedIndex, 1)
-      const docRef = doc(collection(db, podcastname), "script")
-      try {
-        return await updateDoc(docRef, {
-          items: this.scriptItemList,
-        })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (e: any) {
-        if (e.code === "not-found" && e.name === "FirebaseError") {
-          await setDoc(docRef, {
-            items: this.scriptItemList,
-          })
-        } else throw e
-      }
+     this.saveData(podcastname, docname)
     },
     connect(podcastname: string, docname: string) {
       onSnapshot(doc(db, podcastname, docname), (doc) => {
@@ -287,6 +229,7 @@ export const useItemStore = defineStore("item", {
               Array.from({ length: 7 }, () => "")
         ) as string[]
         this.itemList = (doc.data()?.items ?? []) as Item[]
+        this.scriptItemList = (doc.data()?.script ?? []) as Item[]
       })
     },
   },
