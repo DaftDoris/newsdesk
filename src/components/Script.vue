@@ -96,7 +96,7 @@ label {
   background-color: #e3e4e4;
   margin: 20px -2px -2px -2px;
   margin-top: -18px !important;
-  z-index: 9999;
+  z-index: 99;
   position: relative;
 }
 

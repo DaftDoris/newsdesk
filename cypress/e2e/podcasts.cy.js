@@ -23,6 +23,12 @@ const dragDraftToScript = () => {
     )
   })
 }
+const addDraftSlotItems = () => {
+  cy.get("section[slotno=7] textarea").type("<b>new share item</b>{enter}", {
+    force: true,
+  })
+  cy.get("section[slotno=7]").should("contain", "new share item")
+}
 describe("newsdesk logged in", () => {
   beforeEach(() => {
     cy.request(
@@ -303,6 +309,11 @@ describe("newsdesk logged in", () => {
   })
   it("should be able to enter title in script slot title", () => {
     switchPodCast("dev sandbox")
+    dragDraftToScript()
+  })
+  it("should be able to enter in WSYWG Editor in script section", () => {
+    switchPodCast("dev sandbox")
+    addDraftSlotItems()
     dragDraftToScript()
   })
 })
