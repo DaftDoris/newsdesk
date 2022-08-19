@@ -126,7 +126,7 @@ const events = {
 
 <style scoped lang="scss">
 header {
-  @apply ss-furniture;
+  // @apply ss-furniture;
   // px-4 py-4 justify-between sticky top-0 left-0 right-0 z-10 bg-white dark:bg-gray-800 transition-all outline-none border-none;
 }
 
