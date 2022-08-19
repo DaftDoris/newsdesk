@@ -41,9 +41,6 @@ const props = defineProps({
       .split("T")[0],
   },
 })
-const showValue = (e) => {
-  console.log(e, 'eeeeeeeeee')
-}
 const mainArray = props.clipFieldData
 const emits = defineEmits(["save", "dragged"])
 const updateClipField = () => {
