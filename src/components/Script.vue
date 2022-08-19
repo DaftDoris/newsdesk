@@ -16,8 +16,6 @@
 <script lang="ts" setup>
 import { watch, ref, reactive, onMounted } from "vue"
 import { useItemStore } from "@/store/item"
-import Editor from '@tinymce/tinymce-vue'
-import Input from "@/components/atoms/Input.vue"
 import ClipField from "@/components/atoms/ClipField.vue"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const itemStore = useItemStore()
