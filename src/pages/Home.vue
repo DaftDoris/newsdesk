@@ -2,7 +2,7 @@
   <main v-show="initiated && isAuthenticated" class="h-full grid grid-cols-5 gap-4 divide-x">
     <div class="px-4 column-h overflow-y-auto" id="inbox-column" :class="{ 'col-span-3': hideShowColumn.inbox }">
       <div class="flex justify-between items-center">
-        <h2 class="text-2xl dark:text-white">Inbox</h2>
+        <h2 class="text-3xl dark:text-white">Inbox</h2>
         <ListActionButton title="toggle inbox expansion">
           <PlusIcon @click="hideShowColumn.inbox = true, hideShowColumn.script = hideShowColumn.draft = false"
             v-if="!hideShowColumn.inbox" class="dark:text-white bg-transparent transition-colors w-6" />
@@ -15,7 +15,7 @@
     </div>
     <div class="px-4 column-h overflow-y-auto" id="draft-column" :class="{ 'col-span-3': hideShowColumn.draft }">
       <div class="flex justify-between items-center">
-        <h2 class="text-2xl dark:text-white">Draft</h2>
+        <h2 class="text-3xl dark:text-white">Draft</h2>
         <ListActionButton title="toggle draft expansion">
           <PlusIcon @click="hideShowColumn.draft = true, hideShowColumn.script = hideShowColumn.inbox = false"
             v-if="!hideShowColumn.draft" class="dark:text-white bg-transparent transition-colors w-6" />
@@ -60,7 +60,7 @@
     </div>
     <div class="px-4 column-h overflow-y-auto" id="script-column" :class="{ 'col-span-3': hideShowColumn.script }">
       <div class="flex justify-between items-center">
-        <h2 class="text-2xl dark:text-white">Script</h2>
+        <h2 class="text-3xl dark:text-white">Script</h2>
         <ListActionButton title="toggle script expansion">
           <PlusIcon @click="hideShowColumn.script = true, hideShowColumn.draft = hideShowColumn.inbox = false"
             v-if="!hideShowColumn.script" class="dark:text-white bg-transparent transition-colors w-6" />
@@ -69,11 +69,13 @@
         </ListActionButton>
       </div>
 
-      <div class="mt-10" id="script-data">
-        <ScriptInput id="scriptTitleInput" placeholder="Title" @save="events.saveInputTitle" />
-        <ScriptInput id="scriptSpecialDaysInput" placeholder="Special Days" @save="events.saveInputSpecialDay" />
-        <ScriptInput id="scriptBirthdaysInput" placeholder="Birthdays" @save="events.saveInputBirthdays" />
-        <div class="text-center text-2xl">
+      <div class="mt-3" id="script-data">
+        <ScriptInput class="text-lg" id="scriptTitleInput" placeholder="Title" @save="events.saveInputTitle" />
+        <ScriptInput class="text-lg" id="scriptSpecialDaysInput" placeholder="Special Days"
+          @save="events.saveInputSpecialDay" />
+        <ScriptInput class="text-lg" id="scriptBirthdaysInput" placeholder="Birthdays"
+          @save="events.saveInputBirthdays" />
+        <div class="text-center text-lg text-gray-700">
           Clips: <span id="totalClipTime">{{ totalClipTime }}</span> |
           Script: <span id="totalScriptTime">{{ totalScriptTime }}</span> |
           Total: <span id="totalTime">{{ totalTime }}</span> |
@@ -83,8 +85,14 @@
           </span>
         </div>
         <div v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)" :key="slot">
+          <div id="script-{{ slotno }}" class="border rounded-lg border-gray-400 pt-4 mb-5">
+            <span class="pl-4">
+          <SlotTitleInput v-model="itemStore.getScriptSlotTitleList[slot]" :slotno="slot"
+            :updateEvent="events.onUpdateSaveDoc" />
+            </span>
           <Scripts class="my-5" :slotno="slot" :clipFieldData="itemStore.getScriptList(slot)" :podcastId="podcastId"
-            @save="events.onClickScriptsSave" @change="checkUpdate()" />
+            @save="events.onClickScriptsSave" @change="checkUpdate()" :date="date" />
+          </div>
         </div>
       </div>
     </div>
@@ -107,7 +115,8 @@ import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
 import ScriptInput from "@/components/atoms/ScriptInput.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
-import { PlusIcon, MinusIcon, ClipboardCopyIcon, CloudUploadIcon } from "@heroicons/vue/outline"
+import { PlusIcon, MinusIcon, ClipboardCopyIcon } from "@heroicons/vue/outline"
+import { CloudUploadIcon } from "@heroicons/vue/solid"
 import Scripts from "@/components/Script.vue"
 import { useRoute } from "vue-router"
 import jsPDF from "jspdf";
@@ -328,8 +337,7 @@ const dragged = async (x: number, y: number, item: Item) => {
       },
     }]
 
-    await itemStore.addScriptItem(data, props.podcastId, item.slot)
-    await itemStore.getScriptListData(props.podcastId)
+    await itemStore.addScriptItem(data, props.podcastId, item.slot, docname.value)
 
     await itemStore.removeItem(item, props.podcastId, props.date)
   } else {
@@ -373,7 +381,6 @@ const moveArrayItemToNewIndex = (
 
 const connect = () => {
   if (initiated.value) { itemStore.connect(props.podcastId, docname.value) }
-  itemStore.getScriptListData(props.podcastId)
 }
 watch(
   () => route.params,
@@ -428,7 +435,7 @@ const events = {
   },
   onClickScriptsSave(params: any, slotno: string) {
     let data: any = { clipField: params }
-    itemStore.addScriptItem(data, props.podcastId, slotno)
+    itemStore.addScriptItem(data, props.podcastId, slotno, docname.value)
   },
   onUpdateSaveDoc() {
     itemStore.saveData(props.podcastId, docname.value)

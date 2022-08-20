@@ -165,6 +165,11 @@ const emits = defineEmits(["delete", "update", "save", "dragged", "share", "drag
 }
 .prose {
   max-width: 100%;
+  font-family: 'Work Sans', sans-serif;
+  font-size: .9rem;
+  font-weight: 200;
+  color: #414141;
+  line-height: 1.5rem;
 }
 .prose:focus {
   outline: 0;
