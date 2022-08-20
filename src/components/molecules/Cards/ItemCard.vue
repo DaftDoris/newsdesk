@@ -107,6 +107,11 @@ const dropped = (e: DragEvent) => {
     emits("dragged", e.clientX, e.clientY, props.item)
   }
 }
+const draggedDraft = (e: DragEvent) => {
+  if (dropzone.value) {
+    emits("draggedDraft", e.clientX, e.clientY, props.item)
+  }
+}
 
 const getItemText = (itemText: string) => {
   let replacedText
@@ -145,7 +150,7 @@ const getPodcastToShare = (item: Item) => {
   emits("share", item, podcastNameToShare.value)
 }
 
-const emits = defineEmits(["delete", "update", "save", "dragged", "share"])
+const emits = defineEmits(["delete", "update", "save", "dragged", "share", "draggedDraft"])
 </script>
 
 <style scoped lang="scss">
@@ -160,6 +165,11 @@ const emits = defineEmits(["delete", "update", "save", "dragged", "share"])
 }
 .prose {
   max-width: 100%;
+  font-family: 'Work Sans', sans-serif;
+  font-size: .9rem;
+  font-weight: 200;
+  color: #414141;
+  line-height: 1.5rem;
 }
 .prose:focus {
   outline: 0;

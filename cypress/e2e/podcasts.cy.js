@@ -7,7 +7,22 @@ const switchPodCast = (podcast) => {
   cy.get("#headlessui-menu-button-1").click()
   cy.contains(podcast).click()
 }
-
+const dragDraftToScript = () => {
+  cy.get("#script-column").should("not.have.class", "col-span-3")
+  cy.get("button[title='toggle script expansion'").click()
+  cy.get("section[slotno=6] textarea").type("new share item{enter}", { force: true, })
+  cy.get("section[slotno=6]").should("contain", "new share item")
+  cy.get("#script-data div label").then((el) => {
+  cy.get("section[slotno=6] ul div").eq(0).trigger(
+      "dragend",
+      {
+        clientX: el[0].getBoundingClientRect().left,
+        clientY: el[0].getBoundingClientRect().top,
+      },
+      { force: true },
+    )
+  })
+}
 describe("newsdesk logged in", () => {
   beforeEach(() => {
     cy.request(
@@ -77,7 +92,7 @@ describe("newsdesk logged in", () => {
     })
     cy.get("section[slotno=7]").should("contain", "new share item")
     cy.get("section[slotno=7] button[title='Share to podcast']").click()
-    cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
+    cy.get("section[slotno=7] input[id='dev'][type='checkbox']").click()
     switchPodCast("dev 2 sandbox")
     cy.get("#inbox-column").should("contain", "new share item")
   })
@@ -128,7 +143,6 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] textarea").type("dragging item{enter}", {
       force: true,
     })
-    cy.get("section[slotno=7]").should("contain", "dragging item")
     cy.get("section[slotno=7] textarea").type("dragging item in slot{enter}", {
       force: true,
     })
@@ -150,9 +164,6 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] button[title='Delete']").eq(0).click({
       force: true,
     })
-    cy.get("section[slotno=7]")
-      .should("not.contain", "dragging item")
-      .and("not.contain", "dragging item in slot")
   })
 
   it("should add item to slot and remove from inbox when dragging from inbox", () => {
@@ -177,9 +188,9 @@ describe("newsdesk logged in", () => {
     cy.get("#inbox-column ul").should("not.contain", "Remove item in inbox")
   })
 
-  it.skip(
-    "should add item to slot and remove from inbox when dragging from inbox",
-  )
+  it.skip("should add item to slot and remove from inbox when dragging from inbox", () => {
+    switchPodCast("dev sandbox")
+  })
   it("should add item to slot and remove from inbox", () => {
     switchPodCast("dev sandbox")
     cy.get("section[slotno=7] textarea").type("new share item{enter}", {
@@ -189,7 +200,7 @@ describe("newsdesk logged in", () => {
     cy.get("section[slotno=7] button[title='Share to podcast']").click()
     cy.get("section[slotno=7] input[id='dev2'][type='checkbox']").click()
     switchPodCast("dev 2 sandbox")
-    cy.get("#inbox-column").should("contain", "new share item") 
+    cy.get("#inbox-column").should("contain", "new share item")
     cy.get("#delete-inbox").eq(0).click({
       force: true,
     })
@@ -234,11 +245,65 @@ describe("newsdesk logged in", () => {
       "https://twitter.com/PoliticusSarah/status/15207595...",
     )
   })
-  it("should script section", () => {
+  it("should be able to enter in input fields", () => {
     switchPodCast("dev sandbox")
-    for (let section = 1; section <= 7; section++) {
-      cy.get("#script-data span").should("contain", `${section} title`)
-    }
+    cy.get("#scriptTitleInput").type("Script Title Input{enter}", {
+      force: true,
+    })
+    cy.get("#scriptSpecialDaysInput").type("Script SpecialDays Input{enter}", {
+      force: true,
+    })
+    cy.get("#scriptBirthdaysInput").type("Script Birthdays Input{enter}", {
+      force: true,
+    })
+  })
+  it("should drag item from draft to script and remove from draft", () => {
+    switchPodCast("dev sandbox")
+    cy.get("#script-column").should("not.have.class", "col-span-3")
+    cy.get("button[title='toggle script expansion'").click()
+    cy.get("#script-column").should("have.class", "col-span-3")
+    cy.get("section[slotno=7] textarea").type("new share item{enter}", { force: true, })
+    cy.get("section[slotno=7]").should("contain", "new share item")
+    cy.get("section[slotno=6] textarea").type("new share item{enter}", { force: true, })
+    cy.get("section[slotno=6]").should("contain", "new share item")
+    cy.get("#script-data").then((el) => {
+      cy.get("section[slotno=7] ul  li div").eq(0).trigger(
+        "dragend",
+        {
+          clientX: el[0].getBoundingClientRect().right,
+          clientY: el[0].getBoundingClientRect().top,
+        },
+        { force: true },
+      )
+    })
+    cy.get("section[slotno=7] textarea").should("not.contain", "new share item")
+    cy.get("section[slotno=6] textarea").should("not.contain", "new share item")
+  })
+  it("should contain podcast title", () => {
+    cy.visit('http://localhost:3000/')
+    cy.get('#podcast_title').eq(0).should('contain', 'The Smart 7: UK')
+  })
+  it("should contain redirect date", () => {
+    cy.visit('http://localhost:3000/#/dev/2022-10-10')
+    cy.reload()
+  })
+  it("should be delete a delete test item", () => {
+    switchPodCast("dev sandbox")
+    cy.get("section[slotno=7] textarea").type("delete test item{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=7]").should("contain", "delete test item")
+    cy.get("section[slotno=7] button[title='Delete']").click()
+    cy.get("section[slotno=7]").should("not.contain", "delete test item")
+  })
+  it("should be able to enter and clip on clip url", () => {
+    switchPodCast("dev sandbox")
+    dragDraftToScript()
+    cy.reload()
+  })
+  it("should be able to enter title in script slot title", () => {
+    switchPodCast("dev sandbox")
+    dragDraftToScript()
   })
 })
 

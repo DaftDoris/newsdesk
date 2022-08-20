@@ -19,7 +19,7 @@
             draggable="true"
           >
             <component
-              class="w-100 break-all w-full"
+              class="w-100 break-all w-full component text-base"
               :is="'p'"
               :data-item="item"
               v-html="linkify(text)"
@@ -43,6 +43,7 @@
 import { watch } from "vue"
 import { useShareStore } from "@/store/itemShare"
 import { HandIcon, BackspaceIcon } from "@heroicons/vue/outline"
+import ListActionButton from "@/components/atoms/ListActionButton.vue"
 
 const props = defineProps({
   podcastId: {
@@ -93,5 +94,12 @@ const emits = defineEmits(["draggedInbox", "delete"])
 h3,
 h4 {
   @apply dark:text-white;
+}
+.component {
+  font-family: 'Work Sans', sans-serif;
+  font-size: .9rem;
+  font-weight: 200;
+  color: #414141;
+  line-height: 1.5rem;
 }
 </style>
