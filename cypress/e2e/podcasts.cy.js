@@ -245,12 +245,6 @@ describe("newsdesk logged in", () => {
       "https://twitter.com/PoliticusSarah/status/15207595...",
     )
   })
-  it("should script section", () => {
-    switchPodCast("dev sandbox")
-    for (let section = 1; section <= 7; section++) {
-      cy.get("#script-data span").should("contain", `title`)
-    }
-  })
   it("should be able to enter in input fields", () => {
     switchPodCast("dev sandbox")
     cy.get("#scriptTitleInput").type("Script Title Input{enter}", {
@@ -306,6 +300,10 @@ describe("newsdesk logged in", () => {
     switchPodCast("dev sandbox")
     dragDraftToScript()
     cy.reload()
+  })
+  it("should be able to enter title in script slot title", () => {
+    switchPodCast("dev sandbox")
+    dragDraftToScript()
   })
 })
 
