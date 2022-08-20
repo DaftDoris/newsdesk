@@ -456,7 +456,7 @@ const events = {
   },
   onClickInboxDelete(text: string, podcastId: string) {
     if (window.confirm("Are you sure?")) {
-      itemStore.removeInboxItem(text, podcastId, podcastId)
+      shareStore.removeDraggedItem(text, props.podcastId, podcastId)
     }
   },
   onClickUpdate(item: Item) {
