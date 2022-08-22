@@ -1,6 +1,11 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div id="script-{{ slotno }}" class="script-section">
+  <span
+        @click="updateClipField"
+        class="absolute inline-block text-gray-400" style="right: 10px;top: 22px;"
+        > <VolumeUpIcon class="h-8"
+      /></span>
     <div v-for="(itemMain, index) in clipFieldData" :key="index">
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
         <div @dragend="dropped($event, indexNew)" draggable="true">
@@ -17,6 +22,7 @@
 import { watch, ref, reactive, onMounted } from "vue"
 import { useItemStore } from "@/store/item"
 import Editor from '@tinymce/tinymce-vue'
+import { VolumeUpIcon } from "@heroicons/vue/outline"
 import ClipField from "@/components/atoms/ClipField.vue"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const editor = Editor

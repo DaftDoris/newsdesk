@@ -85,7 +85,7 @@
           </span>
         </div>
         <div v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)" :key="slot">
-          <div id="script-{{ slotno }}" class="border rounded-lg border-gray-400 pt-4 mb-5">
+          <div id="script-{{ slotno }}" class="border relative rounded-lg border-gray-400 pt-4 mb-5">
             <span class="pl-4">
           <SlotTitleInput v-model="itemStore.getScriptSlotTitleList[slot]" :slotno="slot"
             :updateEvent="events.onUpdateSaveDoc" />

@@ -13,7 +13,7 @@ const dragDraftToScript = () => {
   cy.get("section[slotno=6] textarea").type("new share item{enter}", { force: true, })
   cy.get("section[slotno=6]").should("contain", "new share item")
   cy.get("#script-data div label").then((el) => {
-  cy.get("section[slotno=6] ul div").eq(0).trigger(
+    cy.get("section[slotno=6] ul div").eq(0).trigger(
       "dragend",
       {
         clientX: el[0].getBoundingClientRect().left,
