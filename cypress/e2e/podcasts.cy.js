@@ -305,6 +305,21 @@ describe("newsdesk logged in", () => {
     switchPodCast("dev sandbox")
     dragDraftToScript()
   })
+  it("should able to delete from inbox", () => {
+    switchPodCast("dev sandbox")
+    cy.get("section[slotno=6] textarea").type("item for inbox{enter}", {
+      force: true,
+    })
+    cy.get("section[slotno=6]").should("contain", "item for inbox")
+    cy.get("section[slotno=6] button[title='Share to podcast']").click()
+    cy.get("section[slotno=6] input[id='dev2'][type='checkbox']").click()
+    switchPodCast("dev 2 sandbox")
+    cy.get("#inbox-column").should("contain", "item for inbox")
+    cy.get("#delete-inbox").eq(0).click({
+      force: true,
+    })
+    cy.get("#inbox-column ul").should("not.contain", "Remove item in inbox")
+  })
 })
 
 import firebaseConfig from "../../firebase.json"
