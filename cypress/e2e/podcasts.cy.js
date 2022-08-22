@@ -7,6 +7,20 @@ const switchPodCast = (podcast) => {
   cy.get("#headlessui-menu-button-1").click()
   cy.contains(podcast).click()
 }
+const RemoveFromInbox = () => {
+  cy.get("section[slotno=6] textarea").type("item for inbox{enter}", {
+    force: true,
+  })
+  cy.get("section[slotno=6]").should("contain", "item for inbox")
+  cy.get("section[slotno=6] button[title='Share to podcast']").click()
+  cy.get("section[slotno=6] input[id='dev2'][type='checkbox']").click()
+  switchPodCast("dev 2 sandbox")
+  cy.get("#inbox-column").should("contain", "item for inbox")
+  cy.get("#delete-inbox").eq(0).click({
+    force: true,
+  })
+  cy.get("#inbox-column ul").should("not.contain", "Remove item in inbox")
+}
 const dragDraftToScript = () => {
   cy.get("#script-column").should("not.have.class", "col-span-3")
   cy.get("button[title='toggle script expansion'").click()
@@ -307,18 +321,7 @@ describe("newsdesk logged in", () => {
   })
   it("should able to delete from inbox", () => {
     switchPodCast("dev sandbox")
-    cy.get("section[slotno=6] textarea").type("item for inbox{enter}", {
-      force: true,
-    })
-    cy.get("section[slotno=6]").should("contain", "item for inbox")
-    cy.get("section[slotno=6] button[title='Share to podcast']").click()
-    cy.get("section[slotno=6] input[id='dev2'][type='checkbox']").click()
-    switchPodCast("dev 2 sandbox")
-    cy.get("#inbox-column").should("contain", "item for inbox")
-    cy.get("#delete-inbox").eq(0).click({
-      force: true,
-    })
-    cy.get("#inbox-column ul").should("not.contain", "Remove item in inbox")
+    RemoveFromInbox()
   })
 })
 
