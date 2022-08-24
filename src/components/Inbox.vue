@@ -8,13 +8,7 @@
       <template v-if="item">
         <span v-for="(text, index) in item" :key="index">
           <div
-            class="
-              flex
-              justify-between
-              items-center
-              border-b border-slate-400
-              pb-1
-            "
+            class="flex justify-between items-center border-b border-slate-400 pb-1"
             @dragend="dropped($event, text, podcastId)"
             draggable="true"
           >
@@ -26,9 +20,13 @@
             />
             <div>
               <HandIcon class="w-5 h-5" />
-              <ListActionButton title="Delete" id="delete-inbox" @click="emits('delete', text, podcastId)">
+              <ListActionButton
+                title="Delete"
+                id="delete-inbox"
+                @click="emits('delete', text, podcastId)"
+              >
                 <BackspaceIcon
-                  class="dark:text-white bg-transparent transition-colors"
+                  class="dark:text-white bg-transparent transition-colors w-5"
                 />
               </ListActionButton>
             </div>
@@ -68,7 +66,6 @@ watch(() => props.podcastId, connect, {
   immediate: true,
 })
 
-
 const linkify = (text: string) => {
   const itemText = text
     .replace(/(">.*?)<\/a>/g, "")
@@ -96,8 +93,8 @@ h4 {
   @apply dark:text-white;
 }
 .component {
-  font-family: 'Work Sans', sans-serif;
-  font-size: .9rem;
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.9rem;
   font-weight: 200;
   color: #414141;
   line-height: 1.5rem;
