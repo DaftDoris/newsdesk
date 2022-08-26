@@ -1,18 +1,15 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <div id="script-{{ slotno }}" class="border script-section rounded-lg border-gray-400">
-    <label class="w-full p-4 flex">
-      {{ slotno }} :
-      <span @click="updateClipField" class="text-gray-400 flex justify-between items-center w-11/12">{{ slotno }} title
-        <VolumeUpIcon class="h-8" />
-      </span>
-    </label>
-
+  <div id="script-{{ slotno }}" class="script-section">
+  <span
+        @click="updateClipField"
+        class="absolute inline-block text-gray-400" style="right: 10px;top: 22px;"
+        > <VolumeUpIcon class="h-8"
+      /></span>
     <div v-for="(itemMain, index) in clipFieldData" :key="index">
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
         <div @dragend="dropped($event, indexNew)" draggable="true">
-          <Input v-model="itemIn.label" :placeholder="`Enter things into ${slotno}...`"
-            @keydown.enter.exact.prevent="save" />
+          <editor api-key='wrg3d2pspm50rpya2jigebeiglg262wyd6x87rf2nnh2jjfh'  v-model="itemIn.label" @change="updateClips()" :init="{ /* your other settings */ }" />
           <ClipField class="text-base" :index="indexNew" :clipField="itemIn?.clipField"
             @delete="deleteClip(itemMain.id)" @change="updateClips()"></ClipField>
         </div>
@@ -24,11 +21,11 @@
 <script lang="ts" setup>
 import { watch, ref, reactive, onMounted } from "vue"
 import { useItemStore } from "@/store/item"
-
-import Input from "@/components/atoms/Input.vue"
-import ClipField from "@/components/atoms/ClipField.vue"
+import Editor from '@tinymce/tinymce-vue'
 import { VolumeUpIcon } from "@heroicons/vue/outline"
+import ClipField from "@/components/atoms/ClipField.vue"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+const editor = Editor
 const itemStore = useItemStore()
 const props = defineProps({
   podcastId: {
@@ -42,6 +39,12 @@ const props = defineProps({
   clipFieldData: {
     type: Object,
     default: null,
+  }, 
+  date: {
+    type: String,
+    default: new Date(new Date().setDate(new Date().getDate() + 1))
+      .toISOString()
+      .split("T")[0],
   },
 })
 const mainArray = props.clipFieldData
@@ -60,19 +63,20 @@ const updateClipField = () => {
 }
 
 const updateClips = () => {
-  itemStore.setItemToSlot(props.clipFieldData, props.podcastId)
+  console.log(window.location)
+  itemStore.setItemToSlot(props.clipFieldData, props.podcastId, props.date)
 }
 const dropped = (e: DragEvent, index: number) => {
   if (e.offsetY < -20) {
-    itemStore.moveClipField(index, "top", props.podcastId, props.slotno)
+    itemStore.moveClipField(index, "top", props.podcastId, props.slotno, props.date)
     console.log("top", index)
   } else {
-    itemStore.moveClipField(index, "bottom", props.podcastId, props.slotno)
+    itemStore.moveClipField(index, "bottom", props.podcastId, props.slotno, props.date)
     console.log("bottom", index)
   }
 }
 const deleteClip = (id: string) => {
-  itemStore.deleteScriptClipField(id, props.podcastId)
+  itemStore.deleteScriptClipField(id, props.podcastId, props.date)
 }
 
 
@@ -97,6 +101,9 @@ label {
   @apply border rounded-b-lg flex border-gray-400;
   background-color: #e3e4e4;
   margin: 20px -2px -2px -2px;
+  margin-top: -18px !important;
+  z-index: 99;
+  position: relative;
 }
 
 .clip-field label {
@@ -114,5 +121,8 @@ label {
 .script-section textarea.input {
   font-size: 16px !important;
   margin-top: 5px !important;
+}
+.tox .tox-statusbar{
+  display: none !important;
 }
 </style>

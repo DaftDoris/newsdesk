@@ -1,9 +1,19 @@
 <template>
-  <label class="w-11/12">
-    {{ slotno }}:
+  <label :class="{ 'flex w-flull': script, 'w-11/12': !script }">
+   <span v-if="!script">{{ slotno }}:</span> 
     <input
+      v-if="!script"
       class="input break-all max-w-full"
-      :placeholder="`${slotno} title`"
+      :placeholder="`title`"
+      v-model="value"
+      @keydown.enter.prevent="updateEvent"
+      @blur="updateEvent"
+    />
+    <input
+      v-else
+      class="input break-all max-w-full"
+      :placeholder="`${slotno} Enter title`"
+      id="scriptSlotTitle"
       v-model="value"
       @keydown.enter.prevent="updateEvent"
       @blur="updateEvent"
@@ -18,11 +28,13 @@ const props = withDefaults(
   defineProps<{
     modelValue?: string | number
     slotno: number
+    script: boolean
     updateEvent: () => void
   }>(),
   {
     modelValue: "",
     slotno: 0,
+    script: false,
   },
 )
 

@@ -29,9 +29,8 @@
     </div>
   </div>
 </template>
-  
-  <script lang="ts" setup>
 
+<script lang="ts" setup>
 import { BackspaceIcon } from "@heroicons/vue/outline"
 import { PropType } from "vue"
 const props = defineProps({
@@ -45,7 +44,7 @@ const props = defineProps({
   },
 })
 const redirectTo = (url: string) => {
-  window.open(url, '_blank');
+  window.open(url, "_blank")
 }
 const emits = defineEmits(["delete"])
 </script>
@@ -124,4 +123,4 @@ const emits = defineEmits(["delete"])
     line-height: 1.5rem;
   }
   </style>
-  
+
