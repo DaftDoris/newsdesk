@@ -14,7 +14,7 @@
           target="_blank"
           @click="redirectTo(clipField.clip_url)"
           >{{ clipField.clip_url }}</a
-        >
+          >
       </div>
     </div>
     <div class="clip-section border-l border-gray-400">
@@ -124,6 +124,11 @@ label {
 .clip-field .clip-section a {
   transform: translate(0px, -100%);
   @apply block;
+  max-width: 200px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  background: #E3E4E4;
 }
 
 .clip-field .clip-section input {
