@@ -9,8 +9,7 @@
     <div v-for="(itemMain, index) in clipFieldData" :key="index">
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
         <div @dragend="dropped($event, indexNew)" draggable="true">
-          <Input v-model="itemIn.label" :placeholder="`Enter things into ${slotno}...`"
-            @change="updateClips()" />
+          <editor api-key='wrg3d2pspm50rpya2jigebeiglg262wyd6x87rf2nnh2jjfh'  v-model="itemIn.label" @change="updateClips()" :init="{ /* your other settings */ }" />
           <ClipField class="text-base" :index="indexNew" :clipField="itemIn?.clipField"
             @delete="deleteClip(itemMain.id)" @change="updateClips()"></ClipField>
         </div>
@@ -22,11 +21,11 @@
 <script lang="ts" setup>
 import { watch, ref, reactive, onMounted } from "vue"
 import { useItemStore } from "@/store/item"
-
+import Editor from '@tinymce/tinymce-vue'
 import { VolumeUpIcon } from "@heroicons/vue/outline"
-import Input from "@/components/atoms/Input.vue"
 import ClipField from "@/components/atoms/ClipField.vue"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+const editor = Editor
 const itemStore = useItemStore()
 const props = defineProps({
   podcastId: {
@@ -102,6 +101,9 @@ label {
   @apply border rounded-b-lg flex border-gray-400;
   background-color: #e3e4e4;
   margin: 20px -2px -2px -2px;
+  margin-top: -18px !important;
+  z-index: 99;
+  position: relative;
 }
 
 .clip-field label {
@@ -119,5 +121,8 @@ label {
 .script-section textarea.input {
   font-size: 16px !important;
   margin-top: 5px !important;
+}
+.tox .tox-statusbar{
+  display: none !important;
 }
 </style>

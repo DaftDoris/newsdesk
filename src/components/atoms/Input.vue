@@ -1,7 +1,7 @@
 <template>
   <label class="block text-base font-bold zero-line-height">
     {{ label }}
-    <textarea class="input" :type="type" :placeholder="placeholder" v-model="value" />
+    <textarea class="input" id="default-editor" :type="type" :placeholder="placeholder" v-model="value" />
   </label>
 </template>
 

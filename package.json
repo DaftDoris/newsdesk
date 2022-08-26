@@ -19,6 +19,7 @@
   "dependencies": {
     "@headlessui/vue": "1.6.7",
     "@heroicons/vue": "1.0.6",
+    "@tinymce/tinymce-vue": "^4.0.7",
     "@types/linkify-it": "3.0.2",
     "@vueuse/core": "9.1.1",
     "array-move": "4.0.0",
@@ -49,6 +50,7 @@
     "cypress": "10.6.0",
     "eslint": "8.22.0",
     "eslint-plugin-cypress": "2.12.1",
+    "eslint-plugin-vue": "^9.3.0",
     "firebase-tools": "11.8.0",
     "postcss": "8.4.16",
     "prettier": "2.7.1",
