@@ -4,7 +4,7 @@
     <input
       v-if="!script"
       class="input break-all max-w-full"
-      :placeholder="`${slotno} title`"
+      :placeholder="`title`"
       v-model="value"
       @keydown.enter.prevent="updateEvent"
       @blur="updateEvent"

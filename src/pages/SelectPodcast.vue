@@ -35,7 +35,7 @@ const date = new Date(new Date().setDate(new Date().getDate() + 1))
 
 <style scoped lang="scss">
 h2 {
-  @apply ss-furniture dark:text-white text-center text-4xl;
+  @apply dark:text-white text-center text-4xl;
 }
 .select-podcast {
   height: calc(100vh - 161px);
