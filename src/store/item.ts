@@ -234,7 +234,7 @@ export const useItemStore = defineStore("item", {
         ) as string[]
         this.itemList = (doc.data()?.items ?? []) as Item[]
         this.scriptItemList = (doc.data()?.script ?? []) as Item[]
-        this.still_to_come = doc.data()?.still_to_come
+        this.still_to_come = doc.data()?.still_to_come ?? ''
       })
     },
   },

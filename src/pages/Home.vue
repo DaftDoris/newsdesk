@@ -213,7 +213,7 @@
               class="input break-all ml-3 border-0 outline-0 w-10/12 max-w-full bg-red-100"
               placeholder="Enter Value"
               v-model="itemStore.still_to_come"
-              @change="itemStore.saveData(podcastId, docname.value)"
+              @change="updateStillToCome()"
             />
           </div>
         </div>
@@ -264,7 +264,6 @@ const props = defineProps({
   },
 })
 
-const still_to_come: string = "xxxxx"
 let totalClipTime: string = "00:00"
 let totalScriptTime: string = "00:00"
 let totalTime: string = "00:00"
@@ -360,7 +359,9 @@ const exportScript = async () => {
   }
   window.open(doc.output("bloburl"), "_blank") // open pdf in new tab
 }
-
+const updateStillToCome = async() => {
+  await itemStore.saveData(props.podcastId, docname.value)
+}
 const showTooltip = ref(Array.from({ length: 7 }, (_, i) => false))
 // @TODO: work with todays date
 const docname: any = ref(props.date)
