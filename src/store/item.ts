@@ -209,53 +209,33 @@ export const useItemStore = defineStore("item", {
       podcastname: string,
       docname: string
     ) {
-      let sortArray: any = this.scriptItemList.filter((item) => item.slot === slot)
       if (position == "top") {
         if(slot !== 7){
-          console.log(sortArray, 'sortArray')
-          sortArray.slot = slot - 1
-          sortArray.map((item) => item.slot  = slot - 1 )
-
-          let swappedArray: any = this.scriptItemList.filter((item) => (item.slot - 1) === slot)
-          swappedArray.slot = slot + 1
-          swappedArray.map((item) => item.slot  = slot + 1 )
-          console.log(sortArray, swappedArray, 'sortArray')
-
-          const filteredArray = this.scriptItemList.filter(
-            (item) => (item.slot !== sortArray.slot) && (item.slot !== swappedArray.slot),
-          )
-          sortArray.map((item) => {
-            filteredArray.push(item)
+          this.scriptItemList.map((item)=> {
+            if(item.slot === slot){
+              item.slot = item.slot+1
+            } else {
+              if(item.slot === slot+1){
+                item.slot = item.slot-1
+              }
+            }
           })
-          swappedArray.map((item) => {
-            filteredArray.push(item)
-          })
-          this.scriptItemList = filteredArray
         }
       } else {
-        if(slot !== 1) {
-          console.log(sortArray, 'sortArray')
-          sortArray.slot = slot + 1
-          sortArray.map((item) => item.slot  = slot + 1 )
-            let swappedArray: any = this.scriptItemList.filter((item) => (item.slot + 1) === slot)
-            swappedArray.slot = slot - 1
-            swappedArray.map((item) => item.slot  = slot - 1 )
-          console.log(sortArray, swappedArray, 'sortArray')
-
-            const filteredArray = this.scriptItemList.filter(
-              (item) => (item.slot !== sortArray.slot) && (item.slot !== swappedArray.slot),
-            )
-            sortArray.map((item) => {
-              filteredArray.push(item)
-            })
-            swappedArray.map((item) => {
-              filteredArray.push(item)
-            })
-            this.scriptItemList = filteredArray
+        if(slot !== 1){
+          this.scriptItemList.map((item)=> {
+            if(item.slot === slot){
+              item.slot = item.slot-1
+            } else {
+              if(item.slot === slot-1){
+                item.slot = item.slot+1
+              }
+            }
+          })
         }
       }
-     
-      // this.saveData(podcastname, docname)
+
+      this.saveData(podcastname, docname)
     },
     async deleteScriptClipField(id: string, podcastname: string, docname: string) {
       let selectedIndex = 0
@@ -266,7 +246,7 @@ export const useItemStore = defineStore("item", {
         }
       })
       this.scriptItemList.splice(selectedIndex, 1)
-     this.saveData(podcastname, docname)
+      this.saveData(podcastname, docname)
     },
     connect(podcastname: string, docname: string) {
       onSnapshot(doc(db, podcastname, docname), (doc) => {
@@ -274,13 +254,13 @@ export const useItemStore = defineStore("item", {
           doc.data()?.slotTitles && doc.data()?.slotTitles.length > 0
             ? doc.data()?.slotTitles
             : Array.from({ length: 7 }, () => "") ??
-              Array.from({ length: 7 }, () => "")
+            Array.from({ length: 7 }, () => "")
         ) as string[]
         this.scriptSlotTitleList = (
           doc.data()?.scriptSlotTitleList && doc.data()?.scriptSlotTitleList.length > 0
             ? doc.data()?.scriptSlotTitleList
             : Array.from({ length: 7 }, () => "") ??
-              Array.from({ length: 7 }, () => "")
+            Array.from({ length: 7 }, () => "")
         ) as string[]
         this.itemList = (doc.data()?.items ?? []) as Item[]
         this.scriptItemList = (doc.data()?.script ?? []) as Item[]

@@ -163,10 +163,8 @@ const createSlotItem = async () => {
 const droppedScript = (e: DragEvent, slot: number) => {
   if (e.offsetY < -20) {
     itemStore.moveScript(slot, "top", props.podcastId, props.date)
-    console.log("top", slot)
   } else {
     itemStore.moveScript(slot, "bottom", props.podcastId, props.date)
-    console.log("bottom", slot)
   }
 }
 const exportScript = async () => {
