@@ -78,6 +78,7 @@
         <div class="text-center text-lg text-gray-700">
           Clips: <span id="totalClipTime">{{ totalClipTime }}</span> |
           Script: <span id="totalScriptTime">{{ totalScriptTime }}</span> |
+          Word Count: <span id="totalScriptTime">{{ showScriptTime.innerText }}</span> |
           Total: <span id="totalTime">{{ totalTime }}</span> |
           <span id="exportScript" class="cursor-pointer" @click="exportScript()">
             Export
