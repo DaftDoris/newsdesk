@@ -213,31 +213,25 @@ export const useItemStore = defineStore("item", {
       podcastname: string,
       docname: string
     ) {
-      if (position == "top") {
-        if(slot !== 7){
-          this.scriptItemList.map((item)=> {
-            if(item.slot === slot){
-              item.slot = item.slot+1
-            } else {
-              if(item.slot === slot+1){
-                item.slot = item.slot-1
-              }
-            }
-          })
-        }
-      } else {
-        if(slot !== 1){
-          this.scriptItemList.map((item)=> {
-            if(item.slot === slot){
-              item.slot = item.slot-1
-            } else {
-              if(item.slot === slot-1){
-                item.slot = item.slot+1
-              }
-            }
-          })
-        }
+      if (position == "top" && slot !== 7) {
+        this.scriptItemList.map((item) => {
+          if (item.slot === slot) {
+            item.slot = item.slot + 1
+          } else if (item.slot === slot + 1) {
+            item.slot = item.slot - 1
+          }
+        })
+      } else if (slot !== 1) {
+        this.scriptItemList.map((item) => {
+          if (item.slot === slot) {
+            item.slot = item.slot - 1
+          } else if (item.slot === slot - 1) {
+            item.slot = item.slot + 1
+          }
+
+        })
       }
+
 
       this.saveData(podcastname, docname)
     },
