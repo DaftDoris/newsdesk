@@ -22,6 +22,7 @@ interface State {
   slotList: string[]
   scriptItemList: any[]
   title: string
+  still_to_come: string
   special_day: string
   birthdays: string
   getScriptListClips: any[]
@@ -35,6 +36,7 @@ export const useItemStore = defineStore("item", {
     slotList: [],
     title: "",
     special_day: "",
+    still_to_come: "",
     birthdays: "",
     scriptItemList: [],
     getScriptListClips: [],
@@ -120,6 +122,7 @@ export const useItemStore = defineStore("item", {
           slotTitles: this.slotTitleList,
           scriptSlotTitleList: this.scriptSlotTitleList,
           script: this.scriptItemList,
+          still_to_come: this.still_to_come,
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
@@ -129,6 +132,7 @@ export const useItemStore = defineStore("item", {
             slotTitles: this.slotTitleList,
             scriptSlotTitleList: this.scriptSlotTitleList,
             script: this.scriptItemList,
+            still_to_come: this.still_to_come,
           })
         } else throw e
       }
@@ -264,6 +268,7 @@ export const useItemStore = defineStore("item", {
         ) as string[]
         this.itemList = (doc.data()?.items ?? []) as Item[]
         this.scriptItemList = (doc.data()?.script ?? []) as Item[]
+        this.still_to_come = doc.data()?.still_to_come ?? ''
       })
     },
   },
