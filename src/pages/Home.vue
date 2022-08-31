@@ -1,37 +1,85 @@
 <template>
-  <main v-show="initiated && isAuthenticated" class="h-full grid grid-cols-5 gap-4 divide-x">
-    <div class="px-4 column-h overflow-y-auto" id="inbox-column" :class="{ 'col-span-3': hideShowColumn.inbox }">
+  <main
+    v-show="initiated && isAuthenticated"
+    class="h-full grid grid-cols-5 gap-4 divide-x"
+  >
+    <div
+      class="px-4 column-h overflow-y-auto"
+      id="inbox-column"
+      :class="{ 'col-span-3': hideShowColumn.inbox }"
+    >
       <div class="flex justify-between items-center">
         <h2 class="text-3xl dark:text-white">Inbox</h2>
         <ListActionButton title="toggle inbox expansion">
-          <PlusIcon @click="hideShowColumn.inbox = true, hideShowColumn.script = hideShowColumn.draft = false"
-            v-if="!hideShowColumn.inbox" class="dark:text-white bg-transparent transition-colors w-6" />
-          <MinusIcon class="dark:text-white bg-transparent transition-colors w-6"
-            @click="hideShowColumn.inbox = false, hideShowColumn.draft = true" v-else />
+          <PlusIcon
+            @click="
+              ;(hideShowColumn.inbox = true),
+                (hideShowColumn.script = hideShowColumn.draft = false)
+            "
+            v-if="!hideShowColumn.inbox"
+            class="dark:text-white bg-transparent transition-colors w-6"
+          />
+          <MinusIcon
+            class="dark:text-white bg-transparent transition-colors w-6"
+            @click="
+              ;(hideShowColumn.inbox = false), (hideShowColumn.draft = true)
+            "
+            v-else
+          />
         </ListActionButton>
       </div>
-      <inbox :podcastId="podcastId" :docname="docname" @draggedInbox="draggedInbox"
-        @delete="events.onClickInboxDelete" />
+      <inbox
+        :podcastId="podcastId"
+        :docname="docname"
+        @draggedInbox="draggedInbox"
+        @delete="events.onClickInboxDelete"
+      />
     </div>
-    <div class="px-4 column-h overflow-y-auto" id="draft-column" :class="{ 'col-span-3': hideShowColumn.draft }">
+    <div
+      class="px-4 column-h overflow-y-auto"
+      id="draft-column"
+      :class="{ 'col-span-3': hideShowColumn.draft }"
+    >
       <div class="flex justify-between items-center">
         <h2 class="text-3xl dark:text-white">Draft</h2>
         <ListActionButton title="toggle draft expansion">
-          <PlusIcon @click="hideShowColumn.draft = true, hideShowColumn.script = hideShowColumn.inbox = false"
-            v-if="!hideShowColumn.draft" class="dark:text-white bg-transparent transition-colors w-6" />
-          <MinusIcon class="dark:text-white bg-transparent transition-colors w-6"
-            @click="hideShowColumn.draft = false, hideShowColumn.inbox = true" v-else />
+          <PlusIcon
+            @click="
+              ;(hideShowColumn.draft = true),
+                (hideShowColumn.script = hideShowColumn.inbox = false)
+            "
+            v-if="!hideShowColumn.draft"
+            class="dark:text-white bg-transparent transition-colors w-6"
+          />
+          <MinusIcon
+            class="dark:text-white bg-transparent transition-colors w-6"
+            @click="
+              ;(hideShowColumn.draft = false), (hideShowColumn.inbox = true)
+            "
+            v-else
+          />
         </ListActionButton>
       </div>
-      <section v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)" :key="slot" :slotno="slot">
+      <section
+        v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
+        :key="slot"
+        :slotno="slot"
+      >
         <div class="flex items-center justify-between">
-          <SlotTitleInput v-model="itemStore.getSlotTitleList[slot]" :slotno="slot"
-            :updateEvent="events.onUpdateSaveDoc" />
+          <SlotTitleInput
+            v-model="itemStore.getSlotTitleList[slot]"
+            :slotno="slot"
+            :updateEvent="events.onUpdateSaveDoc"
+          />
           <span class="relative flex">
-            <button title="Copy Slot item" @click="copySlotText(slot)"
-              class="text-white font-bold p-2 rounded transition-colors">
+            <button
+              title="Copy Slot item"
+              @click="copySlotText(slot)"
+              class="text-white font-bold p-2 rounded transition-colors"
+            >
               <ClipboardCopyIcon class="h-6 w-6 text-black" />
-              <div class="
+              <div
+                class="
                   rounded-md
                   absolute
                   bottom-10
@@ -41,7 +89,9 @@
                   bg-black
                   p-1
                   border-radius
-                " v-if="showTooltip[slot]">
+                "
+                v-if="showTooltip[slot]"
+              >
                 Copied
               </div>
             </button>
@@ -49,32 +99,68 @@
         </div>
         <InputCard @save="events.onClickSave" :slot="slot" />
         <List>
-          <template v-for="item in itemStore.getSlotList(slot).reverse()" :key="item.id">
+          <template
+            v-for="item in itemStore.getSlotList(slot).reverse()"
+            :key="item.id"
+          >
             <ListItem>
-              <ItemCard :item="item" @delete="events.onClickDelete" @share="events.onClickShare"
-                @update="events.onClickUpdate" @dragged="dragged" />
+              <ItemCard
+                :item="item"
+                @delete="events.onClickDelete"
+                @share="events.onClickShare"
+                @update="events.onClickUpdate"
+                @dragged="dragged"
+              />
             </ListItem>
           </template>
         </List>
       </section>
     </div>
-    <div class="px-4 column-h overflow-y-auto" id="script-column" :class="{ 'col-span-3': hideShowColumn.script }">
+    <div
+      class="px-4 column-h overflow-y-auto"
+      id="script-column"
+      :class="{ 'col-span-3': hideShowColumn.script }"
+    >
       <div class="flex justify-between items-center">
         <h2 class="text-3xl dark:text-white">Script</h2>
         <ListActionButton title="toggle script expansion">
-          <PlusIcon @click="hideShowColumn.script = true, hideShowColumn.draft = hideShowColumn.inbox = false"
-            v-if="!hideShowColumn.script" class="dark:text-white bg-transparent transition-colors w-6" />
-          <MinusIcon class="dark:text-white bg-transparent transition-colors w-6"
-            @click="hideShowColumn.script = false, hideShowColumn.inbox = true" v-else />
+          <PlusIcon
+            @click="
+              ;(hideShowColumn.script = true),
+                (hideShowColumn.draft = hideShowColumn.inbox = false)
+            "
+            v-if="!hideShowColumn.script"
+            class="dark:text-white bg-transparent transition-colors w-6"
+          />
+          <MinusIcon
+            class="dark:text-white bg-transparent transition-colors w-6"
+            @click="
+              ;(hideShowColumn.script = false), (hideShowColumn.inbox = true)
+            "
+            v-else
+          />
         </ListActionButton>
       </div>
 
       <div class="mt-3" id="script-data">
-        <ScriptInput class="text-lg" id="scriptTitleInput" placeholder="Title" @save="events.saveInputTitle" />
-        <ScriptInput class="text-lg" id="scriptSpecialDaysInput" placeholder="Special Days"
-          @save="events.saveInputSpecialDay" />
-        <ScriptInput class="text-lg" id="scriptBirthdaysInput" placeholder="Birthdays"
-          @save="events.saveInputBirthdays" />
+        <ScriptInput
+          class="text-lg"
+          id="scriptTitleInput"
+          placeholder="Title"
+          @save="events.saveInputTitle"
+        />
+        <ScriptInput
+          class="text-lg"
+          id="scriptSpecialDaysInput"
+          placeholder="Special Days"
+          @save="events.saveInputSpecialDay"
+        />
+        <ScriptInput
+          class="text-lg"
+          id="scriptBirthdaysInput"
+          placeholder="Birthdays"
+          @save="events.saveInputBirthdays"
+        />
         <div class="text-center text-lg text-gray-700">
           Clips: <span id="totalClipTime">{{ totalClipTime }}</span> |
           Script: <span id="totalScriptTime">{{ totalScriptTime }}</span> |
@@ -82,17 +168,50 @@
           Total: <span id="totalTime">{{ totalTime }}</span> |
           <span id="exportScript" class="cursor-pointer" @click="exportScript()">
             Export
-            <CloudUploadIcon class="dark:text-white bg-transparent transition-colors w-6 in-line" />
+            <CloudUploadIcon
+              class="
+                dark:text-white
+                bg-transparent
+                transition-colors
+                w-6
+                in-line
+              "
+            />
           </span>
         </div>
-        <div v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)" :key="slot">
-          <div id="script-{{ slotno }}" class="border relative rounded-lg border-gray-400 pt-4 mb-5">
+        <div
+          v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
+          :key="slot"
+        >
+          <div
+            id="script-{{ slotno }}"
+            class="border relative rounded-lg border-gray-400 pt-4 mb-5"
+          >
             <span class="pl-4">
-          <SlotTitleInput v-model="itemStore.getScriptSlotTitleList[slot]" :slotno="slot"
-            :updateEvent="events.onUpdateSaveDoc" />
+              <SlotTitleInput
+                v-model="itemStore.getScriptSlotTitleList[slot]"
+                :slotno="slot"
+                :updateEvent="events.onUpdateSaveDoc"
+              />
             </span>
-          <Scripts class="my-5" :slotno="slot" :clipFieldData="itemStore.getScriptList(slot)" :podcastId="podcastId"
-            @save="events.onClickScriptsSave" @change="checkUpdate()" :date="date" />
+            <Scripts
+              class="my-5"
+              :slotno="slot"
+              :clipFieldData="itemStore.getScriptList(slot)"
+              :podcastId="podcastId"
+              @save="events.onClickScriptsSave"
+              @change="checkUpdate()"
+              :date="date"
+            />
+          </div>
+          <div class="flex border relative rounded-lg bg-red-100 border-gray-400 my-5 p-2 bg-" v-if="slot == 4">
+            <label for="">STILL TO COME:  </label>
+            <input
+              class="input break-all ml-3 border-0 outline-0 w-10/12 max-w-full bg-red-100"
+              placeholder="Enter Value"
+              v-model="itemStore.still_to_come"
+              @change="updateStillToCome()"
+            />
           </div>
         </div>
       </div>
@@ -120,8 +239,7 @@ import { PlusIcon, MinusIcon, ClipboardCopyIcon } from "@heroicons/vue/outline"
 import { CloudUploadIcon } from "@heroicons/vue/solid"
 import Scripts from "@/components/Script.vue"
 import { useRoute } from "vue-router"
-import jsPDF from "jspdf";
-
+import jsPDF from "jspdf"
 
 const authStore = useAuthStore()
 const itemStore = useItemStore()
@@ -129,7 +247,7 @@ const shareStore = useShareStore()
 const initiated = ref(false)
 const route = useRoute()
 const { user, isAuthenticated } = storeToRefs(authStore)
-const slotItems: any = [];
+const slotItems: any = []
 const props = defineProps({
   podcastId: {
     type: String,
@@ -143,72 +261,104 @@ const props = defineProps({
   },
 })
 
-let totalClipTime: string = '00:00';
-let totalScriptTime: string = '00:00';
-let totalTime: string = '00:00';
-let slotItemsNew: any = [];
-let doc: any = new jsPDF("p", "pt", "letter");
-let y = 30;
-let pageHeight = 0;
-
+let totalClipTime: string = "00:00"
+let totalScriptTime: string = "00:00"
+let totalTime: string = "00:00"
+let slotItemsNew: any = []
+let doc: any = new jsPDF("p", "pt", "letter")
+let y = 30
+let pageHeight = 0
 
 const createSlotItem = async () => {
-  slotItemsNew = [];
+  slotItemsNew = []
   itemStore.scriptItemList.forEach((item) => {
     if (!slotItemsNew[item.slot]) {
-      slotItemsNew[item.slot] = { items: [], };
+      slotItemsNew[item.slot] = { items: [] }
     }
-    slotItemsNew[item.slot].items.push(item);
-  });
+    slotItemsNew[item.slot].items.push(item)
+  })
 }
 
 const exportScript = async () => {
-  createSlotItem();
-  doc = new jsPDF("p", "pt", "letter");
+  createSlotItem()
+  doc = new jsPDF("p", "pt", "letter")
 
-  y = 50;
-  let x = 50;
-  pageHeight = doc.internal.pageSize.height - 100;
-  const scriptTitleInput = document.getElementById('scriptTitleInput') as HTMLInputElement;
-  const scriptSpecialDaysInput = document.getElementById('scriptSpecialDaysInput') as HTMLInputElement;
-  const scriptBirthdaysInput = document.getElementById('scriptBirthdaysInput') as HTMLInputElement;
+  y = 50
+  let x = 50
+  pageHeight = doc.internal.pageSize.height - 100
+  const scriptTitleInput = document.getElementById(
+    "scriptTitleInput",
+  ) as HTMLInputElement
+  const scriptSpecialDaysInput = document.getElementById(
+    "scriptSpecialDaysInput",
+  ) as HTMLInputElement
+  const scriptBirthdaysInput = document.getElementById(
+    "scriptBirthdaysInput",
+  ) as HTMLInputElement
   // create pdf for each slot
 
-  doc.setFont("Helvetica", "bold").setFontSize(24).text(props.podcastId, x, y);
-  const textWidth = doc.getTextWidth(props.podcastId);
+  doc.setFont("Helvetica", "bold").setFontSize(24).text(props.podcastId, x, y)
+  const textWidth = doc.getTextWidth(props.podcastId)
+  doc.line(x, y + 2, x + textWidth, y + 2).line(x, y + 3, x + textWidth, y + 3)
+  y += 35
   doc
-    .line(x, y + 2, x + textWidth, y + 2)
-    .line(x, y + 3, x + textWidth, y + 3);
-  y += 35;
-  doc.setFont("Helvetica", "bold").setFontSize(18).text(scriptTitleInput.value, x, y); y += 20;
-  doc.setFont("Helvetica", "bold").setFontSize(18).text(scriptSpecialDaysInput.value, x, y); y += 20;
-  doc.setFont("Helvetica", "bold").setFontSize(18).text(scriptBirthdaysInput.value, x, y); y += 25;
-  let clipText = `Clips: ${totalClipTime} | Script: ${totalScriptTime} | Total: ${totalTime}`;
-  doc.setFont("Helvetica", "").setFontSize(13).text(clipText, x, y); y += 20;
+    .setFont("Helvetica", "bold")
+    .setFontSize(18)
+    .text(scriptTitleInput.value, x, y)
+  y += 20
+  doc
+    .setFont("Helvetica", "bold")
+    .setFontSize(18)
+    .text(scriptSpecialDaysInput.value, x, y)
+  y += 20
+  doc
+    .setFont("Helvetica", "bold")
+    .setFontSize(18)
+    .text(scriptBirthdaysInput.value, x, y)
+  y += 25
+  let clipText = `Clips: ${totalClipTime} | Script: ${totalScriptTime} | Total: ${totalTime}`
+  doc.setFont("Helvetica", "").setFontSize(13).text(clipText, x, y)
+  y += 20
   for (let i = 7; i > 0; i--) {
-    if (y > pageHeight) { y = 50; doc.addPage(); } y += 20
-    doc.setFont("Helvetica", "bold").setFontSize(18).text(`${i} title`, x, y); y += 20;
+    if (y > pageHeight) {
+      y = 50
+      doc.addPage()
+    }
+    y += 20
+    doc.setFont("Helvetica", "bold").setFontSize(18).text(`${i} title`, x, y)
+    y += 20
     if (slotItemsNew[i]) {
       slotItemsNew[i].items.filter((element: any) => {
-        if (y > pageHeight) { y = 50; doc.addPage(); }
-        let splitText = doc.setFont("Helvetica", "").setFontSize(13).splitTextToSize(element.params[0].label, 500);
+        if (y > pageHeight) {
+          y = 50
+          doc.addPage()
+        }
+        let splitText = doc
+          .setFont("Helvetica", "")
+          .setFontSize(13)
+          .splitTextToSize(element.params[0].label, 500)
         splitText.map((text: string, ind: number) => {
-          if (y > pageHeight) { y = 50; doc.addPage(); }
-          doc.setFont("Helvetica", "").setFontSize(13).text(text, x, y); y += 20;
-        });
-        let clipfield = element.params[0].clipField;
-        const cliptest = `CLIP URL: ${clipfield.clip_url} | In: ${clipfield.in_time} | ${clipfield.in_msg} | Out: ${clipfield.out_time} | ${clipfield.out_msg}`;
-        doc.setFont("Helvetica", "Oblique").setFontSize(13)
-          .text(cliptest, x, y);
-        const clipWidth = doc.getTextWidth(cliptest);
-        doc.line(x, y + 2, x + clipWidth, y + 2);
-        y += 40;
+          if (y > pageHeight) {
+            y = 50
+            doc.addPage()
+          }
+          doc.setFont("Helvetica", "").setFontSize(13).text(text, x, y)
+          y += 20
+        })
+        let clipfield = element.params[0].clipField
+        const cliptest = `CLIP URL: ${clipfield.clip_url} | In: ${clipfield.in_time} | ${clipfield.in_msg} | Out: ${clipfield.out_time} | ${clipfield.out_msg}`
+        doc.setFont("Helvetica", "Oblique").setFontSize(13).text(cliptest, x, y)
+        const clipWidth = doc.getTextWidth(cliptest)
+        doc.line(x, y + 2, x + clipWidth, y + 2)
+        y += 40
       })
     }
   }
-  window.open(doc.output('bloburl'), '_blank'); // open pdf in new tab
+  window.open(doc.output("bloburl"), "_blank") // open pdf in new tab
 }
-
+const updateStillToCome = async() => {
+  await itemStore.saveData(props.podcastId, docname.value)
+}
 const showTooltip = ref(Array.from({ length: 7 }, (_, i) => false))
 // @TODO: work with todays date
 const docname: any = ref(props.date)
@@ -221,7 +371,7 @@ const hideShowColumn = reactive({
 const draggedInbox = (x: number, y: number, text: string, key: string) => {
   const slot = <Item["slot"]>parseInt(
     <
-    string // @ts-ignore
+      string // @ts-ignore
     >document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
   )
 
@@ -233,90 +383,110 @@ const draggedInbox = (x: number, y: number, text: string, key: string) => {
 }
 
 const removeItemFromSlot = async () => {
-
   if (localStorage.getItem("deleteClip") != null) {
-    const deleteClip = JSON.parse(localStorage.getItem("deleteClip") || "");
-    localStorage.removeItem("deleteClip");
-    let slotitemData = slotItems[deleteClip.slotno].items;
-    slotitemData.splice(deleteClip.index, 1);
-    let slotitem: any = [];
-    if (slotitemData.length > 0) { slotitemData.forEach((element: any) => { slotitem.push(element) }); }
-    slotItems[deleteClip.slotno].items = slotitem;
-    await checkUpdate();
+    const deleteClip = JSON.parse(localStorage.getItem("deleteClip") || "")
+    localStorage.removeItem("deleteClip")
+    let slotitemData = slotItems[deleteClip.slotno].items
+    slotitemData.splice(deleteClip.index, 1)
+    let slotitem: any = []
+    if (slotitemData.length > 0) {
+      slotitemData.forEach((element: any) => {
+        slotitem.push(element)
+      })
+    }
+    slotItems[deleteClip.slotno].items = slotitem
+    await checkUpdate()
   }
 }
 const checkUpdate = async () => {
-  let totalClipSeconds = 0;
-  let scriptCount = 0;
+  let totalClipSeconds = 0
+  let scriptCount = 0
   const slotitemData = await itemStore.scriptItemList
   slotitemData.forEach((element) => {
     if (element.params.length > 0) {
       const clipField = element.params[0].clipField
-      let text = element.params[0].label.replace(/\n/g, "");
-      scriptCount += text.split(" ").length;
-      const in_time = clipField.in_time.split(":");
-      const out_time = clipField.out_time.split(":");
-      const in_seconds = (parseInt(in_time[0]) * 60) + parseInt(in_time[1]);
-      const out_seconds = (parseInt(out_time[0]) * 60) + parseInt(out_time[1]);
-      let seconds = out_seconds - in_seconds;
-      if (!isNaN(seconds)) { totalClipSeconds += seconds }
+      let text = element.params[0].label.replace(/\n/g, "")
+      scriptCount += text.split(" ").length
+      const in_time = clipField.in_time.split(":")
+      const out_time = clipField.out_time.split(":")
+      const in_seconds = parseInt(in_time[0]) * 60 + parseInt(in_time[1])
+      const out_seconds = parseInt(out_time[0]) * 60 + parseInt(out_time[1])
+      let seconds = out_seconds - in_seconds
+      if (!isNaN(seconds)) {
+        totalClipSeconds += seconds
+      }
     }
-  });
+  })
 
-  const remainingSeconds = totalClipSeconds % 60;
-  const minutes = Math.floor(totalClipSeconds / 60);
-  totalClipTime = `${(minutes < 10) ? "0" + minutes : minutes}:${(remainingSeconds < 10) ? "0" + remainingSeconds : remainingSeconds}`;
-  let shoetime = document.getElementById("totalClipTime") as HTMLSpanElement;
-  shoetime.innerText = totalClipTime;
+  const remainingSeconds = totalClipSeconds % 60
+  const minutes = Math.floor(totalClipSeconds / 60)
+  totalClipTime = `${minutes < 10 ? "0" + minutes : minutes}:${
+    remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds
+  }`
+  let shoetime = document.getElementById("totalClipTime") as HTMLSpanElement
+  shoetime.innerText = totalClipTime
   // Total Script Time
-  let ratio = (scriptCount / 185) * 60;
-  const ScriptSeconds = Math.floor(ratio % 60);
-  const ScriptMinutes = Math.floor(ratio / 60);
+  let ratio = (scriptCount / 185) * 60
+  const ScriptSeconds = Math.floor(ratio % 60)
+  const ScriptMinutes = Math.floor(ratio / 60)
 
-  totalScriptTime = `${(ScriptMinutes < 10) ? "0" + ScriptMinutes : ScriptMinutes}:${(ScriptSeconds < 10) ? "0" + ScriptSeconds.toFixed(0) : ScriptSeconds.toFixed(0)}`;
-  let showScriptTime = document.getElementById("totalScriptTime") as HTMLSpanElement;
-  showScriptTime.innerText = totalScriptTime;
+  totalScriptTime = `${
+    ScriptMinutes < 10 ? "0" + ScriptMinutes : ScriptMinutes
+  }:${
+    ScriptSeconds < 10
+      ? "0" + ScriptSeconds.toFixed(0)
+      : ScriptSeconds.toFixed(0)
+  }`
+  let showScriptTime = document.getElementById(
+    "totalScriptTime",
+  ) as HTMLSpanElement
+  showScriptTime.innerText = totalScriptTime
   // totalTime
-  let combinedSeconds = remainingSeconds + ScriptSeconds + 58;
-  let calculatedMinutes = Math.floor(combinedSeconds / 60);
-  let calculatedSeconds = Math.floor(combinedSeconds % 60);
-  let combinedMinutes = minutes + ScriptMinutes + calculatedMinutes;
-  let TotalCombinedSecomds = combinedMinutes * 60 + calculatedSeconds;
-  totalTime = "00:00";
-  if ((TotalCombinedSecomds > 58)) {
-    totalTime = `${(combinedMinutes < 10) ? "0" + combinedMinutes : combinedMinutes}:${(calculatedSeconds < 10) ? "0" + calculatedSeconds : calculatedSeconds}`;
+  let combinedSeconds = remainingSeconds + ScriptSeconds + 58
+  let calculatedMinutes = Math.floor(combinedSeconds / 60)
+  let calculatedSeconds = Math.floor(combinedSeconds % 60)
+  let combinedMinutes = minutes + ScriptMinutes + calculatedMinutes
+  let TotalCombinedSecomds = combinedMinutes * 60 + calculatedSeconds
+  totalTime = "00:00"
+  if (TotalCombinedSecomds > 58) {
+    totalTime = `${
+      combinedMinutes < 10 ? "0" + combinedMinutes : combinedMinutes
+    }:${calculatedSeconds < 10 ? "0" + calculatedSeconds : calculatedSeconds}`
   }
-  let showTotalTime = document.getElementById("totalTime") as HTMLSpanElement;
-  showTotalTime.innerText = totalTime;
-  showTotalTime.style.color = (TotalCombinedSecomds < (7 * 60)) ? "red" : "black";
+  let showTotalTime = document.getElementById("totalTime") as HTMLSpanElement
+  showTotalTime.innerText = totalTime
+  showTotalTime.style.color = TotalCombinedSecomds < 7 * 60 ? "red" : "black"
 }
 
 const updateClipTime = async () => {
-  let totalClipSeconds = 0;
+  let totalClipSeconds = 0
   slotItems.forEach(async (item: any) => {
     item.items.forEach(async (element: any) => {
-      const clipField = element.clipField;
+      const clipField = element.clipField
       // change strint to minutes and seconds
-      const in_time = clipField.in_time.split(":");
-      const out_time = clipField.out_time.split(":");
-      const in_seconds = (parseInt(in_time[0]) * 60) + parseInt(in_time[1]);
-      const out_seconds = (parseInt(out_time[0]) * 60) + parseInt(out_time[1]);
-      let seconds = out_seconds - in_seconds;
-      if (!isNaN(seconds)) { totalClipSeconds += seconds }
-    });
-  });
-  const remainingSeconds = totalClipSeconds % 60;
-  const minutes = Math.floor(totalClipSeconds / 60);
-  totalClipTime = `${(minutes < 10) ? "0" + minutes : minutes}:${(remainingSeconds < 10) ? "0" + remainingSeconds : remainingSeconds}`;
-  let shoetime = document.getElementById("totalClipTime") as HTMLSpanElement;
-  shoetime.innerText = totalClipTime;
+      const in_time = clipField.in_time.split(":")
+      const out_time = clipField.out_time.split(":")
+      const in_seconds = parseInt(in_time[0]) * 60 + parseInt(in_time[1])
+      const out_seconds = parseInt(out_time[0]) * 60 + parseInt(out_time[1])
+      let seconds = out_seconds - in_seconds
+      if (!isNaN(seconds)) {
+        totalClipSeconds += seconds
+      }
+    })
+  })
+  const remainingSeconds = totalClipSeconds % 60
+  const minutes = Math.floor(totalClipSeconds / 60)
+  totalClipTime = `${minutes < 10 ? "0" + minutes : minutes}:${
+    remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds
+  }`
+  let shoetime = document.getElementById("totalClipTime") as HTMLSpanElement
+  shoetime.innerText = totalClipTime
 }
 
 const dragged = async (x: number, y: number, item: Item) => {
-
   const slot = <Item["slot"]>parseInt(
     <
-    string // @ts-ignore
+      string // @ts-ignore
     >document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
   )
 
@@ -327,18 +497,25 @@ const dragged = async (x: number, y: number, item: Item) => {
   if (scriptColumn) {
     hideShowColumn.script = true
     hideShowColumn.inbox = hideShowColumn.draft = false
-    const data: any = [{
-      label: item.text,
-      clipField: {
-        clip_url: "",
-        in_time: "",
-        in_msg: "",
-        out_time: "",
-        out_msg: "",
+    const data: any = [
+      {
+        label: item.text,
+        clipField: {
+          clip_url: "",
+          in_time: "",
+          in_msg: "",
+          out_time: "",
+          out_msg: "",
+        },
       },
-    }]
+    ]
 
-    await itemStore.addScriptItem(data, props.podcastId, item.slot, docname.value)
+    await itemStore.addScriptItem(
+      data,
+      props.podcastId,
+      item.slot,
+      docname.value,
+    )
 
     await itemStore.removeItem(item, props.podcastId, props.date)
   } else {
@@ -349,7 +526,7 @@ const dragged = async (x: number, y: number, item: Item) => {
   if (slot && slot === item.slot) {
     const id = <
       string // @ts-ignore
-      >document.elementFromPoint(x, y)?.attributes["data-id"]?.value
+    >document.elementFromPoint(x, y)?.attributes["data-id"]?.value
 
     if (id) {
       const slotItem = itemStore.getList
@@ -381,7 +558,9 @@ const moveArrayItemToNewIndex = (
 }
 
 const connect = () => {
-  if (initiated.value) { itemStore.connect(props.podcastId, docname.value) }
+  if (initiated.value) {
+    itemStore.connect(props.podcastId, docname.value)
+  }
 }
 watch(
   () => route.params,
@@ -406,7 +585,6 @@ watch(
 
 watch(() => props.podcastId, connect, {
   immediate: true,
-
 })
 
 const copySlotText = (slot: number) => {
