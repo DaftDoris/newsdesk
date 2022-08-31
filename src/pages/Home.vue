@@ -164,7 +164,7 @@
         <div class="text-center text-lg text-gray-700">
           Clips: <span id="totalClipTime">{{ totalClipTime }}</span> |
           Script: <span id="totalScriptTime">{{ totalScriptTime }}</span> |
-          Word Count: <span id="totalScriptTime">{{ showScriptTime.innerText }}</span> |
+          Word Count: <span id="totalScriptTime">{{ totalWordCount }}</span> |
           Total: <span id="totalTime">{{ totalTime }}</span> |
           <span id="exportScript" class="cursor-pointer" @click="exportScript()">
             Export
@@ -264,6 +264,7 @@ const props = defineProps({
 let totalClipTime: string = "00:00"
 let totalScriptTime: string = "00:00"
 let totalTime: string = "00:00"
+let totalWordCount: string = "0"
 let slotItemsNew: any = []
 let doc: any = new jsPDF("p", "pt", "letter")
 let y = 30
@@ -425,6 +426,7 @@ const checkUpdate = async () => {
   }`
   let shoetime = document.getElementById("totalClipTime") as HTMLSpanElement
   shoetime.innerText = totalClipTime
+  totalWordCount = totalClipTime
   // Total Script Time
   let ratio = (scriptCount / 185) * 60
   const ScriptSeconds = Math.floor(ratio % 60)
