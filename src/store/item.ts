@@ -246,9 +246,8 @@ export const useItemStore = defineStore("item", {
       this.scriptItemList.splice(selectedIndex, 1)
       this.saveData(podcastname, docname)
     },
-    async deleteScriptClipFieldNew(id: string,ind:number, podcastname: string, docname: string) {
-        
-      this.scriptItemList[0].params
+    async deleteScriptClipFieldNew(id: string,ind:number, podcastname: string, docname: string) {        
+       
         let selectedIndex = 0
         this.scriptItemList.map((item, index) => {
           if (item.id === id) {
