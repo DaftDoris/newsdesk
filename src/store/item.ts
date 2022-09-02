@@ -246,6 +246,18 @@ export const useItemStore = defineStore("item", {
       this.scriptItemList.splice(selectedIndex, 1)
       this.saveData(podcastname, docname)
     },
+    async deleteScriptClipFieldNew(id: string,ind:number, podcastname: string, docname: string) {        
+       
+        let selectedIndex = 0
+        this.scriptItemList.map((item, index) => {
+          if (item.id === id) {
+            selectedIndex = index
+          }
+        })
+        this.scriptItemList[selectedIndex].params.splice(ind,1);
+        this.saveData(podcastname, docname)
+          
+    },    
     connect(podcastname: string, docname: string) {
       onSnapshot(doc(db, podcastname, docname), (doc) => {
         this.slotTitleList = (
