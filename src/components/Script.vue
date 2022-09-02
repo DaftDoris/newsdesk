@@ -11,7 +11,7 @@
         <div @dragend="dropped($event, indexNew)" draggable="true">
           <editor api-key='wrg3d2pspm50rpya2jigebeiglg262wyd6x87rf2nnh2jjfh'  v-model="itemIn.label" @change="updateClips()" :init="{ /* your other settings */ }" />
           <ClipField class="text-base" :index="indexNew" :clipField="itemIn?.clipField"
-            @delete="deleteClip(itemMain.id)" @change="updateClips()"></ClipField>
+            @delete="deleteClipNew(itemMain.id,indexNew)" @change="updateClips()"></ClipField>
         </div>
       </span>
     </div>
@@ -77,6 +77,10 @@ const dropped = (e: DragEvent, index: number) => {
 }
 const deleteClip = (id: string) => {
   itemStore.deleteScriptClipField(id, props.podcastId, props.date)
+}
+
+const deleteClipNew = (id:string,ind: number) => {
+  itemStore.deleteScriptClipFieldNew(id, ind,props.podcastId, props.date)
 }
 
 

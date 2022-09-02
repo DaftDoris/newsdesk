@@ -207,6 +207,34 @@ export const useItemStore = defineStore("item", {
       this.scriptItemList = filteredArray
       this.saveData(podcastname, docname)
     },
+    async moveScript(
+      slot: number,
+      position: string,
+      podcastname: string,
+      docname: string
+    ) {
+      if (position == "top" && slot !== 7) {
+        this.scriptItemList.map((item) => {
+          if (item.slot === slot) {
+            item.slot = item.slot + 1
+          } else if (item.slot === slot + 1) {
+            item.slot = item.slot - 1
+          }
+        })
+      } else if (slot !== 1) {
+        this.scriptItemList.map((item) => {
+          if (item.slot === slot) {
+            item.slot = item.slot - 1
+          } else if (item.slot === slot - 1) {
+            item.slot = item.slot + 1
+          }
+
+        })
+      }
+
+
+      this.saveData(podcastname, docname)
+    },
     async deleteScriptClipField(id: string, podcastname: string, docname: string) {
       let selectedIndex = 0
 
@@ -216,21 +244,33 @@ export const useItemStore = defineStore("item", {
         }
       })
       this.scriptItemList.splice(selectedIndex, 1)
-     this.saveData(podcastname, docname)
+      this.saveData(podcastname, docname)
     },
+    async deleteScriptClipFieldNew(id: string,ind:number, podcastname: string, docname: string) {        
+       
+        let selectedIndex = 0
+        this.scriptItemList.map((item, index) => {
+          if (item.id === id) {
+            selectedIndex = index
+          }
+        })
+        this.scriptItemList[selectedIndex].params.splice(ind,1);
+        this.saveData(podcastname, docname)
+          
+    },    
     connect(podcastname: string, docname: string) {
       onSnapshot(doc(db, podcastname, docname), (doc) => {
         this.slotTitleList = (
           doc.data()?.slotTitles && doc.data()?.slotTitles.length > 0
             ? doc.data()?.slotTitles
             : Array.from({ length: 7 }, () => "") ??
-              Array.from({ length: 7 }, () => "")
+            Array.from({ length: 7 }, () => "")
         ) as string[]
         this.scriptSlotTitleList = (
           doc.data()?.scriptSlotTitleList && doc.data()?.scriptSlotTitleList.length > 0
             ? doc.data()?.scriptSlotTitleList
             : Array.from({ length: 7 }, () => "") ??
-              Array.from({ length: 7 }, () => "")
+            Array.from({ length: 7 }, () => "")
         ) as string[]
         this.itemList = (doc.data()?.items ?? []) as Item[]
         this.scriptItemList = (doc.data()?.script ?? []) as Item[]

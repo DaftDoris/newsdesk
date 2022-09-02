@@ -179,14 +179,8 @@
             />
           </span>
         </div>
-        <div
-          v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
-          :key="slot"
-        >
-          <div
-            id="script-{{ slotno }}"
-            class="border relative rounded-lg border-gray-400 pt-4 mb-5"
-          >
+        <div v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)" :key="slot">
+          <div id="script-{{ slotno }}" class="border relative rounded-lg border-gray-400 pt-4 mb-5" @dragend="droppedScript($event, slot)" draggable="true">
             <span class="pl-4">
               <SlotTitleInput
                 v-model="itemStore.getScriptSlotTitleList[slot]"
@@ -279,7 +273,13 @@ const createSlotItem = async () => {
     slotItemsNew[item.slot].items.push(item)
   })
 }
-
+const droppedScript = (e: DragEvent, slot: number) => {
+  if (e.offsetY < -20) {
+    itemStore.moveScript(slot, "top", props.podcastId, props.date)
+  } else {
+    itemStore.moveScript(slot, "bottom", props.podcastId, props.date)
+  }
+}
 const exportScript = async () => {
   createSlotItem()
   doc = new jsPDF("p", "pt", "letter")
