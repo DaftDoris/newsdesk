@@ -41,7 +41,7 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "13.3.0",
     "@rushstack/eslint-patch": "1.1.4",
-    "@tailwindcss/typography": "0.5.4",
+    "@tailwindcss/typography": "0.5.7",
     "@types/node": "16.11.56",
     "@vitejs/plugin-vue": "2.3.4",
     "@vue/eslint-config-prettier": "7.0.0",
