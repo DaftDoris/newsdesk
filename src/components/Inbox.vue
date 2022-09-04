@@ -13,13 +13,13 @@
             draggable="true"
           >
             <component
-              class="w-100 break-all w-full component text-base"
+              class="w-100 break-all w-full component text-base dark:text-white"
               :is="'p'"
               :data-item="item"
               v-html="linkify(text)"
             />
             <div>
-              <HandIcon class="w-5 h-5" />
+              <HandIcon class="w-5 h-5 dark:text-white" />
               <ListActionButton
                 title="Delete"
                 id="delete-inbox"

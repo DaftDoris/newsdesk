@@ -4,7 +4,7 @@
   <span
         @click="updateClipField"
         class="absolute inline-block text-gray-400" style="right: 10px;top: 22px;"
-        > <VolumeUpIcon class="h-8"
+        > <VolumeUpIcon class="h-8 dark:text-white"
       /></span>
     <div v-for="(itemMain, index) in clipFieldData" :key="index">
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
