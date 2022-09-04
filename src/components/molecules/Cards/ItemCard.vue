@@ -14,7 +14,7 @@
       @focusout="update"
       @keydown.tab.prevent="false"
       contenteditable="true"
-      class="prose prose-a:text-blue-600 break-all"
+      class="prose prose-a:text-blue-600 break-all dark:text-white"
       v-html="htmlstring"
       ref="element"
       draggable="false"

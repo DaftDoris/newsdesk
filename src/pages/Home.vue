@@ -77,7 +77,7 @@
               @click="copySlotText(slot)"
               class="text-white font-bold p-2 rounded transition-colors"
             >
-              <ClipboardCopyIcon class="h-6 w-6 text-black" />
+              <ClipboardCopyIcon class="h-6 w-6 text-black dark:text-white" />
               <div
                 class="
                   rounded-md
@@ -144,24 +144,24 @@
 
       <div class="mt-3" id="script-data">
         <ScriptInput
-          class="text-lg"
+          class="text-lg dark:text-white"
           id="scriptTitleInput"
           placeholder="Title"
           @save="events.saveInputTitle"
         />
         <ScriptInput
-          class="text-lg"
+          class="text-lg dark:text-white"
           id="scriptSpecialDaysInput"
           placeholder="Special Days"
           @save="events.saveInputSpecialDay"
         />
         <ScriptInput
-          class="text-lg"
+          class="text-lg dark:text-white"
           id="scriptBirthdaysInput"
           placeholder="Birthdays"
           @save="events.saveInputBirthdays"
         />
-        <div class="text-center text-lg text-gray-700">
+        <div class="text-center text-lg text-gray-700 dark:text-white">
           Clips: <span id="totalClipTime">{{ totalClipTime }}</span> | Script:
           <span id="totalScriptTime">{{ totalScriptTime }}</span> | Total:
           <span id="totalTime">{{ totalTime }}</span> |
@@ -202,7 +202,7 @@
             />
           </div>
           <div class="flex border relative rounded-lg bg-red-100 border-gray-400 my-5 p-2 bg-" v-if="slot == 4">
-            <label for="">STILL TO COME:  </label>
+            <label for="" class="dark:text-black">STILL TO COME:  </label>
             <input
               class="input break-all ml-3 border-0 outline-0 w-10/12 max-w-full bg-red-100"
               placeholder="Enter Value"
