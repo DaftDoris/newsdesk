@@ -294,8 +294,7 @@ const exportScript = async () => {
     const scriptBirthdaysInput = document.getElementById(
       "scriptBirthdaysInput",
     ) as HTMLInputElement
-    // create pdf for each slot   
-    const textWidth = doc.getTextWidth(props.podcastId);
+    // create pdf for each slot 
     let clipText = `Clips: ${totalClipTime} | Script: ${totalScriptTime} | Total: ${totalTime}`;
     let pdfhtml = '<p style="font-family: sans-serif!important;margin-bottom:40px;font-size:25px;text-underline-offset: 13px;text-decoration:underline">' + props.podcastId + '</p><p>' + scriptTitleInput.value + '</p><p>' + scriptSpecialDaysInput.value + '</p><p>' + scriptBirthdaysInput.value + '</p><p style="margin-bottom:20px">' + clipText + '</p>';
     for (let i = 7; i > 0; i--) {
