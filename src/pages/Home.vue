@@ -402,7 +402,10 @@ const checkUpdate = async () => {
   let shoetime = document.getElementById("totalClipTime") as HTMLSpanElement
   shoetime.innerText = totalClipTime
   // Total Script Time
-  document.getElementById("totalWordCount").innerText=scriptCount.toString();
+  let wordCount=document.getElementById("totalWordCount");
+  if (wordCount != null) {
+      wordCount.innerText=scriptCount.toString();
+  }
   let ratio = (scriptCount / 185) * 60
   const ScriptSeconds = Math.floor(ratio % 60)
   const ScriptMinutes = Math.floor(ratio / 60)
