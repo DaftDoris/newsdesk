@@ -77,7 +77,7 @@
               @click="copySlotText(slot)"
               class="text-white font-bold p-2 rounded transition-colors"
             >
-              <ClipboardCopyIcon class="h-6 w-6 text-black" />
+              <ClipboardCopyIcon class="h-6 w-6 text-black dark:text-white" />
               <div
                 class="
                   rounded-md
@@ -144,19 +144,19 @@
 
       <div class="mt-3" id="script-data">
         <ScriptInput
-          class="text-lg"
+          class="text-lg dark:text-white"
           id="scriptTitleInput"
           placeholder="Title"
           @save="events.saveInputTitle"
         />
         <ScriptInput
-          class="text-lg"
+          class="text-lg dark:text-white"
           id="scriptSpecialDaysInput"
           placeholder="Special Days"
           @save="events.saveInputSpecialDay"
         />
         <ScriptInput
-          class="text-lg"
+          class="text-lg dark:text-white"
           id="scriptBirthdaysInput"
           placeholder="Birthdays"
           @save="events.saveInputBirthdays"
@@ -164,7 +164,7 @@
         <div class="text-center text-lg text-gray-700">
           Clips: <span id="totalClipTime">{{ totalClipTime }}</span> |
           Script: <span id="totalScriptTime">{{ totalScriptTime }}</span> |
-          Word Count: <span id="totalScriptTime">{{ totalWordCount }}</span> |
+          Word Count: <span id="totalWordCount">{{ totalWordCount }}</span> |
           Total: <span id="totalTime">{{ totalTime }}</span> |
           <span id="exportScript" class="cursor-pointer" @click="exportScript()">
             Export
@@ -199,7 +199,7 @@
             />
           </div>
           <div class="flex border relative rounded-lg bg-red-100 border-gray-400 my-5 p-2 bg-" v-if="slot == 4">
-            <label for="">STILL TO COME:  </label>
+            <label for="" class="dark:text-black">STILL TO COME:  </label>
             <input
               class="input break-all ml-3 border-0 outline-0 w-10/12 max-w-full bg-red-100"
               placeholder="Enter Value"
@@ -281,82 +281,57 @@ const droppedScript = (e: DragEvent, slot: number) => {
   }
 }
 const exportScript = async () => {
-  createSlotItem()
-  doc = new jsPDF("p", "pt", "letter")
-
-  y = 50
-  let x = 50
-  pageHeight = doc.internal.pageSize.height - 100
-  const scriptTitleInput = document.getElementById(
-    "scriptTitleInput",
-  ) as HTMLInputElement
-  const scriptSpecialDaysInput = document.getElementById(
-    "scriptSpecialDaysInput",
-  ) as HTMLInputElement
-  const scriptBirthdaysInput = document.getElementById(
-    "scriptBirthdaysInput",
-  ) as HTMLInputElement
-  // create pdf for each slot
-
-  doc.setFont("Helvetica", "bold").setFontSize(24).text(props.podcastId, x, y)
-  const textWidth = doc.getTextWidth(props.podcastId)
-  doc.line(x, y + 2, x + textWidth, y + 2).line(x, y + 3, x + textWidth, y + 3)
-  y += 35
-  doc
-    .setFont("Helvetica", "bold")
-    .setFontSize(18)
-    .text(scriptTitleInput.value, x, y)
-  y += 20
-  doc
-    .setFont("Helvetica", "bold")
-    .setFontSize(18)
-    .text(scriptSpecialDaysInput.value, x, y)
-  y += 20
-  doc
-    .setFont("Helvetica", "bold")
-    .setFontSize(18)
-    .text(scriptBirthdaysInput.value, x, y)
-  y += 25
-  let clipText = `Clips: ${totalClipTime} | Script: ${totalScriptTime} | Total: ${totalTime}`
-  doc.setFont("Helvetica", "").setFontSize(13).text(clipText, x, y)
-  y += 20
-  for (let i = 7; i > 0; i--) {
-    if (y > pageHeight) {
-      y = 50
-      doc.addPage()
-    }
-    y += 20
-    doc.setFont("Helvetica", "bold").setFontSize(18).text(`${i} title`, x, y)
-    y += 20
-    if (slotItemsNew[i]) {
-      slotItemsNew[i].items.filter((element: any) => {
-        if (y > pageHeight) {
-          y = 50
-          doc.addPage()
-        }
-        let splitText = doc
-          .setFont("Helvetica", "")
-          .setFontSize(13)
-          .splitTextToSize(element.params[0].label, 500)
-        splitText.map((text: string, ind: number) => {
-          if (y > pageHeight) {
-            y = 50
-            doc.addPage()
-          }
-          doc.setFont("Helvetica", "").setFontSize(13).text(text, x, y)
-          y += 20
+    createSlotItem()
+    let doc = new jsPDF("p", "pt", "letter");
+    const scriptTitleInput = document.getElementById(
+      "scriptTitleInput",
+    ) as HTMLInputElement
+    const scriptSpecialDaysInput = document.getElementById(
+      "scriptSpecialDaysInput",
+    ) as HTMLInputElement
+    const scriptBirthdaysInput = document.getElementById(
+      "scriptBirthdaysInput",
+    ) as HTMLInputElement
+    // create pdf for each slot 
+    let clipText = `Clips: ${totalClipTime} | Script: ${totalScriptTime} | Total: ${totalTime}`;
+    let pdfhtml = '<p style="font-family: sans-serif!important;margin-bottom:40px;font-size:25px;text-underline-offset: 13px;text-decoration:underline">' + props.podcastId + '</p><p>' + scriptTitleInput.value + '</p><p>' + scriptSpecialDaysInput.value + '</p><p>' + scriptBirthdaysInput.value + '</p><p style="margin-bottom:20px">' + clipText + '</p>';
+    for (let i = 7; i > 0; i--) {
+      pdfhtml += '<p style="font-weight:bold;">' + `${i} Title` + '</p>';
+      if (slotItemsNew[i]) {
+        slotItemsNew[i].items.filter((element: any) => {
+          let splitText = doc
+            .setFont("Helvetica", "")
+            .setFontSize(13)
+            .splitTextToSize(element.params[0].label, 500)
+          splitText.map((text: string, ind: number) => {
+  
+            pdfhtml += text;
+  
+          })
+          let clipfield = element.params[0].clipField
+          const cliptest = `CLIP URL: ${clipfield.clip_url} | In: ${clipfield.in_time} | ${clipfield.in_msg} | Out: ${clipfield.out_time} | ${clipfield.out_msg}`
+          pdfhtml += "<p>" + cliptest + "</p>";
+  
         })
-        let clipfield = element.params[0].clipField
-        const cliptest = `CLIP URL: ${clipfield.clip_url} | In: ${clipfield.in_time} | ${clipfield.in_msg} | Out: ${clipfield.out_time} | ${clipfield.out_msg}`
-        doc.setFont("Helvetica", "Oblique").setFontSize(13).text(cliptest, x, y)
-        const clipWidth = doc.getTextWidth(cliptest)
-        doc.line(x, y + 2, x + clipWidth, y + 2)
-        y += 40
-      })
+      }
+  
+  
     }
+  
+    let docPdf = new jsPDF("p", "pt", "letter")
+    let pdfHtmlData = "<div style='width:520px;margin:20px auto'>" + pdfhtml + "</div>";
+    docPdf.html(pdfHtmlData, {
+      x: 50,
+      y: 0,
+      autoPaging: 'text',
+      margin: [40, 0, 40, 0],
+      callback: function (pdf) {
+        window.open(docPdf.output("bloburl"), "_blank") // open pdf in new tab
+      }
+    })
+  
   }
-  window.open(doc.output("bloburl"), "_blank") // open pdf in new tab
-}
+  
 const updateStillToCome = async() => {
   await itemStore.saveData(props.podcastId, docname.value)
 }
@@ -428,6 +403,7 @@ const checkUpdate = async () => {
   shoetime.innerText = totalClipTime
   totalWordCount = totalClipTime
   // Total Script Time
+  document.getElementById("totalWordCount").innerText=scriptCount;
   let ratio = (scriptCount / 185) * 60
   const ScriptSeconds = Math.floor(ratio % 60)
   const ScriptMinutes = Math.floor(ratio / 60)
@@ -459,6 +435,10 @@ const checkUpdate = async () => {
   showTotalTime.innerText = totalTime
   showTotalTime.style.color = TotalCombinedSecomds < 7 * 60 ? "red" : "black"
 }
+
+watch(() => {
+    checkUpdate()
+})
 
 const updateClipTime = async () => {
   let totalClipSeconds = 0
@@ -609,6 +589,7 @@ const copySlotText = (slot: number) => {
     }, 500)
   }
 }
+
 
 const events = {
   onClickSave(text: string, slot: Item["slot"]) {
