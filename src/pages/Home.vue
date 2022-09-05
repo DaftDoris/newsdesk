@@ -403,7 +403,7 @@ const checkUpdate = async () => {
   shoetime.innerText = totalClipTime
   totalWordCount = totalClipTime
   // Total Script Time
-  document.getElementById("totalWordCount").innerText=scriptCount;
+  document.getElementById("totalWordCount").innerText=scriptCount.toString()?scriptCount:'0';
   let ratio = (scriptCount / 185) * 60
   const ScriptSeconds = Math.floor(ratio % 60)
   const ScriptMinutes = Math.floor(ratio / 60)
@@ -436,9 +436,7 @@ const checkUpdate = async () => {
   showTotalTime.style.color = TotalCombinedSecomds < 7 * 60 ? "red" : "black"
 }
 
-watch(() => {
-    checkUpdate()
-})
+
 
 const updateClipTime = async () => {
   let totalClipSeconds = 0
@@ -551,6 +549,10 @@ watch(
     if (toParams.date) connect()
   },
 )
+
+watch(route.params, () => {
+    checkUpdate()
+})
 
 watch(
   isAuthenticated,
