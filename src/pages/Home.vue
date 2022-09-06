@@ -358,20 +358,24 @@ const draggedInbox = (x: number, y: number, text: string, key: string) => {
   }
 }
 
+const removeItem = async () => {
+	const deleteClip = JSON.parse(localStorage.getItem("deleteClip") || "")
+  localStorage.removeItem("deleteClip")
+  let slotitemData = slotItems[deleteClip.slotno].items
+  slotitemData.splice(deleteClip.index, 1)
+  let slotitem: any = []
+  if (slotitemData.length > 0) {
+    slotitemData.forEach((element: any) => {
+      slotitem.push(element)
+    })
+  }
+  slotItems[deleteClip.slotno].items = slotitem
+  await checkUpdate()
+}
+
 const removeItemFromSlot = async () => {
   if (localStorage.getItem("deleteClip") != null) {
-    const deleteClip = JSON.parse(localStorage.getItem("deleteClip") || "")
-    localStorage.removeItem("deleteClip")
-    let slotitemData = slotItems[deleteClip.slotno].items
-    slotitemData.splice(deleteClip.index, 1)
-    let slotitem: any = []
-    if (slotitemData.length > 0) {
-      slotitemData.forEach((element: any) => {
-        slotitem.push(element)
-      })
-    }
-    slotItems[deleteClip.slotno].items = slotitem
-    await checkUpdate()
+    removeItem();
   }
 }
 const checkUpdate = async () => {
