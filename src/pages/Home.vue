@@ -391,14 +391,17 @@ const checkUpdate = async () => {
       const out_time = clipField.out_time.split(":")
       const in_seconds = parseInt(in_time[0]) * 60 + parseInt(in_time[1])
       const out_seconds = parseInt(out_time[0]) * 60 + parseInt(out_time[1])
-      let seconds = out_seconds - in_seconds
-      totalClipSeconds += (!isNaN(seconds))seconds:0
+      let seconds = out_seconds - in_seconds;
+
+      totalClipSeconds += (!isNaN(seconds))?seconds:0;
     }
   })
 
   const remainingSeconds = totalClipSeconds % 60
   const minutes = Math.floor(totalClipSeconds / 60)
-  totalClipTime = `${minutes < 10 ? "0" + minutes : minutes}:${remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds}`
+  totalClipTime = `${minutes < 10 ? "0" + minutes : minutes}:${
+    remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds
+  }`
   let shoetime = document.getElementById("totalClipTime") as HTMLSpanElement
   shoetime.innerText = totalClipTime
   // Total Script Time
@@ -410,9 +413,16 @@ const checkUpdate = async () => {
   const ScriptSeconds = Math.floor(ratio % 60)
   const ScriptMinutes = Math.floor(ratio / 60)
 
-  totalScriptTime = `${ScriptMinutes < 10 ? "0" + ScriptMinutes : ScriptMinutes}:${
-    ScriptSeconds < 10? "0" + ScriptSeconds.toFixed(0): ScriptSeconds.toFixed(0)}`
-  let showScriptTime = document.getElementById("totalScriptTime",) as HTMLSpanElement
+  totalScriptTime = `${
+    ScriptMinutes < 10 ? "0" + ScriptMinutes : ScriptMinutes
+  }:${
+    ScriptSeconds < 10
+      ? "0" + ScriptSeconds.toFixed(0)
+      : ScriptSeconds.toFixed(0)
+  }`
+  let showScriptTime = document.getElementById(
+    "totalScriptTime",
+  ) as HTMLSpanElement
   showScriptTime.innerText = totalScriptTime
   // totalTime
   let combinedSeconds = remainingSeconds + ScriptSeconds + 58
@@ -422,7 +432,9 @@ const checkUpdate = async () => {
   let TotalCombinedSecomds = combinedMinutes * 60 + calculatedSeconds
   totalTime = "00:00"
   if (TotalCombinedSecomds > 58) {
-    totalTime = `${combinedMinutes < 10 ? "0" + combinedMinutes : combinedMinutes}:${calculatedSeconds < 10 ? "0" + calculatedSeconds : calculatedSeconds}`
+    totalTime = `${
+      combinedMinutes < 10 ? "0" + combinedMinutes : combinedMinutes
+    }:${calculatedSeconds < 10 ? "0" + calculatedSeconds : calculatedSeconds}`
   }
   let showTotalTime = document.getElementById("totalTime") as HTMLSpanElement
   showTotalTime.innerText = totalTime
