@@ -501,8 +501,6 @@ const dragged = async (x: number, y: number, item: Item) => {
       item.slot,
       docname.value,
     )
-
-    await itemStore.removeItem(item, props.podcastId, props.date)
   } else {
     hideShowColumn.draft = true
     hideShowColumn.script = hideShowColumn.inbox = false
