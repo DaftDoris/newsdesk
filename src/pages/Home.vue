@@ -8,9 +8,10 @@
       id="inbox-column"
       :class="{ 'col-span-3': hideShowColumn.inbox }"
     >
-      <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center mobile-align-tab">
         <h2 class="text-3xl dark:text-white">Inbox</h2>
-        <ListActionButton title="toggle inbox expansion">
+        <ListActionButton title="toggle inbox expansion" class="mobile-icon-show">
+        <MailOpenIcon class="w-5 mobile-show" />
           <PlusIcon
             @click="
               ;(hideShowColumn.inbox = true),
@@ -28,21 +29,24 @@
           />
         </ListActionButton>
       </div>
+      <div class="mobile-hide-show">
       <inbox
         :podcastId="podcastId"
         :docname="docname"
         @draggedInbox="draggedInbox"
         @delete="events.onClickInboxDelete"
       />
+      </div>
     </div>
     <div
       class="px-4 column-h overflow-y-auto"
       id="draft-column"
       :class="{ 'col-span-3': hideShowColumn.draft }"
     >
-      <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center mobile-align-tab">
         <h2 class="text-3xl dark:text-white">Draft</h2>
-        <ListActionButton title="toggle draft expansion">
+        <ListActionButton title="toggle draft expansion" class="mobile-icon-show">
+          <DocumentTextIcon class="w-5 mobile-show" />
           <PlusIcon
             @click="
               ;(hideShowColumn.draft = true),
@@ -60,6 +64,7 @@
           />
         </ListActionButton>
       </div>
+      <div class="mobile-hide-show">
       <section
         v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
         :key="slot"
@@ -72,12 +77,13 @@
             :updateEvent="events.onUpdateSaveDoc"
           />
           <span class="relative flex">
+          <button title="submit button" class="submit-btn">Submit</button>
             <button
               title="Copy Slot item"
               @click="copySlotText(slot)"
               class="text-white font-bold p-2 rounded transition-colors"
             >
-              <ClipboardCopyIcon class="h-6 w-6 text-black dark:text-white" />
+              <DuplicateIcon class="h-6 w-6 text-black dark:text-white" />
               <div
                 class="
                   rounded-md
@@ -115,15 +121,17 @@
           </template>
         </List>
       </section>
+      </div>
     </div>
     <div
       class="px-4 column-h overflow-y-auto"
       id="script-column"
       :class="{ 'col-span-3': hideShowColumn.script }"
     >
-      <div class="flex justify-between items-center">
-        <h2 class="text-3xl dark:text-white">Script</h2>
-        <ListActionButton title="toggle script expansion">
+      <div class="flex justify-between items-center mobile-align-tab">
+        <h2 class="text-3xl dark:text-white ">Script</h2>
+        <ListActionButton title="toggle script expansion" class="mobile-icon-show">
+          <CodeIcon class="w-5 mobile-show" />
           <PlusIcon
             @click="
               ;(hideShowColumn.script = true),
@@ -142,7 +150,7 @@
         </ListActionButton>
       </div>
 
-      <div class="mt-3" id="script-data">
+      <div class="mt-3 mobile-hide-show" id="script-data">
         <ScriptInput
           class="text-lg dark:text-white"
           id="scriptTitleInput"
@@ -232,8 +240,8 @@ import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
 import ScriptInput from "@/components/atoms/ScriptInput.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
-import { PlusIcon, MinusIcon, ClipboardCopyIcon } from "@heroicons/vue/outline"
-import { CloudUploadIcon } from "@heroicons/vue/solid"
+import { PlusIcon, MinusIcon, ClipboardCopyIcon,  } from "@heroicons/vue/outline"
+import { CloudUploadIcon,MailOpenIcon,DocumentTextIcon,CodeIcon,DuplicateIcon  } from "@heroicons/vue/solid"
 import Scripts from "@/components/Script.vue"
 import { useRoute } from "vue-router"
 import jsPDF from "jspdf"

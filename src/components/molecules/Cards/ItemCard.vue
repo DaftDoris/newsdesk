@@ -21,12 +21,7 @@
       @mouseleave="selectedText"
     ></component>
     <div class="flex justify-end">
-      <HandIcon @click="dropzone = true" />
-      <ListActionButton title="Delete" @click="emits('delete', item)">
-        <BackspaceIcon
-          class="dark:text-white bg-transparent transition-colors"
-        />
-      </ListActionButton>
+
       <ListActionButton title="Share to podcast">
         <Popover as="div" class="relative pt-1 text-sm">
           <div>
@@ -74,6 +69,12 @@
           </transition>
         </Popover>
       </ListActionButton>
+      <SwitchHorizontalIcon class="mobile-icon-color" @click="dropzone = true" />
+      <ListActionButton title="Delete" @click="emits('delete', item)">
+        <XIcon 
+          class="dark:text-white bg-transparent transition-colors"
+        />
+      </ListActionButton>
     </div>
   </div>
 </template>
@@ -83,7 +84,8 @@ import { PropType, computed, ref } from "vue"
 import { Item } from "@/types/item"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue"
-import { BackspaceIcon, HandIcon, CheckIcon, BookmarkIcon } from "@heroicons/vue/outline"
+import { BackspaceIcon, HandIcon, CheckIcon, } from "@heroicons/vue/outline"
+import { BookmarkIcon, SwitchHorizontalIcon,XIcon    } from "@heroicons/vue/solid"
 import { usePodcastStore } from "@/store/podcasts"
 import { useRoute } from "vue-router"
 
