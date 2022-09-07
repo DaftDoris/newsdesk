@@ -393,7 +393,7 @@ const checkUpdate = async () => {
       const out_seconds = parseInt(out_time[0]) * 60 + parseInt(out_time[1])
       let seconds = out_seconds - in_seconds;
 
-      totalClipSeconds += !isNaN(seconds) ? seconds:0;
+      totalClipSeconds += seconds;
     }
   })
 
