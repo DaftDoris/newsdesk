@@ -599,9 +599,13 @@ watch(() => props.podcastId, connect, {
 })
 
 const submitItemOnMobileview = (slot: number) => {       
-      let text = document.querySelector("section[slotno_custom='"+slot+"'] textarea").value
-      itemStore.addItem({ text, slot }, props.podcastId, docname.value)     
-      document.querySelector("section[slotno_custom='"+slot+"'] textarea").value='';   
+      const section=document.querySelector("section[slotno_custom='"+slot+"'] textarea") as HTMLElement;
+      const text = section.value      
+      if(text){
+        itemStore.addItem({ text, slot }, props.podcastId, docname.value)     
+        section.value='';   
+      }
+      
 }
 
 const copySlotText = (slot: number) => {
