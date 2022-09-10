@@ -111,7 +111,7 @@ const dropped = (e: DragEvent) => {
   }
 }
 
-const droppedclick = (e: DragEvent) => {
+const droppedclick = (e: MouseEvent) => {
   if (dropzone.value) {
     emits("draggednew", e.clientX, e.clientY, props.item)
   }
