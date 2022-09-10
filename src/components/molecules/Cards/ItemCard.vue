@@ -69,7 +69,8 @@
           </transition>
         </Popover>
       </ListActionButton>
-      <SwitchHorizontalIcon class="mobile-icon-color" @click="dropzone = true" />
+      <SwitchHorizontalIcon class="mobile-icon-color mic-mobile" @click="droppedclick" />
+      <SwitchHorizontalIcon class="mobile-icon-color mic-desktop" />
       <ListActionButton title="Delete" @click="emits('delete', item)">
         <XIcon 
           class="dark:text-white bg-transparent transition-colors"
@@ -109,6 +110,13 @@ const dropped = (e: DragEvent) => {
     emits("dragged", e.clientX, e.clientY, props.item)
   }
 }
+
+const droppedclick = (e: DragEvent) => {
+  if (dropzone.value) {
+    emits("draggednew", e.clientX, e.clientY, props.item)
+  }
+}
+
 const draggedDraft = (e: DragEvent) => {
   if (dropzone.value) {
     emits("draggedDraft", e.clientX, e.clientY, props.item)
@@ -152,7 +160,7 @@ const getPodcastToShare = (item: Item) => {
   emits("share", item, podcastNameToShare.value)
 }
 
-const emits = defineEmits(["delete", "update", "save", "dragged", "share", "draggedDraft"])
+const emits = defineEmits(["delete", "update", "save", "dragged", "share", "draggedDraft","draggednew"])
 </script>
 
 <style scoped lang="scss">

@@ -69,6 +69,7 @@
         v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
         :key="slot"
         :slotno="slot"
+        :slotno_custom="slot"
       >
         <div class="flex items-center justify-between">
           <SlotTitleInput
@@ -77,7 +78,7 @@
             :updateEvent="events.onUpdateSaveDoc"
           />
           <span class="relative flex">
-          <button title="submit button" class="submit-btn">Submit</button>
+          <button title="submit button" @click="submitItemOnMobileview(slot)" class="submit-btn">Submit</button>
             <button
               title="Copy Slot item"
               @click="copySlotText(slot)"
@@ -116,6 +117,7 @@
                 @share="events.onClickShare"
                 @update="events.onClickUpdate"
                 @dragged="dragged"
+                @draggednew="draggednew"
               />
             </ListItem>
           </template>
@@ -469,8 +471,33 @@ const updateClipTime = async () => {
   shoetime.innerText = totalClipTime
 }
 
+const draggednew  =async (x: number, y: number, item: Item) => {
+
+  const data: any = [
+      {
+        label: item.text,
+        clipField: {
+          clip_url: "",
+          in_time: "",
+          in_msg: "",
+          out_time: "",
+          out_msg: "",
+        },
+      },
+    ]
+
+    await itemStore.addScriptItem(
+      data,
+      props.podcastId,
+      item.slot,
+      docname.value,
+    )
+   alert('Item moved to script');
+
+}
+
 const dragged = async (x: number, y: number, item: Item) => {
-  const slot = <Item["slot"]>parseInt(
+    const slot = <Item["slot"]>parseInt(
     <
       string // @ts-ignore
     >document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
@@ -479,7 +506,7 @@ const dragged = async (x: number, y: number, item: Item) => {
   const scriptColumn = document
     .elementFromPoint(x, y)
     ?.closest("div #script-column")
-
+    
   if (scriptColumn) {
     hideShowColumn.script = true
     hideShowColumn.inbox = hideShowColumn.draft = false
@@ -570,6 +597,12 @@ watch(
 watch(() => props.podcastId, connect, {
   immediate: true,
 })
+
+const submitItemOnMobileview = (slot: number) => {       
+      let text = document.querySelector("section[slotno_custom='"+slot+"'] textarea").value
+      itemStore.addItem({ text, slot }, props.podcastId, docname.value)     
+      document.querySelector("section[slotno_custom='"+slot+"'] textarea").value='';   
+}
 
 const copySlotText = (slot: number) => {
   const itemData = itemStore.getSlotList(slot).reverse()
