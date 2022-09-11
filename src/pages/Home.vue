@@ -598,10 +598,15 @@ watch(() => props.podcastId, connect, {
   immediate: true,
 })
 
-const submitItemOnMobileview = (slot: number) => {       
-      const section=document.querySelector("section[slotno_custom='"+slot+"'] textarea") as HTMLElement;
+const submitItemOnMobileview = (slotno: number) => { 
+      const slot = <Item["slot"]>parseInt(
+    <
+      string // @ts-ignore
+    ><unknown>slotno,
+  )      
+      const section=(<HTMLInputElement>document.querySelector("section[slotno_custom='"+slot+"'] textarea"));
       const text = section.value      
-      if(text){
+      if(text && slotno){
         itemStore.addItem({ text, slot }, props.podcastId, docname.value)     
         section.value='';   
       }
