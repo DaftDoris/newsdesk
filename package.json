@@ -48,7 +48,7 @@
     "@vue/eslint-config-typescript": "11.0.1",
     "autoprefixer": "10.4.9",
     "cypress": "10.7.0",
-    "eslint": "8.23.0",
+    "eslint": "8.23.1",
     "eslint-plugin-cypress": "2.12.1",
     "eslint-plugin-vue": "9.4.0",
     "firebase-tools": "11.8.1",
