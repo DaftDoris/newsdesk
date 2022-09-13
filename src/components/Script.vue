@@ -1,15 +1,14 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div id="script-{{ slotno }}" class="script-section">
-  <span
-        @click="updateClipField"
-        class="absolute inline-block text-gray-400" style="right: 10px;top: 22px;"
-        > <VolumeUpIcon class="h-8 dark:text-white"
-      /></span>
+    <span @click="updateClipField" class="absolute inline-block text-gray-400" style="right: 10px;top: 22px;">
+      <VolumeUpIcon class="h-8 dark:text-white" />
+    </span>
     <div v-for="(itemMain, index) in clipFieldData" :key="index">
       <span v-for="(itemIn, indexNew) in itemMain.params" :key="indexNew">
         <div @dragend="dropped($event, indexNew)" draggable="true">
-          <editor api-key='wrg3d2pspm50rpya2jigebeiglg262wyd6x87rf2nnh2jjfh'  v-model="itemIn.label" @change="updateClips()" :init="{ /* your other settings */ }" />
+          <editor api-key='wrg3d2pspm50rpya2jigebeiglg262wyd6x87rf2nnh2jjfh' v-model="itemIn.label"
+            @keyup="emits('keypress', 'checkUpdate')" @change="updateClips()" :init="{ /* your other settings */ }" />
           <ClipField class="text-base" :index="indexNew" :clipField="itemIn?.clipField"
             @delete="deleteClipNew(itemMain.id,indexNew)" @change="updateClips()"></ClipField>
         </div>
@@ -39,7 +38,7 @@ const props = defineProps({
   clipFieldData: {
     type: Object,
     default: null,
-  }, 
+  },
   date: {
     type: String,
     default: new Date(new Date().setDate(new Date().getDate() + 1))
@@ -48,7 +47,8 @@ const props = defineProps({
   },
 })
 const mainArray = props.clipFieldData
-const emits = defineEmits(["save", "dragged"])
+const emits = defineEmits(["save", "dragged", "keypress"])
+
 const updateClipField = () => {
   props.clipFieldData[0].params.push({
     label: "",
@@ -62,25 +62,23 @@ const updateClipField = () => {
   })
 }
 
+
 const updateClips = () => {
-  console.log(window.location)
   itemStore.setItemToSlot(props.clipFieldData, props.podcastId, props.date)
 }
 const dropped = (e: DragEvent, index: number) => {
   if (e.offsetY < -20) {
     itemStore.moveClipField(index, "top", props.podcastId, props.slotno, props.date)
-    console.log("top", index)
   } else {
     itemStore.moveClipField(index, "bottom", props.podcastId, props.slotno, props.date)
-    console.log("bottom", index)
   }
 }
 const deleteClip = (id: string) => {
   itemStore.deleteScriptClipField(id, props.podcastId, props.date)
 }
 
-const deleteClipNew = (id:string,ind: number) => {
-  itemStore.deleteScriptClipFieldNew(id, ind,props.podcastId, props.date)
+const deleteClipNew = (id: string, ind: number) => {
+  itemStore.deleteScriptClipFieldNew(id, ind, props.podcastId, props.date)
 }
 
 
@@ -126,7 +124,8 @@ label {
   font-size: 16px !important;
   margin-top: 5px !important;
 }
-.tox .tox-statusbar{
+
+.tox .tox-statusbar {
   display: none !important;
 }
 </style>
