@@ -292,13 +292,11 @@ const checkUpdate = async () => {
   let totalClipSeconds = 0
   let scriptCount = 0
   const slotitemData = await itemStore.scriptItemList
-  slotitemData.forEach((element) => {
-    if (element.params.length > 0) {
+  slotitemData.map((element) => {
+    if (element.params.length != 0) {
       const clipField = element.params[0].clipField
       let text = element.params[0].label.replace(/(<([^>]+)>)/gi, "")
       scriptCount += (text !== '') ? text.split(" ").length : 0
-      console.log('text ===> ', text.split(" "));
-
       const in_time = (clipField.in_time != '') ? clipField.in_time.split(":") : [0, 0]
       const out_time = (clipField.out_time != '') ? clipField.out_time.split(":") : [0, 0]
       const in_seconds = parseInt(in_time[0]) * 60 + parseInt(in_time[1])
@@ -315,9 +313,7 @@ const checkUpdate = async () => {
   shoetime.innerText = totalClipTime
   // Total Script Time
   let wordCount = document.getElementById("totalWordCount");
-  if (wordCount != null) {
-    wordCount.innerText = scriptCount.toString();
-  }
+  wordCount.innerText = scriptCount.toString();
   let ratio = (scriptCount / 185) * 60
   const ScriptSeconds = Math.floor(ratio % 60)
   const ScriptMinutes = Math.floor(ratio / 60)
