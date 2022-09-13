@@ -293,7 +293,7 @@ const removeItemFromSlot = async () => {
   }
 }
 const checkUpdate = async () => {
-  let totalClipSeconds = 0
+  let totalClipSeconds = 0;
   let scriptCount = 0
   const slotitemData = await itemStore.scriptItemList
   slotitemData.map((element) => {
@@ -306,7 +306,7 @@ const checkUpdate = async () => {
       const in_seconds = parseInt(in_time[0]) * 60 + parseInt(in_time[1])
       const out_seconds = parseInt(out_time[0]) * 60 + parseInt(out_time[1])
       let seconds = out_seconds - in_seconds;
-      totalClipSeconds += parseInt(seconds);
+      totalClipSeconds += seconds;
     }
   })
 
@@ -316,7 +316,7 @@ const checkUpdate = async () => {
   let shoetime = document.getElementById("totalClipTime") as HTMLSpanElement
   shoetime.innerText = totalClipTime
   // Total Script Time
-  let wordCount = document.getElementById("totalWordCount");
+  let wordCount = document.getElementById("totalWordCount") as HTMLSpanElement;
   wordCount.innerText = scriptCount.toString();
   let ratio = (scriptCount / 185) * 60
   const ScriptSeconds = Math.floor(ratio % 60)
