@@ -164,8 +164,8 @@ const props = defineProps({
   },
 })
 
-function pad(num: number) {
-  return (num < 10) ? "0" + num.toString() : num.toString();
+function pad(num: string) {
+  return (num.length < 2) ? "0" + num : num;
 }
 
 let totalClipTime: string = "00:00"
@@ -312,7 +312,7 @@ const checkUpdate = async () => {
 
   const remainingSeconds = totalClipSeconds % 60
   const minutes = Math.floor(totalClipSeconds / 60)
-  totalClipTime = `${pad(minutes)}:${pad(remainingSeconds)}`
+  totalClipTime = `${pad(minutes.toString())}:${pad(remainingSeconds.toString())}`
   let shoetime = document.getElementById("totalClipTime") as HTMLSpanElement
   shoetime.innerText = totalClipTime
   // Total Script Time
@@ -321,7 +321,7 @@ const checkUpdate = async () => {
   let ratio = (scriptCount / 185) * 60
   const ScriptSeconds = Math.floor(ratio % 60)
   const ScriptMinutes = Math.floor(ratio / 60)
-  totalScriptTime = `${pad(ScriptMinutes)}:${pad(ScriptSeconds)}`
+  totalScriptTime = `${pad(ScriptMinutes.toString())}:${pad(ScriptSeconds.toString())}`
   let showScriptTime = document.getElementById("totalScriptTime",) as HTMLSpanElement
   showScriptTime.innerText = totalScriptTime
   // totalTime
@@ -332,7 +332,7 @@ const checkUpdate = async () => {
   let TotalCombinedSecomds = combinedMinutes * 60 + calculatedSeconds
   totalTime = "00:00"
   if (TotalCombinedSecomds > 58) {
-    totalTime = `${pad(combinedMinutes)}:${pad(calculatedSeconds)}`
+    totalTime = `${pad(combinedMinutes.toString())}:${pad(calculatedSeconds.toString())}`
   }
   let showTotalTime = document.getElementById("totalTime") as HTMLSpanElement
   showTotalTime.innerText = totalTime
