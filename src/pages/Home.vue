@@ -164,8 +164,8 @@ const props = defineProps({
   },
 })
 
-function pad(num: number = 0) {
-  return (num.toString().length < 2) ? num : "0" + num.toString();
+function pad(num: number) {
+  return (num < 10) ? "0" + num.toString() : num;
 }
 
 let totalClipTime: string = "00:00"
