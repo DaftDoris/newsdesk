@@ -300,7 +300,7 @@ const checkUpdate = async () => {
   slotitemData.map((element) => {
     if (element.params.length != 0) {
       const clipField = element.params[0].clipField
-      let text = element.params[0].label.replace(/(<([^>]+)>)/gi, "")
+      let text = element.params[0].label.replace(/\n/g, "")
       scriptCount += (text !== '') ? text.split(" ").length : 0
       const in_time = (clipField.in_time != '') ? clipField.in_time.split(":") : [0, 0]
       const out_time = (clipField.out_time != '') ? clipField.out_time.split(":") : [0, 0]
