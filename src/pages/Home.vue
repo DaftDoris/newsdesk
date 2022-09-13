@@ -164,6 +164,12 @@ const props = defineProps({
   },
 })
 
+function pad(num: String, size: Number) {
+  num = num.toString();
+  while (num.length < size) num = "0" + num;
+  return num;
+}
+
 let totalClipTime: string = "00:00"
 let totalScriptTime: string = "00:00"
 let totalTime: string = "00:00"
@@ -308,7 +314,7 @@ const checkUpdate = async () => {
 
   const remainingSeconds = totalClipSeconds % 60
   const minutes = Math.floor(totalClipSeconds / 60)
-  totalClipTime = `${minutes < 10 ? "0" + minutes : minutes}:${remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds}`
+  totalClipTime = `${pad(minutes.toString(), 2)}:${pad(remainingSeconds.toString(), 2)}`
   let shoetime = document.getElementById("totalClipTime") as HTMLSpanElement
   shoetime.innerText = totalClipTime
   // Total Script Time
@@ -317,15 +323,8 @@ const checkUpdate = async () => {
   let ratio = (scriptCount / 185) * 60
   const ScriptSeconds = Math.floor(ratio % 60)
   const ScriptMinutes = Math.floor(ratio / 60)
-
-  totalScriptTime = `${ScriptMinutes < 10 ? "0" + ScriptMinutes : ScriptMinutes
-    }:${ScriptSeconds < 10
-      ? "0" + ScriptSeconds.toFixed(0)
-      : ScriptSeconds.toFixed(0)
-    }`
-  let showScriptTime = document.getElementById(
-    "totalScriptTime",
-  ) as HTMLSpanElement
+  totalScriptTime = `${pad(ScriptMinutes.toString(), 2)}:${pad(ScriptSeconds.toString(), 2)}`
+  let showScriptTime = document.getElementById("totalScriptTime",) as HTMLSpanElement
   showScriptTime.innerText = totalScriptTime
   // totalTime
   let combinedSeconds = remainingSeconds + ScriptSeconds + 58
@@ -335,8 +334,7 @@ const checkUpdate = async () => {
   let TotalCombinedSecomds = combinedMinutes * 60 + calculatedSeconds
   totalTime = "00:00"
   if (TotalCombinedSecomds > 58) {
-    totalTime = `${combinedMinutes < 10 ? "0" + combinedMinutes : combinedMinutes
-      }:${calculatedSeconds < 10 ? "0" + calculatedSeconds : calculatedSeconds}`
+    totalTime = `${pad(combinedMinutes.toString(), 2)}:${pad(calculatedSeconds.toString(), 2)}`
   }
   let showTotalTime = document.getElementById("totalTime") as HTMLSpanElement
   showTotalTime.innerText = totalTime
