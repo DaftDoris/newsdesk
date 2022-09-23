@@ -277,6 +277,7 @@ const droppedScript = (e: DragEvent, slot: number) => {
     itemStore.moveScript(slot, "bottom", props.podcastId, props.date)
   }
 }
+
 const exportScript = async () => {
   createSlotItem()
   let doc = new jsPDF("p", "pt", "letter");
