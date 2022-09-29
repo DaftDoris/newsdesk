@@ -1,43 +1,92 @@
 <template>
-  <main v-show="initiated && isAuthenticated" class="h-full grid grid-cols-5 gap-4 divide-x">
-    <div class="px-4 column-h overflow-y-auto" id="inbox-column" :class="{ 'col-span-3': hideShowColumn.inbox }">
-      <div class="flex justify-between items-center">
+
+  <main
+    v-show="initiated && isAuthenticated"
+    class="h-full grid grid-cols-5 gap-4 divide-x"
+  >
+    <div
+      class="px-4 column-h overflow-y-auto"
+      id="inbox-column"
+      :class="{ 'col-span-3': hideShowColumn.inbox }"
+    >
+      <div class="flex justify-between items-center mobile-align-tab">
         <h2 class="text-3xl dark:text-white">Inbox</h2>
-        <ListActionButton title="toggle inbox expansion">
-          <PlusIcon @click="
-            ;(hideShowColumn.inbox = true),
-              (hideShowColumn.script = hideShowColumn.draft = false)
-          " v-if="!hideShowColumn.inbox" class="dark:text-white bg-transparent transition-colors w-6" />
-          <MinusIcon class="dark:text-white bg-transparent transition-colors w-6" @click="
-            ;(hideShowColumn.inbox = false), (hideShowColumn.draft = true)
-          " v-else />
+        <ListActionButton title="toggle inbox expansion" class="mobile-icon-show">
+        <MailOpenIcon class="w-5 mobile-show" />
+          <PlusIcon
+            @click="
+              ;(hideShowColumn.inbox = true),
+                (hideShowColumn.script = hideShowColumn.draft = false)
+            "
+            v-if="!hideShowColumn.inbox"
+            class="dark:text-white bg-transparent transition-colors w-6"
+          />
+          <MinusIcon
+            class="dark:text-white bg-transparent transition-colors w-6"
+            @click="
+              ;(hideShowColumn.inbox = false), (hideShowColumn.draft = true)
+            "
+            v-else
+          />
         </ListActionButton>
       </div>
-      <inbox :podcastId="podcastId" :docname="docname" @draggedInbox="draggedInbox"
-        @delete="events.onClickInboxDelete" />
+      <div class="mobile-hide-show">
+      <inbox
+        :podcastId="podcastId"
+        :docname="docname"
+        @draggedInbox="draggedInbox"
+        @delete="events.onClickInboxDelete"
+      />
+      </div>
     </div>
-    <div class="px-4 column-h overflow-y-auto" id="draft-column" :class="{ 'col-span-3': hideShowColumn.draft }">
-      <div class="flex justify-between items-center">
+    <div
+      class="px-4 column-h overflow-y-auto"
+      id="draft-column"
+      :class="{ 'col-span-3': hideShowColumn.draft }"
+    >
+      <div class="flex justify-between items-center mobile-align-tab">
         <h2 class="text-3xl dark:text-white">Draft</h2>
-        <ListActionButton title="toggle draft expansion">
-          <PlusIcon @click="
-            ;(hideShowColumn.draft = true),
-              (hideShowColumn.script = hideShowColumn.inbox = false)
-          " v-if="!hideShowColumn.draft" class="dark:text-white bg-transparent transition-colors w-6" />
-          <MinusIcon class="dark:text-white bg-transparent transition-colors w-6" @click="
-            ;(hideShowColumn.draft = false), (hideShowColumn.inbox = true)
-          " v-else />
+        <ListActionButton title="toggle draft expansion" class="mobile-icon-show">
+          <DocumentTextIcon class="w-5 mobile-show" />
+          <PlusIcon
+            @click="
+              ;(hideShowColumn.draft = true),
+                (hideShowColumn.script = hideShowColumn.inbox = false)
+            "
+            v-if="!hideShowColumn.draft"
+            class="dark:text-white bg-transparent transition-colors w-6"
+          />
+          <MinusIcon
+            class="dark:text-white bg-transparent transition-colors w-6"
+            @click="
+              ;(hideShowColumn.draft = false), (hideShowColumn.inbox = true)
+            "
+            v-else
+          />
         </ListActionButton>
       </div>
-      <section v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)" :key="slot" :slotno="slot">
+      <div class="mobile-hide-show">
+      <section
+        v-for="slot in Array.from({ length: 7 }, (_, i) => 7 - i)"
+        :key="slot"
+        :slotno="slot"
+        :slotno_custom="slot"
+      >
+
         <div class="flex items-center justify-between">
           <SlotTitleInput v-model="itemStore.getSlotTitleList[slot]" :slotno="slot"
             :updateEvent="events.onUpdateSaveDoc" />
           <span class="relative flex">
-            <button title="Copy Slot item" @click="copySlotText(slot)"
-              class="text-white font-bold p-2 rounded transition-colors">
-              <ClipboardCopyIcon class="h-6 w-6 text-black dark:text-white" />
-              <div class="
+          <button title="submit button" @click="submitItemOnMobileview(slot)" class="submit-btn">Submit</button>
+            <button
+              title="Copy Slot item"
+              @click="copySlotText(slot)"
+              class="text-white font-bold p-2 rounded transition-colors"
+            >
+              <DuplicateIcon class="h-6 w-6 text-black dark:text-white" />
+              <div
+                class="
+
                   rounded-md
                   absolute
                   bottom-10
@@ -57,34 +106,69 @@
         <List>
           <template v-for="item in itemStore.getSlotList(slot).reverse()" :key="item.id">
             <ListItem>
-              <ItemCard :item="item" @delete="events.onClickDelete" @share="events.onClickShare"
-                @update="events.onClickUpdate" @dragged="dragged" />
+              <ItemCard
+                :item="item"
+                @delete="events.onClickDelete"
+                @share="events.onClickShare"
+                @update="events.onClickUpdate"
+                @dragged="dragged"
+                @draggednew="draggednew"
+              />
+
             </ListItem>
           </template>
         </List>
       </section>
+      </div>
     </div>
-    <div class="px-4 column-h overflow-y-auto" id="script-column" :class="{ 'col-span-3': hideShowColumn.script }">
-      <div class="flex justify-between items-center">
-        <h2 class="text-3xl dark:text-white">Script</h2>
-        <ListActionButton title="toggle script expansion">
-          <PlusIcon @click="
-            ;(hideShowColumn.script = true),
-              (hideShowColumn.draft = hideShowColumn.inbox = false)
-          " v-if="!hideShowColumn.script" class="dark:text-white bg-transparent transition-colors w-6" />
-          <MinusIcon class="dark:text-white bg-transparent transition-colors w-6" @click="
-            ;(hideShowColumn.script = false), (hideShowColumn.inbox = true)
-          " v-else />
+
+    <div
+      class="px-4 column-h overflow-y-auto"
+      id="script-column"
+      :class="{ 'col-span-3': hideShowColumn.script }"
+    >
+      <div class="flex justify-between items-center mobile-align-tab">
+        <h2 class="text-3xl dark:text-white ">Script</h2>
+        <ListActionButton title="toggle script expansion" class="mobile-icon-show">
+          <CodeIcon class="w-5 mobile-show" />
+          <PlusIcon
+            @click="
+              ;(hideShowColumn.script = true),
+                (hideShowColumn.draft = hideShowColumn.inbox = false)
+            "
+            v-if="!hideShowColumn.script"
+            class="dark:text-white bg-transparent transition-colors w-6"
+          />
+          <MinusIcon
+            class="dark:text-white bg-transparent transition-colors w-6"
+            @click="
+              ;(hideShowColumn.script = false), (hideShowColumn.inbox = true)
+            "
+            v-else
+          />
         </ListActionButton>
       </div>
 
-      <div class="mt-3" id="script-data">
-        <ScriptInput class="text-lg dark:text-white" id="scriptTitleInput" placeholder="Title"
-          @save="events.saveInputTitle" />
-        <ScriptInput class="text-lg dark:text-white" id="scriptSpecialDaysInput" placeholder="Special Days"
-          @save="events.saveInputSpecialDay" />
-        <ScriptInput class="text-lg dark:text-white" id="scriptBirthdaysInput" placeholder="Birthdays"
-          @save="events.saveInputBirthdays" />
+      <div class="mt-3 mobile-hide-show" id="script-data">
+        <ScriptInput
+          class="text-lg dark:text-white"
+          id="scriptTitleInput"
+          placeholder="Title"
+          @save="events.saveInputTitle"
+        />
+        <ScriptInput
+          class="text-lg dark:text-white"
+          id="scriptSpecialDaysInput"
+          placeholder="Special Days"
+          @save="events.saveInputSpecialDay"
+        />
+        <ScriptInput
+          class="text-lg dark:text-white"
+          id="scriptBirthdaysInput"
+          placeholder="Birthdays"
+          @save="events.saveInputBirthdays"
+        />
+
         <div class="text-center text-lg text-gray-700 dark:text-white">
           Clips: <span id="totalClipTime">{{ totalClipTime }}</span> |
           Script: <span id="totalScriptTime">{{ totalScriptTime }}</span> |
@@ -138,8 +222,8 @@ import InputCard from "@/components/molecules/Cards/InputCard.vue"
 import SlotTitleInput from "@/components/atoms/SlotTitleInput.vue"
 import ScriptInput from "@/components/atoms/ScriptInput.vue"
 import ListActionButton from "@/components/atoms/ListActionButton.vue"
-import { PlusIcon, MinusIcon, ClipboardCopyIcon } from "@heroicons/vue/outline"
-import { CloudUploadIcon } from "@heroicons/vue/solid"
+import { PlusIcon, MinusIcon } from "@heroicons/vue/outline"
+import { CloudUploadIcon,MailOpenIcon,DocumentTextIcon,CodeIcon,DuplicateIcon  } from "@heroicons/vue/solid"
 import Scripts from "@/components/Script.vue"
 import { useRoute } from "vue-router"
 import jsPDF from "jspdf"
@@ -193,6 +277,7 @@ const droppedScript = (e: DragEvent, slot: number) => {
     itemStore.moveScript(slot, "bottom", props.podcastId, props.date)
   }
 }
+
 const exportScript = async () => {
   createSlotItem()
   let doc = new jsPDF("p", "pt", "letter");
@@ -365,8 +450,33 @@ const updateClipTime = async () => {
   shoetime.innerText = totalClipTime
 }
 
+const draggednew  =async (x: number, y: number, item: Item) => {
+
+  const data: any = [
+      {
+        label: item.text,
+        clipField: {
+          clip_url: "",
+          in_time: "",
+          in_msg: "",
+          out_time: "",
+          out_msg: "",
+        },
+      },
+    ]
+
+    await itemStore.addScriptItem(
+      data,
+      props.podcastId,
+      item.slot,
+      docname.value,
+    )
+   alert('Item moved to script');
+
+}
+
 const dragged = async (x: number, y: number, item: Item) => {
-  const slot = <Item["slot"]>parseInt(
+    const slot = <Item["slot"]>parseInt(
     <
     string // @ts-ignore
     >document.elementFromPoint(x, y)?.closest("section")?.attributes["slotno"]?.value,
@@ -375,7 +485,7 @@ const dragged = async (x: number, y: number, item: Item) => {
   const scriptColumn = document
     .elementFromPoint(x, y)
     ?.closest("div #script-column")
-
+    
   if (scriptColumn) {
     hideShowColumn.script = true
     hideShowColumn.inbox = hideShowColumn.draft = false
@@ -467,6 +577,21 @@ watch(
 watch(() => props.podcastId, connect, {
   immediate: true,
 })
+
+const submitItemOnMobileview = (slotno: number) => { 
+      const slot = <Item["slot"]>parseInt(
+    <
+      string // @ts-ignore
+    ><unknown>slotno,
+  )      
+      const section=(<HTMLInputElement>document.querySelector("section[slotno_custom='"+slot+"'] textarea"));
+      const text = section.value      
+      if(text && slotno){
+        itemStore.addItem({ text, slot }, props.podcastId, docname.value)     
+        section.value='';   
+      }
+      
+}
 
 const copySlotText = (slot: number) => {
   const itemData = itemStore.getSlotList(slot).reverse()
