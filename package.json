@@ -32,7 +32,7 @@
     "pinia": "2.0.23",
     "vue": "3.2.41",
     "vue-create-ripple": "0.3.1",
-    "vue-router": "4.1.5"
+    "vue-router": "4.1.6"
   },
   "eslintIgnore": [
     "dist/**",
