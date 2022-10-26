@@ -42,7 +42,7 @@
     "@rollup/plugin-node-resolve": "13.3.0",
     "@rushstack/eslint-patch": "1.2.0",
     "@tailwindcss/typography": "0.5.7",
-    "@types/node": "16.18.0",
+    "@types/node": "16.18.1",
     "@vitejs/plugin-vue": "2.3.4",
     "@vue/eslint-config-prettier": "7.0.0",
     "@vue/eslint-config-typescript": "11.0.1",
