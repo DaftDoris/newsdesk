@@ -41,6 +41,6 @@ const save = () => {
   width: 47vw;
 }
 label {
-  @apply ss-furniture  dark:text-white;
+  @apply  dark:text-white;
 }
 </style>

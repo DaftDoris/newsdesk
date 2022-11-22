@@ -115,7 +115,9 @@ export const useItemStore = defineStore("item", {
       return this.saveData(podcastname, docname)
     },
     async saveData(podcastname: string, docname: string) {
-      const docRef = doc(collection(db, podcastname), docname)
+      const userUID: any = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyBvk41kRWgCj9cQ2Bn_WRcxuULTcV3TwqI:[DEFAULT]') || '{}') 
+      const collectionName: any = `${userUID.uid}_${docname}`
+      const docRef = doc(collection(db, podcastname), collectionName)
       try {
         return await updateDoc(docRef, {
           items: this.itemList,
@@ -259,7 +261,9 @@ export const useItemStore = defineStore("item", {
           
     },    
     connect(podcastname: string, docname: string) {
-      onSnapshot(doc(db, podcastname, docname), (doc) => {
+      const userUID: any = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyBvk41kRWgCj9cQ2Bn_WRcxuULTcV3TwqI:[DEFAULT]') || '{}') 
+      const collectionName: any = `${userUID.uid}_${docname}`
+      onSnapshot(doc(db, podcastname, collectionName), (doc) => {
         this.slotTitleList = (
           doc.data()?.slotTitles && doc.data()?.slotTitles.length > 0
             ? doc.data()?.slotTitles

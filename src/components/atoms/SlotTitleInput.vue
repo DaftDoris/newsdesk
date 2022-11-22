@@ -48,6 +48,6 @@ const value = useVModel(props, "modelValue", emit)
   width: 47vw;
 }
 label {
-  @apply ss-furniture text-4xl dark:text-white;
+  @apply text-4xl dark:text-white;
 }
 </style>
