@@ -25,7 +25,7 @@
     "array-move": "4.0.0",
     "firebase": "9.13.0",
     "google-auth-library": "8.6.0",
-    "googleapis": "109.0.0",
+    "googleapis": "109.0.1",
     "jspdf": "2.5.1",
     "moment": "2.29.4",
     "nanoid": "4.0.0",
