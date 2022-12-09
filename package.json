@@ -24,7 +24,7 @@
     "@vueuse/core": "9.1.1",
     "array-move": "4.0.0",
     "firebase": "9.15.0",
-    "google-auth-library": "8.6.0",
+    "google-auth-library": "8.7.0",
     "googleapis": "109.0.1",
     "jspdf": "2.5.1",
     "moment": "2.29.4",
