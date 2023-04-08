@@ -30,7 +30,7 @@
     "moment": "2.29.4",
     "nanoid": "4.0.2",
     "pinia": "2.0.34",
-    "vue": "3.2.45",
+    "vue": "3.2.47",
     "vue-create-ripple": "0.3.1",
     "vue-router": "4.1.6"
   },
